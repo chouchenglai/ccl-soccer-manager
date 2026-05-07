@@ -22,9 +22,21 @@ def get_now_time():
 
 # --- 工具 ---
 def get_all_reports():
-    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
+    # 1. 定義排除名單
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+    
+    # 2. 獲取所有 csv 檔案
+    files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+    
+    # 💡 修正位置：按檔案最後修改時間排序（最新的排在最前面）
+    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+    
+    # 💡 修正位置：確保預設檔案始終在最後一排
+    if DEFAULT_DB in files:
+        files.remove(DEFAULT_DB)
+        files.append(DEFAULT_DB)
+        
+    return files
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
@@ -57,13 +69,29 @@ def save_chat(nickname, content):
 current_tw_date = datetime.now(TW_TZ).date()
 
 # --- 初始化 ---
-ensure_files()
-if 'current_db' not in st.session_state: st.session_state.current_db = DEFAULT_DB
+# 💡 關鍵修正：每次執行都重新獲取最新清單，確保刷新後能看到新檔案
 all_reports = get_all_reports()
-if not all_reports: all_reports = [DEFAULT_DB]
-if st.session_state.current_db not in all_reports: st.session_state.current_db = all_reports[0]
 
-main_df = load_data()
+if 'current_db' not in st.session_state:
+    st.session_state.current_db = DEFAULT_DB
+
+# 如果目前選中的檔案不存在（例如被刪除或未同步），則跳回第一個（最新的報表）
+if st.session_state.current_db not in all_reports:
+    st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
+
+# --- 側邊欄選單顯示 ---
+selected_db = st.sidebar.selectbox(
+    "請選擇報表帳號：",
+    options=all_reports,
+    # 確保 index 始終指向正確的位置
+    index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
+    key="main_db_selector"
+)
+
+# 偵測變化
+if selected_db != st.session_state.current_db:
+    st.session_state.current_db = selected_db
+    st.rerun()
 
 # --- 標誌顯示區 (Base64) ---
 import base64
@@ -455,7 +483,7 @@ with tab2:
 
     # --- 5. 區塊 C：已授權帳號清單 (具備密碼保護) ---
     st.subheader("已授權帳號清單", anchor=False)
-    st.caption("💡 溫馨提示：點擊啟動後將跳轉至主頁，請更改左上角切換帳號列表，選擇您個人報表操作。")
+    st.caption("💡 溫馨提示：點擊啟動後將跳轉至主頁。")
     
     physical_files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in [req_file, CHAT_DB]]
     passed_names = req_df[req_df['審核結果'].str.contains("過關|通過|OK", na=False)]['申請名稱'].tolist()
