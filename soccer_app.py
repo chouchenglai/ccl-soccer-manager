@@ -120,7 +120,7 @@ components.html("""
             請稍候再回來查看
         </p>
         <p style="margin-top: 40px; font-size: 10pt; color: #bdc3c7;">
-            © 2026 CCL-Soccer | 專業足球數據管理系統
+            © 2026 CCL-Soccer | 足球數據管理系統
         </p>
     </div>
 </body>
