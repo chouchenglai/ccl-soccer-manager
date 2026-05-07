@@ -115,9 +115,9 @@ components.html("""
         <h1>網站維護進行中</h1>
         <p>
             為了提供更優質的賽事管理體驗<br>
-            現正在系統優化與數據維護。<br>
-            目前暫時關閉運作，<br>
-            請稍候再回來查看。
+            現正在系統優化與數據維護<br>
+            目前暫時關閉運作<br>
+            請稍候再回來查看
         </p>
         <p style="margin-top: 40px; font-size: 10pt; color: #bdc3c7;">
             © 2026 CCL-Soccer | 專業足球數據管理系統
