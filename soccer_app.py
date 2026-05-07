@@ -455,7 +455,7 @@ with tab2:
 
     # --- 5. 區塊 C：已授權帳號清單 (具備密碼保護) ---
     st.subheader("已授權帳號清單", anchor=False)
-    st.caption("💡 溫馨提示：點擊啟動後將跳轉至主頁。")
+    st.caption("💡 溫馨提示：點擊啟動後將跳轉至主頁，請更改左上角切換帳號列表，選擇您個人報表操作。")
     
     physical_files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in [req_file, CHAT_DB]]
     passed_names = req_df[req_df['審核結果'].str.contains("過關|通過|OK", na=False)]['申請名稱'].tolist()
