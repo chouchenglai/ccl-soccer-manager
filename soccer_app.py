@@ -8,50 +8,44 @@ from datetime import datetime, timedelta, timezone
 # 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
 
-# --- 基本設定 ---
-DEFAULT_DB = "ccl-soccer.csv"  # 💡 確保這行在最上面
+# --- 1. 基本設定 ---
+DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
 COLUMNS = ["日期", "賽事項目", "類型", "金額", "盈虧金額", "結算總分"]
 CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
 
 TW_TZ = pytz.timezone('Asia/Taipei')
 
+# --- 2. 工具函數定義 (先定義好，後面才能叫它) ---
 def get_now_time():
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
-# --- 工具 ---
 def get_all_reports():
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    # 這裡現在可以安全使用 DEFAULT_DB 了
+    # 獲取所有 csv 檔案
     files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-    
     # 按檔案修改時間排序 (最新在前)
     files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-    
     # 確保預設檔案墊底
     if DEFAULT_DB in files:
         files.remove(DEFAULT_DB)
         files.append(DEFAULT_DB)
-        
     return files
 
-# --- 工具 ---
-def get_all_reports():
-    # 1. 定義排除名單
-    forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    
-    # 2. 獲取所有 csv 檔案
-    files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-    
-    # 💡 修正位置：按檔案最後修改時間排序（最新的排在最前面）
-    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-    
-    # 💡 修正位置：確保預設檔案始終在最後一排
-    if DEFAULT_DB in files:
-        files.remove(DEFAULT_DB)
-        files.append(DEFAULT_DB)
-        
-    return files
+def ensure_files():
+    if not os.path.exists(DEFAULT_DB):
+        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False)
+    if not os.path.exists(CHAT_DB):
+        pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
+
+# --- 3. 初始化與執行邏輯 (放在函數定義之後) ---
+ensure_files()
+
+if 'current_db' not in st.session_state:
+    st.session_state.current_db = DEFAULT_DB
+
+# 💡 現在這裡調用 get_all_reports() 就不會報錯了！
+all_reports = get_all_reports()
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
