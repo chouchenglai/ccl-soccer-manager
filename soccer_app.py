@@ -54,7 +54,8 @@ def save_chat(nickname, content):
     new_msg = {"時間": get_now_time(), "暱稱": nickname, "內容": content, "標籤": "訪客"}
     df = pd.concat([df, pd.DataFrame([new_msg])], ignore_index=True)
     df.to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
-current_tw_date
+current_tw_date = datetime.now(TW_TZ).date()
+
 # --- 初始化 ---
 ensure_files()
 if 'current_db' not in st.session_state: st.session_state.current_db = DEFAULT_DB
