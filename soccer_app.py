@@ -20,36 +20,9 @@ def get_now_time():
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
 # --- 工具 ---
-# --- 1. 核心工具函數 (放在代碼最上方區域) ---
 def get_all_reports():
-    # 這裡確保排除「帳本」與「聊天紀錄」，讓選單乾乾淨淨
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
     return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-
-# --- 2. 側邊欄顯示邏輯 (放在 st.sidebar 區域) ---
-st.sidebar.markdown("### 📂 報表帳號切換")
-
-# 1：先獲取清單 (定義變數)
-all_reports = get_all_reports()
-all_reports.sort() # 排序
-
-# 2：確保預設檔案排在第一位
-if DEFAULT_DB in all_reports:
-    all_reports.remove(DEFAULT_DB)
-    all_reports.insert(0, DEFAULT_DB)
-
-# 3：現在才可以使用 all_reports 變數
-selected_db = st.sidebar.selectbox(
-    "請選擇報表帳號：",
-    options=all_reports,
-    index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
-    key="main_db_selector_final"
-)
-
-# 同步更新狀態
-if selected_db != st.session_state.current_db:
-    st.session_state.current_db = selected_db
-    st.rerun()
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
