@@ -17,6 +17,7 @@ CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
 TW_TZ = pytz.timezone('Asia/Taipei') # 設定台北時區
 
 def get_now_time():
+    # 這裡會回傳正確的台北時間字串
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
 # --- 工具 ---
