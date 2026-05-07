@@ -151,7 +151,7 @@ if new_msg_count > st.session_state.last_chat_count:
 with st.sidebar:
     st.header("💰 資金與統計中心")
     idx = all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0
-    selected_db = st.selectbox("切換報表", all_reports, index=idx)
+    selected_db = st.selectbox("切換帳號", all_reports, index=idx)
     if selected_db != st.session_state.current_db:
         st.session_state.current_db = selected_db
         st.rerun()
