@@ -27,23 +27,26 @@ def get_all_reports():
     return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
 
 # --- 2. 側邊欄顯示邏輯 (放在 st.sidebar 區域) ---
-# 獲取清單
-all_reports = get_all_reports()
-all_reports.sort()  # 讓帳號按 A-Z 排序
+st.sidebar.markdown("### 📂 報表帳號切換")
 
+# 1：先獲取清單 (定義變數)
+all_reports = get_all_reports()
+all_reports.sort() # 排序
+
+# 2：確保預設檔案排在第一位
 if DEFAULT_DB in all_reports:
     all_reports.remove(DEFAULT_DB)
     all_reports.insert(0, DEFAULT_DB)
 
-# 渲染選單 (這行最關鍵，變數名稱要對齊)
+# 3：現在才可以使用 all_reports 變數
 selected_db = st.sidebar.selectbox(
     "請選擇報表帳號：",
     options=all_reports,
     index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
-    key="main_db_selector_simple"
+    key="main_db_selector_final"
 )
 
-# 同步狀態
+# 同步更新狀態
 if selected_db != st.session_state.current_db:
     st.session_state.current_db = selected_db
     st.rerun()
