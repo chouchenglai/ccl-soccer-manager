@@ -21,9 +21,7 @@ def get_now_time():
 
 # --- 工具 ---
 def get_all_reports():
-    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
-    forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+    return [f for f in os.listdir('.') if f.endswith('.csv') and f != CHAT_DB]
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
