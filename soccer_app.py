@@ -9,16 +9,31 @@ from datetime import datetime, timedelta, timezone
 st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
-DEFAULT_DB = "ccl-soccer.csv"
+DEFAULT_DB = "ccl-soccer.csv"  # 💡 確保這行在最上面
 CHAT_DB = "ccl_chat_log.csv"
 COLUMNS = ["日期", "賽事項目", "類型", "金額", "盈虧金額", "結算總分"]
 CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
 
-TW_TZ = pytz.timezone('Asia/Taipei') # 設定台北時區
+TW_TZ = pytz.timezone('Asia/Taipei')
 
 def get_now_time():
-    # 這裡會回傳正確的台北時間字串
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
+
+# --- 工具 ---
+def get_all_reports():
+    forbidden_files = [CHAT_DB, "pending_requests.csv"]
+    # 這裡現在可以安全使用 DEFAULT_DB 了
+    files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+    
+    # 按檔案修改時間排序 (最新在前)
+    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+    
+    # 確保預設檔案墊底
+    if DEFAULT_DB in files:
+        files.remove(DEFAULT_DB)
+        files.append(DEFAULT_DB)
+        
+    return files
 
 # --- 工具 ---
 def get_all_reports():
