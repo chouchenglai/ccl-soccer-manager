@@ -20,10 +20,33 @@ def get_now_time():
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
 # --- 工具 ---
+# --- 1. 核心工具函數 (放在代碼最上方區域) ---
 def get_all_reports():
-    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
+    # 這裡確保排除「帳本」與「聊天紀錄」，讓選單乾乾淨淨
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
     return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+
+# --- 2. 側邊欄顯示邏輯 (放在 st.sidebar 區域) ---
+# 獲取清單
+all_reports = get_all_reports()
+all_reports.sort()  # 讓帳號按 A-Z 排序
+
+if DEFAULT_DB in all_reports:
+    all_reports.remove(DEFAULT_DB)
+    all_reports.insert(0, DEFAULT_DB)
+
+# 渲染選單 (這行最關鍵，變數名稱要對齊)
+selected_db = st.sidebar.selectbox(
+    "請選擇報表帳號：",
+    options=all_reports,
+    index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
+    key="main_db_selector_simple"
+)
+
+# 同步狀態
+if selected_db != st.session_state.current_db:
+    st.session_state.current_db = selected_db
+    st.rerun()
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
