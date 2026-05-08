@@ -8,44 +8,23 @@ from datetime import datetime, timedelta, timezone
 # 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
 
-# --- 1. 基本設定 ---
+# --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
 COLUMNS = ["日期", "賽事項目", "類型", "金額", "盈虧金額", "結算總分"]
 CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
 
-TW_TZ = pytz.timezone('Asia/Taipei')
+TW_TZ = pytz.timezone('Asia/Taipei') # 設定台北時區
 
-# --- 2. 工具函數定義 (先定義好，後面才能叫它) ---
 def get_now_time():
+    # 這裡會回傳正確的台北時間字串
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
+# --- 工具 ---
 def get_all_reports():
+    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    # 獲取所有 csv 檔案
-    files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-    # 按檔案修改時間排序 (最新在前)
-    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-    # 確保預設檔案墊底
-    if DEFAULT_DB in files:
-        files.remove(DEFAULT_DB)
-        files.append(DEFAULT_DB)
-    return files
-
-def ensure_files():
-    if not os.path.exists(DEFAULT_DB):
-        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False)
-    if not os.path.exists(CHAT_DB):
-        pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
-
-# --- 3. 初始化與執行邏輯 (放在函數定義之後) ---
-ensure_files()
-
-if 'current_db' not in st.session_state:
-    st.session_state.current_db = DEFAULT_DB
-
-# 💡 現在這裡調用 get_all_reports() 就不會報錯了！
-all_reports = get_all_reports()
+    return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
@@ -78,29 +57,13 @@ def save_chat(nickname, content):
 current_tw_date = datetime.now(TW_TZ).date()
 
 # --- 初始化 ---
-# 💡 關鍵修正：每次執行都重新獲取最新清單，確保刷新後能看到新檔案
+ensure_files()
+if 'current_db' not in st.session_state: st.session_state.current_db = DEFAULT_DB
 all_reports = get_all_reports()
+if not all_reports: all_reports = [DEFAULT_DB]
+if st.session_state.current_db not in all_reports: st.session_state.current_db = all_reports[0]
 
-if 'current_db' not in st.session_state:
-    st.session_state.current_db = DEFAULT_DB
-
-# 如果目前選中的檔案不存在（例如被刪除或未同步），則跳回第一個（最新的報表）
-if st.session_state.current_db not in all_reports:
-    st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
-
-# --- 側邊欄選單顯示 ---
-selected_db = st.sidebar.selectbox(
-    "請選擇報表帳號：",
-    options=all_reports,
-    # 確保 index 始終指向正確的位置
-    index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
-    key="main_db_selector"
-)
-
-# 偵測變化
-if selected_db != st.session_state.current_db:
-    st.session_state.current_db = selected_db
-    st.rerun()
+main_df = load_data()
 
 # --- 標誌顯示區 (Base64) ---
 import base64
@@ -195,39 +158,17 @@ with st.sidebar:
         st.session_state.current_db = selected_db
         st.rerun()
     st.divider()
-    st.divider()
-    
-    # 💡 修正：增加數據類型檢查與錯誤防護
     if not main_df.empty:
-        try:
-            # 確保「結算總分」是數字，避免非數字導致 int() 失敗
-            last_total = main_df["結算總分"].iloc[-1]
-            current_bal = int(pd.to_numeric(last_total, errors='coerce') or 0)
-            
-            st.metric("目前可用本金", f"${current_bal:,}")
-            
-            # 計算累積投入
-            invest_types = ['初始', '手動補倉', '補倉']
-            # 確保金額欄位也是數字格式
-            main_df['金額'] = pd.to_numeric(main_df['金額'], errors='coerce').fillna(0)
-            total_investment = main_df[main_df['類型'].isin(invest_types)]['金額'].sum()
-            
-            st.write(f"💼 累積投入: `${int(total_investment):,}`")
-            
-            real_profit = current_bal - total_investment
-            if real_profit >= 0: 
-                st.success(f"📈 純獲利: `${int(real_profit):,}`")
-            else: 
-                st.error(f"📉 尚虧: `${int(abs(real_profit)):,}`")
-        except Exception as e:
-            st.warning(f"⚠️ 數據計算中... (暫無有效數據)")
-    else:
-        st.info("💡 目前尚無紀錄，請先新增第一筆初始資料。")
-
-    # 下載按鈕部分
-    if not main_df.empty:
-        csv_data = main_df.to_csv(index=False).encode('utf-8-sig')
-        st.download_button("📥 下載完整紀錄 (CSV)", data=csv_data, file_name=f"{st.session_state.current_db}_backup.csv")
+        current_bal = int(main_df["結算總分"].iloc[-1])
+        st.metric("目前可用本金", f"${current_bal:,}")
+        invest_types = ['初始', '手動補倉', '補倉']
+        total_investment = main_df[main_df['類型'].isin(invest_types)]['金額'].sum()
+        st.write(f"💼 累積投入: `${total_investment:,}`")
+        real_profit = current_bal - total_investment
+        if real_profit >= 0: st.success(f"📈 純獲利: `${real_profit:,}`")
+        else: st.error(f"📉 尚虧: `${abs(real_profit):,}`")
+    csv = main_df.to_csv(index=False).encode('utf-8-sig')
+    st.download_button("📥 下載完整紀錄 (CSV)", data=csv, file_name="soccer_backup.csv")
 
 # --- 邏輯判斷與主功能 ---
 if main_df.empty:
@@ -448,21 +389,8 @@ with tab2:
         else:
             # 通過校驗，執行建立
             new_id = f"{len(req_df) + 1:04d}"
-            
-            # ✅ 修正第 201 行：確保台北時區獲取正確
             today_str = datetime.now(TW_TZ).strftime("%Y年%m月%d日")
-            
             target_csv = f"{new_name}.csv" if not new_name.endswith(".csv") else new_name
-            
-            # 建立個人報表並寫入初始行
-            first_row = {
-                "日期": today_str,
-                "賽事項目": "系統初始化",
-                "類型": "初始",
-                "金額": new_fund,
-                "盈虧金額": 0,
-                "結算總分": new_fund
-            }
             
             # 建立個人檔案並寫入免責首行
             with open(target_csv, "w", encoding="utf-8-sig") as f:
