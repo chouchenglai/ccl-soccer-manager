@@ -24,16 +24,54 @@ def get_now_time():
 def get_all_reports():
     # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    # 💡 關鍵修正：重新掃描當前目錄下所有 CSV
     files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-        # 💡 排序優化：按檔案建立/修改時間排序 (最新在前)
+    
+    # 💡 核心升級 1：按照檔案的最後修改時間排序，讓最新的排在選單最上方
     files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
     
-    # 💡 墊底優化：確保預設檔案始終在最後一排
+    # 💡 核心升級 2：強制把預設的 ccl-soccer.csv 移到清單最後一排
     if DEFAULT_DB in files:
         files.remove(DEFAULT_DB)
         files.append(DEFAULT_DB)
+        
     return files
+
+def ensure_files():
+    if not os.path.exists(DEFAULT_DB):
+        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False)
+    if not os.path.exists(CHAT_DB):
+        pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
+
+def load_data():
+    if os.path.exists(st.session_state.current_db):
+        try:
+            df = pd.read_csv(st.session_state.current_db)
+            if "月份" in df.columns: df = df.drop(columns=["月份"])
+            return df
+        except: return pd.DataFrame(columns=COLUMNS)
+    return pd.DataFrame(columns=COLUMNS)
+
+def save_data(df):
+    if "月份" in df.columns: df = df.drop(columns=["月份"])
+    df.to_csv(st.session_state.current_db, index=False, encoding='utf-8-sig')
+
+def load_chat():
+    if os.path.exists(CHAT_DB): return pd.read_csv(CHAT_DB)
+    return pd.DataFrame(columns=CHAT_COLUMNS)
+
+def save_chat(nickname, content):
+    df = load_chat()
+    new_msg = {"時間": get_now_time(), "暱稱": nickname, "內容": content, "標籤": "訪客"}
+    df = pd.concat([df, pd.DataFrame([new_msg])], ignore_index=True)
+    df.to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
+
+current_tw_date = datetime.now(TW_TZ).date()
+
+# --- 工具 ---
+def get_all_reports():
+    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
+    forbidden_files = [CHAT_DB, "pending_requests.csv"]
+    return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
@@ -68,17 +106,20 @@ current_tw_date = datetime.now(TW_TZ).date()
 # --- 初始化 ---
 ensure_files()
 
-# 💡 每次運行代碼都重新獲取清單
+# 💡 核心升級 3：確保每次重整，都重新掃描伺服器目錄，不漏掉任何一個新檔案
 all_reports = get_all_reports()
 
-if 'current_db' not in st.session_state:
+if not all_reports: 
+    all_reports = [DEFAULT_DB]
+
+if 'current_db' not in st.session_state: 
     st.session_state.current_db = DEFAULT_DB
 
-# 如果目前的檔案被刪除或清單更新，自動導回第一個
-if st.session_state.current_db not in all_reports:
-    st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
+# 💡 防錯機制：如果選單紀錄的帳號剛好被刪除，自動跳回清單的第一個 (即最新帳號)
+if st.session_state.current_db not in all_reports: 
+    st.session_state.current_db = all_reports[0]
 
-current_tw_date = datetime.now(TW_TZ).date()
+main_df = load_data()
 
 # --- 標誌顯示區 (Base64) ---
 import base64
