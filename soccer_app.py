@@ -448,8 +448,21 @@ with tab2:
         else:
             # 通過校驗，執行建立
             new_id = f"{len(req_df) + 1:04d}"
+            
+            # ✅ 修正第 201 行：確保台北時區獲取正確
             today_str = datetime.now(TW_TZ).strftime("%Y年%m月%d日")
+            
             target_csv = f"{new_name}.csv" if not new_name.endswith(".csv") else new_name
+            
+            # 建立個人報表並寫入初始行
+            first_row = {
+                "日期": today_str,
+                "賽事項目": "系統初始化",
+                "類型": "初始",
+                "金額": new_fund,
+                "盈虧金額": 0,
+                "結算總分": new_fund
+            }
             
             # 建立個人檔案並寫入免責首行
             with open(target_csv, "w", encoding="utf-8-sig") as f:
