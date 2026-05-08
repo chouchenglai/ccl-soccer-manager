@@ -195,17 +195,39 @@ with st.sidebar:
         st.session_state.current_db = selected_db
         st.rerun()
     st.divider()
+    st.divider()
+    
+    # 💡 修正：增加數據類型檢查與錯誤防護
     if not main_df.empty:
-        current_bal = int(main_df["結算總分"].iloc[-1])
-        st.metric("目前可用本金", f"${current_bal:,}")
-        invest_types = ['初始', '手動補倉', '補倉']
-        total_investment = main_df[main_df['類型'].isin(invest_types)]['金額'].sum()
-        st.write(f"💼 累積投入: `${total_investment:,}`")
-        real_profit = current_bal - total_investment
-        if real_profit >= 0: st.success(f"📈 純獲利: `${real_profit:,}`")
-        else: st.error(f"📉 尚虧: `${abs(real_profit):,}`")
-    csv = main_df.to_csv(index=False).encode('utf-8-sig')
-    st.download_button("📥 下載完整紀錄 (CSV)", data=csv, file_name="soccer_backup.csv")
+        try:
+            # 確保「結算總分」是數字，避免非數字導致 int() 失敗
+            last_total = main_df["結算總分"].iloc[-1]
+            current_bal = int(pd.to_numeric(last_total, errors='coerce') or 0)
+            
+            st.metric("目前可用本金", f"${current_bal:,}")
+            
+            # 計算累積投入
+            invest_types = ['初始', '手動補倉', '補倉']
+            # 確保金額欄位也是數字格式
+            main_df['金額'] = pd.to_numeric(main_df['金額'], errors='coerce').fillna(0)
+            total_investment = main_df[main_df['類型'].isin(invest_types)]['金額'].sum()
+            
+            st.write(f"💼 累積投入: `${int(total_investment):,}`")
+            
+            real_profit = current_bal - total_investment
+            if real_profit >= 0: 
+                st.success(f"📈 純獲利: `${int(real_profit):,}`")
+            else: 
+                st.error(f"📉 尚虧: `${int(abs(real_profit)):,}`")
+        except Exception as e:
+            st.warning(f"⚠️ 數據計算中... (暫無有效數據)")
+    else:
+        st.info("💡 目前尚無紀錄，請先新增第一筆初始資料。")
+
+    # 下載按鈕部分
+    if not main_df.empty:
+        csv_data = main_df.to_csv(index=False).encode('utf-8-sig')
+        st.download_button("📥 下載完整紀錄 (CSV)", data=csv_data, file_name=f"{st.session_state.current_db}_backup.csv")
 
 # --- 邏輯判斷與主功能 ---
 if main_df.empty:
