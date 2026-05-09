@@ -413,7 +413,7 @@ with tab2:
             today_str = datetime.now(TW_TZ).strftime("%Y年%m月%d日")
             target_csv = f"{new_name}.csv" if not new_name.endswith(".csv") else new_name
 
-                        empty_df=pd. DataFrame(columns=COLUMNS)
+                        empty_df = pd. DataFrame(columns=COLUMNS)
                         empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')                        
                       
             # 更新總表 (預設權限為 User)
