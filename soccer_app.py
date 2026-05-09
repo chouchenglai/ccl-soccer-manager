@@ -5,52 +5,49 @@ import os
 import time
 from datetime import datetime, timedelta, timezone
 
-# 1. 頁面設定 (最頂端)
+# 1. 頁面設定 (必須在最頂端)
 st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
 
-# --- 基本設定 ---
+# --- 1. 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
 COLUMNS = ["日期", "賽事項目", "類型", "金額", "盈虧金額", "結算總分"]
 CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
 
-TW_TZ = pytz.timezone('Asia/Taipei') # 設定台北時區
+# 定義台北時區
+TW_TZ = pytz.timezone('Asia/Taipei')
+
+# --- 2. 工具函數定義 (順序：定義完才能在初始化調用) ---
 
 def get_now_time():
-    # 這裡會回傳正確的台北時間字串
-    return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
-
-# --- 工具 ---
-# --- 2. 工具函數定義 (順序：必須在初始化之前定義) ---
-
-def get_now_time():
+    """獲取台北時間字串"""
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
 def get_all_reports():
-    # 排除系統保留檔案
+    """獲取所有 CSV 報表，並進行排序"""
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    # 重新掃描目錄下所有 CSV
+    # 重新掃描
     files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-    # 按檔案修改時間排序 (最新在前)
+    # 最新修改的排前面
     files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-    # 確保預設檔案始終在最後一排
+    # 預設檔案墊底
     if DEFAULT_DB in files:
         files.remove(DEFAULT_DB)
         files.append(DEFAULT_DB)
     return files
 
 def ensure_files():
+    """確保核心檔案存在"""
     if not os.path.exists(DEFAULT_DB):
         pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False, encoding='utf-8-sig')
     if not os.path.exists(CHAT_DB):
         pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 
 def load_data(file_path):
-    """💡 關鍵修正：確保 load_data 在被調用前已定義"""
+    """載入報表數據，並處理空值"""
     if os.path.exists(file_path):
         try:
             df = pd.read_csv(file_path)
-            # 統一清理格式
             if "月份" in df.columns: df = df.drop(columns=["月份"])
             return df
         except:
@@ -61,20 +58,20 @@ def load_data(file_path):
 
 ensure_files()
 
-# 💡 先獲取清單，再決定當前資料庫
+# 💡 先獲取最新清單
 all_reports = get_all_reports()
 
 if 'current_db' not in st.session_state:
     st.session_state.current_db = DEFAULT_DB
 
-# 💡 雙重保險：如果選中的檔案不見了，自動校正
+# 💡 檢查當前選中的檔案是否有效
 if st.session_state.current_db not in all_reports:
     st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
 
-# 💡 定義當前台北日期
+# 💡 設定全局日期
 current_tw_date = datetime.now(TW_TZ).date()
 
-# 💡 現在可以安全調用 load_data 了！
+# 💡 正式讀取數據
 main_df = load_data(st.session_state.current_db)
 
 # --- 標誌顯示區 (Base64) ---
