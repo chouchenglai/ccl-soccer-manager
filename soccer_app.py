@@ -383,8 +383,8 @@ else:
                     time.sleep(0.5)
                     st.rerun()
                 if c_cancel.form_submit_button("取消"):
-    st.session_state.show_add_funds = False
-    st.rerun()
+                    st.session_state.show_add_funds = False
+                    st.rerun()
 
 # ==========================================
 # Tab 2: 帳號管理
