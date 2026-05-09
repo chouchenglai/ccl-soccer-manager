@@ -35,10 +35,31 @@ def ensure_files():
 def load_data():
     if os.path.exists(st.session_state.current_db):
         try:
-            df = pd.read_csv(st.session_state.current_db)
-            if "月份" in df.columns: df = df.drop(columns=["月份"])
+            # 自動跳過前面非 CSV 的說明文字
+            df = pd.read_csv(
+                st.session_state.current_db,
+                encoding='utf-8-sig',
+                on_bad_lines='skip',
+                skiprows=2
+            )
+
+            # 如果欄位不完整，自動修復
+            missing_cols = [col for col in COLUMNS if col not in df.columns]
+            for col in missing_cols:
+                df[col] = None
+
+            df = df[COLUMNS]
+
+            # 清除舊月份欄位
+            if "月份" in df.columns:
+                df = df.drop(columns=["月份"])
+
             return df
-        except: return pd.DataFrame(columns=COLUMNS)
+
+        except Exception as e:
+            st.error(f"CSV 讀取失敗：{e}")
+            return pd.DataFrame(columns=COLUMNS)
+
     return pd.DataFrame(columns=COLUMNS)
 
 def save_data(df):
@@ -393,11 +414,8 @@ with tab2:
             target_csv = f"{new_name}.csv" if not new_name.endswith(".csv") else new_name
             
             # 建立個人檔案並寫入免責首行
-            with open(target_csv, "w", encoding="utf-8-sig") as f:
-                f.write("以下名單資料，表示同意免責聲明全部條款\n")
-                f.write(f"保存會員資料：申請編號【{new_id}】、申請名稱【{new_name}】、申請日期【{today_str}】\n")
-            
-            pd.DataFrame(columns=COLUMNS).to_csv(target_csv, index=False, encoding='utf-8-sig', mode='a')
+            empty_df = pd.DataFrame(columns=COLUMNS)
+                        empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')
             
             # 更新總表 (預設權限為 User)
             new_data = {
