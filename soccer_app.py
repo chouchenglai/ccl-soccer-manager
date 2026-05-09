@@ -309,7 +309,7 @@ with tab2:
     st.subheader("🗑️ 系統強制重置中", anchor=False)
     
     # 💡 這一行是關鍵：我們直接手動定義一個清單，裡面只放你想刪除的那個檔案
-    target_to_kill = ["admin.csv", "admin.csv"] 
+    target_to_kill = ["test.csv", "test.csv"] 
     
     for fname in target_to_kill:
         if os.path.exists(fname):
