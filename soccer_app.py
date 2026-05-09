@@ -239,7 +239,7 @@ with st.sidebar:
         )
 
 # --- 邏輯判斷與主功能 ---
-if main_df.empty:
+if main_df.empty or main_df["結算總分"].dropna().empty:
     st.subheader("初始化報表")
     init_cap = st.number_input("起始本金", value=60000, step=1000)
     if st.button("建立"):
