@@ -56,14 +56,24 @@ def save_chat(nickname, content):
     df.to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 current_tw_date = datetime.now(TW_TZ).date()
 
-# --- 初始化 ---
+# --- 3. 系統初始化 (確保在讀取 main_df 之前完成) ---
 ensure_files()
-if 'current_db' not in st.session_state: st.session_state.current_db = DEFAULT_DB
-all_reports = get_all_reports()
-if not all_reports: all_reports = [DEFAULT_DB]
-if st.session_state.current_db not in all_reports: st.session_state.current_db = all_reports[0]
 
-main_df = load_data()
+# 💡 修正 1：先獲取清單，再決定當前資料庫
+all_reports = get_all_reports()
+
+if 'current_db' not in st.session_state:
+    st.session_state.current_db = DEFAULT_DB
+
+# 💡 修正 2：雙重保險，如果 session_state 裡的檔案名稱不在當前目錄清單，自動校正
+if st.session_state.current_db not in all_reports:
+    if DEFAULT_DB in all_reports:
+        st.session_state.current_db = DEFAULT_DB
+    elif all_reports:
+        st.session_state.current_db = all_reports[0]
+
+# 💡 修正 3：這行非常關鍵，確保 main_df 讀取的是「當前正確」的檔案路徑
+main_df = load_data(st.session_state.current_db)
 
 # --- 標誌顯示區 (Base64) ---
 import base64
@@ -153,11 +163,19 @@ if new_msg_count > st.session_state.last_chat_count:
 with st.sidebar:
     st.header("💰 資金與統計中心")
     idx = all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0
-    selected_db = st.selectbox("切換帳號", all_reports, index=idx)
+    # 側邊欄：報表切換
+    selected_db = st.selectbox(
+        "📁 選擇報表", 
+        all_reports, 
+        index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0
+    )
+
+    # 💡 修正 4：當切換報表時，立即刷新 main_df，防止讀到舊的/空的數據
     if selected_db != st.session_state.current_db:
         st.session_state.current_db = selected_db
+        # 強制在此時重新載入數據，解決切換分頁顯示空檔案的問題
         st.rerun()
-    st.divider()
+    
     if not main_df.empty:
         current_bal = int(main_df["結算總分"].iloc[-1])
         st.metric("目前可用本金", f"${current_bal:,}")
