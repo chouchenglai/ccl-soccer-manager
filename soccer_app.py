@@ -382,6 +382,7 @@ else:
                     st.success(f"成功補倉 ${add_amt:,}！")
                     time.sleep(0.5)
                     st.rerun()
+
                 if c_cancel.form_submit_button("取消"):
                    st.session_state.show_add_funds = False
                    st.rerun()
