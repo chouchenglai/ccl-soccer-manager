@@ -572,7 +572,7 @@ with tab2:
     else:
         st.info("暫無已授權之清單。")
 
-    with tab_live:
+with tab_live:
         # 第一行：大標題
             st.markdown("### 📡 即時比分同步觀看 (Live)")
         
@@ -582,7 +582,7 @@ with tab2:
         # 第三行：嵌入外部比分網[cite: 1]
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
-    with tab3: # 📋 歷史記錄
+with tab3: # 📋 歷史記錄
         st.subheader("📜 完整賽事歷史紀錄")
         
         # 1. 定義染色邏輯 (確保縮排正確)
@@ -613,15 +613,15 @@ with tab2:
         else:
             st.info("目前尚無歷史紀錄。")
 
-    with tab4: # 統計圖表[cite: 2]        
+with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
         st.write("")
         st.line_chart(main_df["結算總分"], height=320)      
 
 # ---------------------------------------------------------
-    # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
-    # ---------------------------------------------------------
-    with tab5:
+# 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
+# ---------------------------------------------------------
+with tab5:
         st.markdown("### 💬 足球現場實況滾球推薦")
         
         def get_chat_safely():
