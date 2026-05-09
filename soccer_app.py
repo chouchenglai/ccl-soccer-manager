@@ -21,58 +21,60 @@ def get_now_time():
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
 # --- 工具 ---
+# --- 2. 工具函數定義 (順序：必須在初始化之前定義) ---
+
+def get_now_time():
+    return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
+
 def get_all_reports():
-    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
+    # 排除系統保留檔案
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+    # 重新掃描目錄下所有 CSV
+    files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
+    # 按檔案修改時間排序 (最新在前)
+    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+    # 確保預設檔案始終在最後一排
+    if DEFAULT_DB in files:
+        files.remove(DEFAULT_DB)
+        files.append(DEFAULT_DB)
+    return files
 
 def ensure_files():
     if not os.path.exists(DEFAULT_DB):
-        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False)
+        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False, encoding='utf-8-sig')
     if not os.path.exists(CHAT_DB):
         pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 
-def load_data():
-    if os.path.exists(st.session_state.current_db):
+def load_data(file_path):
+    """💡 關鍵修正：確保 load_data 在被調用前已定義"""
+    if os.path.exists(file_path):
         try:
-            df = pd.read_csv(st.session_state.current_db)
+            df = pd.read_csv(file_path)
+            # 統一清理格式
             if "月份" in df.columns: df = df.drop(columns=["月份"])
             return df
-        except: return pd.DataFrame(columns=COLUMNS)
+        except:
+            return pd.DataFrame(columns=COLUMNS)
     return pd.DataFrame(columns=COLUMNS)
 
-def save_data(df):
-    if "月份" in df.columns: df = df.drop(columns=["月份"])
-    df.to_csv(st.session_state.current_db, index=False, encoding='utf-8-sig')
+# --- 3. 系統初始化 (嚴格執行順序) ---
 
-def load_chat():
-    if os.path.exists(CHAT_DB): return pd.read_csv(CHAT_DB)
-    return pd.DataFrame(columns=CHAT_COLUMNS)
-
-def save_chat(nickname, content):
-    df = load_chat()
-    new_msg = {"時間": get_now_time(), "暱稱": nickname, "內容": content, "標籤": "訪客"}
-    df = pd.concat([df, pd.DataFrame([new_msg])], ignore_index=True)
-    df.to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
-current_tw_date = datetime.now(TW_TZ).date()
-
-# --- 3. 系統初始化 (確保在讀取 main_df 之前完成) ---
 ensure_files()
 
-# 💡 修正 1：先獲取清單，再決定當前資料庫
+# 💡 先獲取清單，再決定當前資料庫
 all_reports = get_all_reports()
 
 if 'current_db' not in st.session_state:
     st.session_state.current_db = DEFAULT_DB
 
-# 💡 修正 2：雙重保險，如果 session_state 裡的檔案名稱不在當前目錄清單，自動校正
+# 💡 雙重保險：如果選中的檔案不見了，自動校正
 if st.session_state.current_db not in all_reports:
-    if DEFAULT_DB in all_reports:
-        st.session_state.current_db = DEFAULT_DB
-    elif all_reports:
-        st.session_state.current_db = all_reports[0]
+    st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
 
-# 💡 修正 3：這行非常關鍵，確保 main_df 讀取的是「當前正確」的檔案路徑
+# 💡 定義當前台北日期
+current_tw_date = datetime.now(TW_TZ).date()
+
+# 💡 現在可以安全調用 load_data 了！
 main_df = load_data(st.session_state.current_db)
 
 # --- 標誌顯示區 (Base64) ---
