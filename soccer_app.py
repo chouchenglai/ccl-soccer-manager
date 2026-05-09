@@ -5,101 +5,65 @@ import os
 import time
 from datetime import datetime, timedelta, timezone
 
-# 1. 頁面設定 (必須在最頂端)
+# 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
 
-# --- 1. 基本設定 ---
+# --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
 COLUMNS = ["日期", "賽事項目", "類型", "金額", "盈虧金額", "結算總分"]
 CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
 
-# 定義台北時區
-TW_TZ = pytz.timezone('Asia/Taipei')
-
-# --- 2. 工具函數定義 (順序：定義完才能在初始化調用) ---
+TW_TZ = pytz.timezone('Asia/Taipei') # 設定台北時區
 
 def get_now_time():
-    """獲取台北時間字串"""
+    # 這裡會回傳正確的台北時間字串
     return datetime.now(TW_TZ).strftime("%Y-%m-%d %H:%M")
 
+# --- 工具 ---
 def get_all_reports():
-    """獲取所有 CSV 報表，並進行排序"""
+    # 這裡加上條件：排除「註冊帳本 (pending_requests.csv)」和「聊天紀錄」
     forbidden_files = [CHAT_DB, "pending_requests.csv"]
-    # 重新掃描
-    files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
-    # 最新修改的排前面
-    files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-    # 預設檔案墊底
-    if DEFAULT_DB in files:
-        files.remove(DEFAULT_DB)
-        files.append(DEFAULT_DB)
-    return files
+    return [f for f in os.listdir('.') if f.endswith('.csv') and f not in forbidden_files]
 
 def ensure_files():
-    """確保核心檔案存在"""
     if not os.path.exists(DEFAULT_DB):
-        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False, encoding='utf-8-sig')
+        pd.DataFrame(columns=COLUMNS).to_csv(DEFAULT_DB, index=False)
     if not os.path.exists(CHAT_DB):
         pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 
-def load_data(file_path):
-    """載入報表數據，並處理空值"""
-    if os.path.exists(file_path):
+def load_data():
+    if os.path.exists(st.session_state.current_db):
         try:
-            df = pd.read_csv(file_path)
+            df = pd.read_csv(st.session_state.current_db)
             if "月份" in df.columns: df = df.drop(columns=["月份"])
             return df
-        except:
-            return pd.DataFrame(columns=COLUMNS)
+        except: return pd.DataFrame(columns=COLUMNS)
     return pd.DataFrame(columns=COLUMNS)
 
-# --- 3. 系統初始化 (確保所有變數都已就緒) ---
-ensure_files()
-all_reports = get_all_reports()
+def save_data(df):
+    if "月份" in df.columns: df = df.drop(columns=["月份"])
+    df.to_csv(st.session_state.current_db, index=False, encoding='utf-8-sig')
 
-if 'current_db' not in st.session_state:
-    st.session_state.current_db = DEFAULT_DB
+def load_chat():
+    if os.path.exists(CHAT_DB): return pd.read_csv(CHAT_DB)
+    return pd.DataFrame(columns=CHAT_COLUMNS)
 
-# 檢查檔案有效性
-if st.session_state.current_db not in all_reports:
-    st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
-
+def save_chat(nickname, content):
+    df = load_chat()
+    new_msg = {"時間": get_now_time(), "暱稱": nickname, "內容": content, "標籤": "訪客"}
+    df = pd.concat([df, pd.DataFrame([new_msg])], ignore_index=True)
+    df.to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 current_tw_date = datetime.now(TW_TZ).date()
-main_df = load_data(st.session_state.current_db)
 
-# --- 4. 側邊欄控制區 (請確保這裡的縮進完全正確) ---
-with st.sidebar:
-    # 💡 確保 logo_base64 在這裡是被認得的
-    try:
-        st.markdown(
-            f'<div style="text-align: center;"><img src="data:image/png;base64,{logo_base64}" width="150"></div>', 
-            unsafe_allow_html=True
-        )
-    except:
-        st.write("⚽ CCL-SOCCER") # 萬一圖片載入失敗的備案
-        
-    st.title("控制台")
-    
-    # 💡 關鍵修正：讓選單能真正「抓到」檔案
-    selected_db = st.selectbox(
-        "📁 選擇報表：", 
-        all_reports, 
-        index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
-        key="main_db_selector"
-    )
+# --- 初始化 ---
+ensure_files()
+if 'current_db' not in st.session_state: st.session_state.current_db = DEFAULT_DB
+all_reports = get_all_reports()
+if not all_reports: all_reports = [DEFAULT_DB]
+if st.session_state.current_db not in all_reports: st.session_state.current_db = all_reports[0]
 
-    # 偵測選單變動並強制刷新
-    if selected_db != st.session_state.current_db:
-        st.session_state.current_db = selected_db
-        st.rerun()
-
-    st.divider()
-    st.info(f"📅 系統時間：\n{get_now_time()}")
-
-# --- 5. 主頁面顯示 ---
-st.title("⚽ CCL-Soccer 足球賽事管理系統")
-st.caption(f"當前操作帳號：`{st.session_state.current_db}`")
+main_df = load_data()
 
 # --- 標誌顯示區 (Base64) ---
 import base64
@@ -142,34 +106,13 @@ if "current_db" in st.session_state and os.path.exists(req_file):
     except:
         pass
 
+# 3. 側邊欄開關 (使用我們剛才算好的 check_is_admin)
 with st.sidebar:
-    # 這裡放您的 Logo 標誌區
-    st.markdown(f'<div style="text-align: center;"><img src="data:image/png;base64,{logo_base64}" width="150"></div>', unsafe_allow_html=True)
-    st.title("控制台")
-    
-    # 💡 關鍵修正：報表選擇器，確保它與 session_state 同步
-    selected_db = st.selectbox(
-        "📁 選擇報表：", 
-        all_reports, 
-        index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
-        key="db_selector"
-    )
-
-    # 偵測選單變動
-    if selected_db != st.session_state.current_db:
-        st.session_state.current_db = selected_db
-        # 💡 重要：切換時立刻重新載入數據，防止顯示「初始本金」的誤判
-        st.rerun()
-
     st.divider()
-    st.info(f"📅 系統時間：\n{get_now_time()}")
-
-# --- 5. 主頁面顯示 ---
-st.title("⚽ CCL-Soccer 足球賽事管理系統")
-st.caption(f"當前帳號：`{st.session_state.current_db}`")
-
-# 再次確認 main_df 是否抓到資料，避免分頁顯示空白
-main_df = load_data(st.session_state.current_db)
+    # 提供開關給用戶，不論是誰都能控制自己的接收狀態
+    show_notif = st.toggle("接收討論區新訊息廣播", value=True)
+    if check_is_admin:
+        st.caption("🛡️ 管理員身分已驗證")
 
 # 4. 提醒邏輯：管理員發言穿透 OR 用戶開啟開關
 if new_msg_count > st.session_state.last_chat_count:
@@ -210,19 +153,11 @@ if new_msg_count > st.session_state.last_chat_count:
 with st.sidebar:
     st.header("💰 資金與統計中心")
     idx = all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0
-    # 側邊欄：報表切換
-    selected_db = st.selectbox(
-        "📁 選擇報表", 
-        all_reports, 
-        index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0
-    )
-
-    # 💡 修正 4：當切換報表時，立即刷新 main_df，防止讀到舊的/空的數據
+    selected_db = st.selectbox("切換帳號", all_reports, index=idx)
     if selected_db != st.session_state.current_db:
         st.session_state.current_db = selected_db
-        # 強制在此時重新載入數據，解決切換分頁顯示空檔案的問題
         st.rerun()
-    
+    st.divider()
     if not main_df.empty:
         current_bal = int(main_df["結算總分"].iloc[-1])
         st.metric("目前可用本金", f"${current_bal:,}")
@@ -254,43 +189,38 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-    # --- 6. 頁面分頁邏輯 (確保 main_df 安全讀取) ---
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 數據報表", "📝 註冊帳號", "🛠️ 管理端", "💬 討論區", "📋 申請紀錄"])
-
-with tab1:
-    st.subheader(f"📈 帳號報表: {st.session_state.current_db}")
-    
-    # 💡 關鍵修正：檢查 main_df 是否為空，避免 ILOC 報錯
-    if main_df.empty:
-        st.warning("⚠️ 目前尚無歷史數據。")
-        st.info("請前往「管理端」建立初始資料，或在此輸入第一筆本金。")
-        # 這裡保留您原本的初始化本金輸入邏輯
-        init_fund = st.number_input("輸入初始本金：", min_value=0, value=1000)
-        if st.button("建立初始紀錄"):
-            new_data = {
-                "日期": get_now_time().split(' ')[0],
-                "賽事項目": "初始開戶",
-                "類型": "初始",
-                "金額": init_fund,
-                "盈虧金額": 0,
-                "結算總分": init_fund
-            }
-            main_df = pd.DataFrame([new_data])
-            save_data(main_df)
-            st.success("✅ 初始紀錄已建立！")
-            st.rerun()
-    else:
-        # 顯示數據表格
-        st.dataframe(main_df, use_container_width=True)
-        
-        # 這裡是您原本的計算盈虧、下載 CSV 的代碼區塊
-        # 確保在計算時使用 pd.to_numeric 防止格式錯誤
-        try:
-            st.divider()
-            last_bal = pd.to_numeric(main_df["結算總分"].iloc[-1], errors='coerce')
-            st.metric("當前餘額", f"${last_bal:,.0f}")
-        except:
-            pass
+    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
+       
+    with tab1: # 下單投注
+        try: balance = int(main_df["結算總分"].iloc[-1])
+        except: balance = 0
+        if "bet_val" not in st.session_state: st.session_state.bet_val = 5000
+        st.components.v1.html("""
+            <style>
+                #clock-container { display: flex; align-items: center; background-color: #f8f9fb; padding: 8px 15px; border-radius: 6px; border-left: 5px solid #ff4b4b; font-family: sans-serif; margin-bottom: 5px; }
+                #clock { font-size: 15px; font-weight: 600; color: #31333f; letter-spacing: 0.8px; }
+                .prefix { font-size: 14px; color: #666; margin-right: 12px; }
+            </style>
+            <div id="clock-container"><span class="prefix">台北標準時間 (GMT+8) :</span><span id="clock">載入中...</span></div>
+            <audio id="winAudio" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
+            <audio id="loseAudio" src="https://assets.mixkit.co/active_storage/sfx/2511/2511-preview.mp3" preload="auto"></audio>
+            <audio id="clickAudio" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+            <audio id="alertAudio" src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3" preload="auto"></audio>
+            <script>
+                function updateClock() {
+                    const now = new Date();
+                    const hh = String(now.getHours()).padStart(2, '0');
+                    const mm = String(now.getMinutes()).padStart(2, '0');
+                    const ss = String(now.getSeconds()).padStart(2, '0');
+                    document.getElementById('clock').textContent = now.toLocaleDateString() + " " + hh + ":" + mm + ":" + ss;
+                }
+                setInterval(updateClock, 1000); updateClock();
+                window.parent.playAppSound = function(type) {
+                    var audio = document.getElementById(type + 'Audio');
+                    if (audio) { audio.pause(); audio.currentTime = 0; audio.play().catch(e => console.log(e)); }
+                };
+            </script>
+        """, height=52)
 
         @st.dialog("⚠️全額下注確認⚠️")
         def confirm_all_in():
