@@ -415,7 +415,7 @@ with tab2:
             
             # 建立個人檔案並寫入免責首行
             empty_df = pd.DataFrame(columns=COLUMNS)
-                        empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')
+                                        empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')
             
             # 更新總表 (預設權限為 User)
             new_data = {
