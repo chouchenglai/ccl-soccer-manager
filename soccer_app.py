@@ -466,7 +466,7 @@ with tab2:
         if not new_name:
             st.warning("請先輸入名稱再送出。")
         elif has_chinese:
-            st.error("❌ 建立失敗：報表名稱不可包含中文字，請修改為純英文或數字名稱。")[cite: 1]
+            st.error("❌ 建立失敗：報表名稱不可包含中文字，請修改為純英文或數字名稱。")
         elif not is_agree:
             st.error("❌ 請先勾選「同意服務協議」方可送出申請。")
         else:
@@ -493,7 +493,7 @@ with tab2:
 
     st.divider()
 
-    # --- 4. 區塊 B：審核進度詳情 (管理員互動版) ---[cite: 1]       
+    # --- 4. 區塊 B：審核進度詳情 (管理員互動版) ---       
     st.subheader("帳號審核進度詳情", anchor=False)
     st.caption("💡 溫馨提示：審核進度需要24～48小時才能完成，伺服器建立檔案後才能啟用服務。")
            
@@ -515,7 +515,7 @@ with tab2:
                 status = row["審核結果"]
                 if "進行中" in status:
                     c3.warning(status)
-                    # 一鍵通過按鈕[cite: 1]
+                    # 一鍵通過按鈕
                     if c4.button("✅ 通過", key=f"approve_{idx}"):
                         req_df.at[idx, "審核結果"] = "通過"
                         req_df.to_csv(req_file, index=False, encoding='utf-8-sig')
@@ -579,7 +579,7 @@ with tab_live:
         # 第二行：藍色背景提示框
             st.info("💡 提示：擇優場次後，請複製賽事，再點擊上方欄目，切換【下單投注】")
            
-        # 第三行：嵌入外部比分網[cite: 1]
+        # 第三行：嵌入外部比分網
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
 with tab3: # 📋 歷史記錄
@@ -613,7 +613,7 @@ with tab3: # 📋 歷史記錄
         else:
             st.info("目前尚無歷史紀錄。")
 
-with tab4: # 統計圖表[cite: 2]        
+with tab4: # 統計圖表        
         st.subheader("📈 統計表曲線圖")
         st.write("")
         st.line_chart(main_df["結算總分"], height=320)      
