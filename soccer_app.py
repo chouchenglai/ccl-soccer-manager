@@ -1,14 +1,3 @@
-# 修復版 soccer_app.py
-# 已修復：
-# 1. tab2 NameError
-# 2. tabs 縮排錯亂
-# 3. admin.csv 初始化異常
-# 4. 自動刷新同步
-# 5. CSV 載入保護
-# 6. 管理員權限識別
-# 7. 討論區同步通知
-# 8. Streamlit 結構崩潰問題
-
 import pytz
 import streamlit as st
 import pandas as pd
