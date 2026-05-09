@@ -171,47 +171,72 @@ if new_msg_count > st.session_state.last_chat_count:
 
 # --- Sidebar (側邊欄) ---
 with st.sidebar:
+
     st.header("💰 資金與統計中心")
-    idx = all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0
-    selected_db = st.selectbox("切換帳號", all_reports, index=idx)
+
+    idx = all_reports.index(st.session_state.current_db) \
+        if st.session_state.current_db in all_reports else 0
+
+    selected_db = st.selectbox(
+        "切換帳號",
+        all_reports,
+        index=idx
+    )
+
     if selected_db != st.session_state.current_db:
         st.session_state.current_db = selected_db
         st.rerun()
+
     st.divider()
+
     if not main_df.empty:
-    try:
-        current_bal = int(
-            pd.to_numeric(
-                main_df["結算總分"],
-                errors='coerce'
-            ).dropna().iloc[-1]
+
+        try:
+            current_bal = int(
+                pd.to_numeric(
+                    main_df["結算總分"],
+                    errors='coerce'
+                ).dropna().iloc[-1]
+            )
+
+        except:
+            current_bal = 0
+
+        st.metric(
+            "目前可用本金",
+            f"${current_bal:,}"
         )
-    except:
-        current_bal = 0
 
-    st.metric("目前可用本金", f"${current_bal:,}")
+        invest_types = ['初始', '手動補倉', '補倉']
 
-    invest_types = ['初始', '手動補倉', '補倉']
+        total_investment = main_df[
+            main_df['類型'].isin(invest_types)
+        ]['金額'].sum()
 
-    total_investment = main_df[
-        main_df['類型'].isin(invest_types)
-    ]['金額'].sum()
+        st.write(
+            f"💼 累積投入: `${total_investment:,}`"
+        )
 
-    st.write(f"💼 累積投入: `${total_investment:,}`")
+        real_profit = current_bal - total_investment
 
-    real_profit = current_bal - total_investment
+        if real_profit >= 0:
+            st.success(
+                f"📈 純獲利: `${real_profit:,}`"
+            )
+        else:
+            st.error(
+                f"📉 尚虧: `${abs(real_profit):,}`"
+            )
 
-    if real_profit >= 0:
-        st.success(f"📈 純獲利: `${real_profit:,}`")
-    else:
-        st.error(f"📉 尚虧: `${abs(real_profit):,}`")
+        csv = main_df.to_csv(
+            index=False
+        ).encode('utf-8-sig')
 
-    csv = main_df.to_csv(index=False).encode('utf-8-sig')
-
-    st.download_button(
-        "📥 下載完整紀錄 (CSV)",
-        data=csv,
-        file_name="soccer_backup.csv")
+        st.download_button(
+            "📥 下載完整紀錄 (CSV)",
+            data=csv,
+            file_name="soccer_backup.csv"
+        )
 
 # --- 邏輯判斷與主功能 ---
 if main_df.empty:
