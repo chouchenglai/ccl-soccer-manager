@@ -205,9 +205,14 @@ with st.sidebar:
         st.success(f"📈 純獲利: `${real_profit:,}`")
     else:
         st.error(f"📉 尚虧: `${abs(real_profit):,}`")
+
     csv = main_df.to_csv(index=False).encode('utf-8-sig')
 
-    st.download_button("📥 下載完整紀錄 (CSV)", data=csv, file_name="soccer_backup.csv")
+    st.download_button(
+        "📥 下載完整紀錄 (CSV)",
+        data=csv,
+        file_name="soccer_backup.csv"
+    )
 
 # --- 邏輯判斷與主功能 ---
 if main_df.empty:
