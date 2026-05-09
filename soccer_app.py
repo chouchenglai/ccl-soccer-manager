@@ -106,6 +106,18 @@ if os.path.exists(img_path):
 # 🚀 全局討論區提醒系統 
 # ==========================================
 
+# 🔄 每15秒自動刷新一次（全局同步通知）
+st.markdown(
+    """
+    <script>
+        setTimeout(function(){
+            window.location.reload();
+        }, 15000);
+    </script>
+    """,
+    unsafe_allow_html=True
+)
+
 # 1. 數據準備
 current_chat_data = load_chat()
 new_msg_count = len(current_chat_data)
@@ -139,7 +151,10 @@ if new_msg_count > st.session_state.last_chat_count:
     latest_msg = current_chat_data.iloc[-1]
     
     sender_name = str(latest_msg['暱稱']).lower()
-    is_sender_admin = sender_name in ['管理員', 'admin']
+    is_sender_admin = any(
+    x in sender_name
+    for x in ['管理員', 'admin']
+)
     
     if is_sender_admin or show_notif:
         # 判斷樣式
