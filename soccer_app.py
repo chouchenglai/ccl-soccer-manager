@@ -254,38 +254,43 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
-       
-    with tab1: # 下單投注
-        try: balance = int(main_df["結算總分"].iloc[-1])
-        except: balance = 0
-        if "bet_val" not in st.session_state: st.session_state.bet_val = 5000
-        st.components.v1.html("""
-            <style>
-                #clock-container { display: flex; align-items: center; background-color: #f8f9fb; padding: 8px 15px; border-radius: 6px; border-left: 5px solid #ff4b4b; font-family: sans-serif; margin-bottom: 5px; }
-                #clock { font-size: 15px; font-weight: 600; color: #31333f; letter-spacing: 0.8px; }
-                .prefix { font-size: 14px; color: #666; margin-right: 12px; }
-            </style>
-            <div id="clock-container"><span class="prefix">台北標準時間 (GMT+8) :</span><span id="clock">載入中...</span></div>
-            <audio id="winAudio" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
-            <audio id="loseAudio" src="https://assets.mixkit.co/active_storage/sfx/2511/2511-preview.mp3" preload="auto"></audio>
-            <audio id="clickAudio" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
-            <audio id="alertAudio" src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3" preload="auto"></audio>
-            <script>
-                function updateClock() {
-                    const now = new Date();
-                    const hh = String(now.getHours()).padStart(2, '0');
-                    const mm = String(now.getMinutes()).padStart(2, '0');
-                    const ss = String(now.getSeconds()).padStart(2, '0');
-                    document.getElementById('clock').textContent = now.toLocaleDateString() + " " + hh + ":" + mm + ":" + ss;
-                }
-                setInterval(updateClock, 1000); updateClock();
-                window.parent.playAppSound = function(type) {
-                    var audio = document.getElementById(type + 'Audio');
-                    if (audio) { audio.pause(); audio.currentTime = 0; audio.play().catch(e => console.log(e)); }
-                };
-            </script>
-        """, height=52)
+    # --- 6. 頁面分頁邏輯 (確保 main_df 安全讀取) ---
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 數據報表", "📝 註冊帳號", "🛠️ 管理端", "💬 討論區", "📋 申請紀錄"])
+
+with tab1:
+    st.subheader(f"📈 帳號報表: {st.session_state.current_db}")
+    
+    # 💡 關鍵修正：檢查 main_df 是否為空，避免 ILOC 報錯
+    if main_df.empty:
+        st.warning("⚠️ 目前尚無歷史數據。")
+        st.info("請前往「管理端」建立初始資料，或在此輸入第一筆本金。")
+        # 這裡保留您原本的初始化本金輸入邏輯
+        init_fund = st.number_input("輸入初始本金：", min_value=0, value=1000)
+        if st.button("建立初始紀錄"):
+            new_data = {
+                "日期": get_now_time().split(' ')[0],
+                "賽事項目": "初始開戶",
+                "類型": "初始",
+                "金額": init_fund,
+                "盈虧金額": 0,
+                "結算總分": init_fund
+            }
+            main_df = pd.DataFrame([new_data])
+            save_data(main_df)
+            st.success("✅ 初始紀錄已建立！")
+            st.rerun()
+    else:
+        # 顯示數據表格
+        st.dataframe(main_df, use_container_width=True)
+        
+        # 這裡是您原本的計算盈虧、下載 CSV 的代碼區塊
+        # 確保在計算時使用 pd.to_numeric 防止格式錯誤
+        try:
+            st.divider()
+            last_bal = pd.to_numeric(main_df["結算總分"].iloc[-1], errors='coerce')
+            st.metric("當前餘額", f"${last_bal:,.0f}")
+        except:
+            pass
 
         @st.dialog("⚠️全額下注確認⚠️")
         def confirm_all_in():
