@@ -37,11 +37,10 @@ def load_data():
         try:
             # 自動跳過前面非 CSV 的說明文字
             df = pd.read_csv(
-                st.session_state.current_db,
-                encoding='utf-8-sig',
-                on_bad_lines='skip',
-                skiprows=2
-            )
+                        st.session_state.current_db,
+                        encoding='utf-8-sig',
+                        on_bad_lines='skip'
+                        )
 
             # 如果欄位不完整，自動修復
             missing_cols = [col for col in COLUMNS if col not in df.columns]
@@ -413,11 +412,9 @@ with tab2:
             today_str = datetime.now(TW_TZ).strftime("%Y年%m月%d日")
             target_csv = f"{new_name}.csv" if not new_name.endswith(".csv") else new_name
 
-                        df = pd.read_csv(
-              st.session_state.current_db,
-              encoding='utf-8-sig',
-              on_bad_lines='skip'
-            )                        
+            empty_df = pd.DataFrame(columns=COLUMNS)
+            empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')          
+             
                       
             # 更新總表 (預設權限為 User)
             new_data = {
