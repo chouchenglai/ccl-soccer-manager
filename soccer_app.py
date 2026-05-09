@@ -54,25 +54,52 @@ def load_data(file_path):
             return pd.DataFrame(columns=COLUMNS)
     return pd.DataFrame(columns=COLUMNS)
 
-# --- 3. 系統初始化 (嚴格執行順序) ---
-
+# --- 3. 系統初始化 (確保所有變數都已就緒) ---
 ensure_files()
-
-# 💡 先獲取最新清單
 all_reports = get_all_reports()
 
 if 'current_db' not in st.session_state:
     st.session_state.current_db = DEFAULT_DB
 
-# 💡 檢查當前選中的檔案是否有效
+# 檢查檔案有效性
 if st.session_state.current_db not in all_reports:
     st.session_state.current_db = all_reports[0] if all_reports else DEFAULT_DB
 
-# 💡 設定全局日期
 current_tw_date = datetime.now(TW_TZ).date()
-
-# 💡 正式讀取數據
 main_df = load_data(st.session_state.current_db)
+
+# --- 4. 側邊欄控制區 (請確保這裡的縮進完全正確) ---
+with st.sidebar:
+    # 💡 確保 logo_base64 在這裡是被認得的
+    try:
+        st.markdown(
+            f'<div style="text-align: center;"><img src="data:image/png;base64,{logo_base64}" width="150"></div>', 
+            unsafe_allow_html=True
+        )
+    except:
+        st.write("⚽ CCL-SOCCER") # 萬一圖片載入失敗的備案
+        
+    st.title("控制台")
+    
+    # 💡 關鍵修正：讓選單能真正「抓到」檔案
+    selected_db = st.selectbox(
+        "📁 選擇報表：", 
+        all_reports, 
+        index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
+        key="main_db_selector"
+    )
+
+    # 偵測選單變動並強制刷新
+    if selected_db != st.session_state.current_db:
+        st.session_state.current_db = selected_db
+        st.rerun()
+
+    st.divider()
+    st.info(f"📅 系統時間：\n{get_now_time()}")
+
+# --- 5. 主頁面顯示 ---
+st.title("⚽ CCL-Soccer 足球賽事管理系統")
+st.caption(f"當前操作帳號：`{st.session_state.current_db}`")
 
 # --- 標誌顯示區 (Base64) ---
 import base64
