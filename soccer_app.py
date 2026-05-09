@@ -382,13 +382,12 @@ else:
                     st.success(f"成功補倉 ${add_amt:,}！")
                     time.sleep(0.5)
                     st.rerun()
-
                 if c_cancel.form_submit_button("取消"):
                    st.session_state.show_add_funds = False
                    st.rerun()
 
 # ==========================================
-# Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
+# Tab 2: 帳號管理
 # ==========================================
 with tab2:    
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
