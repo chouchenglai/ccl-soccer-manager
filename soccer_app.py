@@ -115,13 +115,34 @@ if "current_db" in st.session_state and os.path.exists(req_file):
     except:
         pass
 
-# 3. 側邊欄開關 (使用我們剛才算好的 check_is_admin)
 with st.sidebar:
+    # 這裡放您的 Logo 標誌區
+    st.markdown(f'<div style="text-align: center;"><img src="data:image/png;base64,{logo_base64}" width="150"></div>', unsafe_allow_html=True)
+    st.title("控制台")
+    
+    # 💡 關鍵修正：報表選擇器，確保它與 session_state 同步
+    selected_db = st.selectbox(
+        "📁 選擇報表：", 
+        all_reports, 
+        index=all_reports.index(st.session_state.current_db) if st.session_state.current_db in all_reports else 0,
+        key="db_selector"
+    )
+
+    # 偵測選單變動
+    if selected_db != st.session_state.current_db:
+        st.session_state.current_db = selected_db
+        # 💡 重要：切換時立刻重新載入數據，防止顯示「初始本金」的誤判
+        st.rerun()
+
     st.divider()
-    # 提供開關給用戶，不論是誰都能控制自己的接收狀態
-    show_notif = st.toggle("接收討論區新訊息廣播", value=True)
-    if check_is_admin:
-        st.caption("🛡️ 管理員身分已驗證")
+    st.info(f"📅 系統時間：\n{get_now_time()}")
+
+# --- 5. 主頁面顯示 ---
+st.title("⚽ CCL-Soccer 足球賽事管理系統")
+st.caption(f"當前帳號：`{st.session_state.current_db}`")
+
+# 再次確認 main_df 是否抓到資料，避免分頁顯示空白
+main_df = load_data(st.session_state.current_db)
 
 # 4. 提醒邏輯：管理員發言穿透 OR 用戶開啟開關
 if new_msg_count > st.session_state.last_chat_count:
