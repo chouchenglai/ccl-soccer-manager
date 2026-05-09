@@ -211,8 +211,7 @@ with st.sidebar:
     st.download_button(
         "📥 下載完整紀錄 (CSV)",
         data=csv,
-        file_name="soccer_backup.csv"
-    )
+        file_name="soccer_backup.csv")
 
 # --- 邏輯判斷與主功能 ---
 if main_df.empty:
