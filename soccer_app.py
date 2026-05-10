@@ -95,47 +95,12 @@ img_path = "ccl_logo_header.jpg"
 if os.path.exists(img_path):
     img_b64 = get_base64_img(img_path)
     st.markdown(f"""
-    <style>
-
-        .banner-box {{
-
-            width: 100%;
-
-            text-align: center;
-
-            background-color: #ffffff;
-
-            padding: 0px;
-
-            margin-top: -30px;
-
-            margin-bottom: -10px;
-
-            overflow: hidden;
-
-        }}
-
-        .banner-img {{
-
-            width: 72%;
-
-            height: auto;
-
-            display: block;
-
-            margin: 0 auto;
-
-        }}
-
-    </style>
-
-    <div class="banner-box">
-
-        <img src="data:image/jpeg;base64,{img_b64}" class="banner-img">
-
-    </div>
-
-""", unsafe_allow_html=True)
+        <style>
+            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
+            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
+        </style>
+        <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # 🚀 全局討論區提醒系統 
