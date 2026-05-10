@@ -586,10 +586,7 @@ with tab2:
             style[row.index.get_loc('盈虧金額')] = target_color
             return style
 
-        # 2. 顯示表格 (包含倒序處理與千分位格式化)
-        if not main_df.empty:
-            # iloc[::-1] 讓最新的資料排在最上面
-                    # 2. 顯示表格 (包含倒序處理與千分位格式化)
+        # 2. 顯示表格 (包含倒序處理與千分位格式化)                
         if not main_df.empty:
 
             # 建立顯示專用 DataFrame
