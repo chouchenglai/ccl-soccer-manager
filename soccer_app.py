@@ -568,6 +568,7 @@ with tab2:
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
         with tab3: # 📋 歷史記錄
+
         st.subheader("📜 完整賽事歷史紀錄")
 
         # 1. 定義染色邏輯
