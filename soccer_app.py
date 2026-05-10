@@ -594,7 +594,7 @@ with tab2:
                 "盈虧金額": "{:+,.0f}", 
                 "結算總分": "{:,}"
             })
-                        st.dataframe(
+            st.dataframe(
                 styled_df,
                 width=1400,
                 height=420,
