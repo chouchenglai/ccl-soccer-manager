@@ -656,7 +656,7 @@ with tab2:
                         "結算總分",
                         width="large",
                         format="%,d"
-                    )
+                    ),
 
         else:
             st.info("目前尚無歷史紀錄。")
