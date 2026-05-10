@@ -640,7 +640,7 @@ with tab2:
                         width="small"
                     ),
 
-                                        "金額": st.column_config.NumberColumn(
+                   "金額": st.column_config.NumberColumn(
                         "金額",
                         width="medium",
                         format="%,d"
