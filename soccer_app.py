@@ -658,6 +658,12 @@ with tab2:
                         format="%,d"
                     ),
 
+                }
+            )
+
+        else:
+            st.info("目前尚無歷史紀錄。")
+
         else:
             st.info("目前尚無歷史紀錄。")
 
