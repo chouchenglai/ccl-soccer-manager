@@ -607,6 +607,7 @@ with tab2:
 
         "賽事項目": st.column_config.TextColumn(
             "賽事項目"
+            width="large"
         ),
 
         "類型": st.column_config.TextColumn(
@@ -628,7 +629,7 @@ with tab2:
 
         "結算總分": st.column_config.NumberColumn(
             "結算總分",
-            width="medium",
+            width="small",
             format="%,d"
         )
 
