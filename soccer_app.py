@@ -602,12 +602,12 @@ with tab2:
 
         "日期": st.column_config.TextColumn(
             "日期",
-            width="medium"
+            width="small""
         ),
 
         "賽事項目": st.column_config.TextColumn(
             "賽事項目",
-            width="medium",            
+            width="medium"            
 
         "類型": st.column_config.TextColumn(
             "類型",
@@ -628,7 +628,7 @@ with tab2:
 
         "結算總分": st.column_config.NumberColumn(
             "結算總分",
-            width="medium",
+            width="small",
             format="%,d"
         )
 
