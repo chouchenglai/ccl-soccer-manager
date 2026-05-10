@@ -95,47 +95,12 @@ img_path = "ccl_logo_header.jpg"
 if os.path.exists(img_path):
     img_b64 = get_base64_img(img_path)
     st.markdown(f"""
-    <style>
-
-        .banner-box {{
-
-            width: 100%;
-
-            text-align: center;
-
-            background-color: #ffffff;
-
-            padding: 0px;
-
-            margin-top: -30px;
-
-            margin-bottom: -10px;
-
-            overflow: hidden;
-
-        }}
-
-        .banner-img {{
-
-            width: 72%;
-
-            height: auto;
-
-            display: block;
-
-            margin: 0 auto;
-
-        }}
-
-    </style>
-
-    <div class="banner-box">
-
-        <img src="data:image/jpeg;base64,{img_b64}" class="banner-img">
-
-    </div>
-
-""", unsafe_allow_html=True)
+        <style>
+            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
+            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
+        </style>
+        <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # 🚀 全局討論區提醒系統 
@@ -617,86 +582,19 @@ with tab2:
                 target_color = 'color: black'
             
             # 將顏色套用到「類型」與「盈虧金額」這兩欄
-            styled_df = display_df.style.apply(
-                color_row,
-                axis=1
-            ).format({
+            style[row.index.get_loc('類型')] = target_color
+            style[row.index.get_loc('盈虧金額')] = target_color
+            return style
 
-                "金額": "{:,}",
-
-                "盈虧金額": "{:+,.0f}",
-
-                "結算總分": "{:,}"
-
-            })
-
-        # 2. 顯示表格 (包含倒序處理與千分位格式化)                
+        # 2. 顯示表格 (包含倒序處理與千分位格式化)
         if not main_df.empty:
-
-            # 建立顯示專用 DataFrame
-            display_df = main_df.iloc[::-1].copy()
-
-            # 日期只顯示年月日
-            display_df["日期"] = pd.to_datetime(
-                display_df["日期"],
-                errors="coerce"
-            ).dt.strftime("%Y-%m-%d")
-
-            # 套用表格樣式
-            styled_df = display_df.style.apply(
-                color_row,
-                axis=1
-            ).format({
-
-                "金額": "{:,}",
-
-                "盈虧金額": "{:+,.0f}",
-
+            # iloc[::-1] 讓最新的資料排在最上面
+            styled_df = main_df.iloc[::-1].style.apply(color_row, axis=1).format({
+                "金額": "{:,}", 
+                "盈虧金額": "{:+,.0f}", 
                 "結算總分": "{:,}"
-
             })
-            st.dataframe(
-    styled_df,
-    width=1400,
-    height=420,
-    column_config={
-
-        "日期": st.column_config.TextColumn(
-            "日期",
-            width="small"
-        ),
-
-        "賽事項目": st.column_config.TextColumn(
-            "賽事項目",
-            width="large"
-        ),
-
-        "類型": st.column_config.TextColumn(
-            "類型",
-            width="small"
-        ),
-
-        "金額": st.column_config.NumberColumn(
-            "金額",
-            width="small",
-            format="%,d"
-        ),
-
-        "盈虧金額": st.column_config.NumberColumn(
-            "盈虧金額",
-            width="small",
-            format="%+d"
-        ),
-
-        "結算總分": st.column_config.NumberColumn(
-            "結算總分",
-            width="small",
-            format="%,d"
-        )
-
-    }
-)
-
+            st.dataframe(styled_df, use_container_width=True)
         else:
             st.info("目前尚無歷史紀錄。")
 
