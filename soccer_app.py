@@ -596,7 +596,7 @@ with tab2:
             })
             st.dataframe(
     styled_df,
-    use_container_width=True,
+    width=1400,
     height=420,
     column_config={
 
@@ -606,8 +606,7 @@ with tab2:
         ),
 
         "賽事項目": st.column_config.TextColumn(
-           "賽事項目",
-           width="medium"
+            "賽事項目"
         ),
 
         "類型": st.column_config.TextColumn(
@@ -629,19 +628,12 @@ with tab2:
 
         "結算總分": st.column_config.NumberColumn(
             "結算總分",
-            width="small",
+            width="medium",
             format="%,d"
         )
 
     }
-)
-        else:
-            st.info("目前尚無歷史紀錄。")
-
-    with tab4: # 統計圖表[cite: 2]        
-        st.subheader("📈 統計表曲線圖")
-        st.write("")
-        st.line_chart(main_df["結算總分"], height=320)      
+)      
 
 # ---------------------------------------------------------
     # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
