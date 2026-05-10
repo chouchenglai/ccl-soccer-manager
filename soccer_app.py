@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
-st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="CCL-Soccer 體育賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
@@ -800,4 +800,4 @@ with tab2:
                
 # --- 底部 ---
 st.divider()
-st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來足球管理系統版權所有</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來賽事管理系統版權所有</div>""", unsafe_allow_html=True)
