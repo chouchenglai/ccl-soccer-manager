@@ -589,13 +589,30 @@ with tab2:
         # 2. 顯示表格 (包含倒序處理與千分位格式化)
         if not main_df.empty:
             # iloc[::-1] 讓最新的資料排在最上面
+                    # 2. 顯示表格 (包含倒序處理與千分位格式化)
+        if not main_df.empty:
+
+            # 建立顯示專用 DataFrame
+            display_df = main_df.iloc[::-1].copy()
+
+            # 日期只顯示年月日
+            display_df["日期"] = pd.to_datetime(
+                display_df["日期"],
+                errors="coerce"
+            ).dt.strftime("%Y-%m-%d")
+
+            # 套用表格樣式
             styled_df = display_df.style.apply(
                 color_row,
                 axis=1
             ).format({
-                "金額": "{:,}", 
-                "盈虧金額": "{:+,.0f}", 
+
+                "金額": "{:,}",
+
+                "盈虧金額": "{:+,.0f}",
+
                 "結算總分": "{:,}"
+
             })
             st.dataframe(
     styled_df,
