@@ -596,7 +596,7 @@ with tab2:
             })
             st.dataframe(
     styled_df,
-    width=1400,
+    width=1600,
     height=420,
     column_config={
 
