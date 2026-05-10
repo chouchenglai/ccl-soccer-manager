@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
-st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="CCL-Soccer 體育賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
@@ -95,47 +95,12 @@ img_path = "ccl_logo_header.jpg"
 if os.path.exists(img_path):
     img_b64 = get_base64_img(img_path)
     st.markdown(f"""
-    <style>
-
-        .banner-box {{
-
-            width: 100%;
-
-            text-align: center;
-
-            background-color: #ffffff;
-
-            padding: 0px;
-
-            margin-top: -30px;
-
-            margin-bottom: -10px;
-
-            overflow: hidden;
-
-        }}
-
-        .banner-img {{
-
-            width: 72%;
-
-            height: auto;
-
-            display: block;
-
-            margin: 0 auto;
-
-        }}
-
-    </style>
-
-    <div class="banner-box">
-
-        <img src="data:image/jpeg;base64,{img_b64}" class="banner-img">
-
-    </div>
-
-""", unsafe_allow_html=True)
+        <style>
+            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
+            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
+        </style>
+        <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # 🚀 全局討論區提醒系統 
@@ -800,4 +765,4 @@ with tab2:
                
 # --- 底部 ---
 st.divider()
-st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來足球管理系統版權所有</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來賽事管理系統版權所有</div>""", unsafe_allow_html=True)
