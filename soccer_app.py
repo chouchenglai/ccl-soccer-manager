@@ -586,48 +586,110 @@ with tab2:
             style[row.index.get_loc('盈虧金額')] = target_color
             return style
 
-                # 顯示表格（強制欄位寬度）
-st.dataframe(
-    styled_df,
-    use_container_width=True,
-    height=420,
-    column_config={
+               with tab3: # 歷史記錄
 
-        "日期": st.column_config.TextColumn(
-            "日期",
-            width="medium"
-        ),
+    st.subheader("📜 完整賽事歷史紀錄")
 
-        "賽事項目": st.column_config.TextColumn(
-            "賽事項目",
-            width="medium"
-        ),
+    def color_row(row):
 
-        "類型": st.column_config.TextColumn(
-            "類型",
-            width="small"
-        ),
+        style = [''] * len(row)
 
-        "金額": st.column_config.NumberColumn(
-            "金額",
-            width="small",
-            format="%,d"
-        ),
+        target_color = ''
 
-        "盈虧金額": st.column_config.NumberColumn(
-            "盈虧金額",
-            width="small",
-            format="%,d"
-        ),
+        if '贏' in str(row['類型']):
+            target_color = 'color: green'
 
-        "結算總分": st.column_config.NumberColumn(
-            "結算總分",
-            width="medium",
-            format="%,d"
-        ),
+        elif '輸' in str(row['類型']):
+            target_color = 'color: red'
 
-    }
-)
+        style[row.index.get_loc('類型')] = target_color
+        style[row.index.get_loc('盈虧金額')] = target_color
+
+        return style
+
+    # 顯示表格
+    if not main_df.empty:
+
+        # 倒序排列
+        display_df = main_df.iloc[::-1].copy()
+
+        # 安全轉換數值
+        display_df["金額"] = pd.to_numeric(
+            display_df["金額"],
+            errors='coerce'
+        ).fillna(0)
+
+        display_df["盈虧金額"] = pd.to_numeric(
+            display_df["盈虧金額"],
+            errors='coerce'
+        ).fillna(0)
+
+        display_df["結算總分"] = pd.to_numeric(
+            display_df["結算總分"],
+            errors='coerce'
+        ).fillna(0)
+
+        # 套用樣式
+        styled_df = display_df.style.apply(
+            color_row,
+            axis=1
+        ).format({
+            "金額": "{:,}",
+            "盈虧金額": "{:+,.0f}",
+            "結算總分": "{:,}"
+        })
+
+        # 顯示表格
+        st.dataframe(
+
+            styled_df,
+
+            use_container_width=True,
+
+            height=420,
+
+            column_config={
+
+                "日期": st.column_config.TextColumn(
+                    "日期",
+                    width="medium"
+                ),
+
+                "賽事項目": st.column_config.TextColumn(
+                    "賽事項目",
+                    width="large"
+                ),
+
+                "類型": st.column_config.TextColumn(
+                    "類型",
+                    width="small"
+                ),
+
+                "金額": st.column_config.NumberColumn(
+                    "金額",
+                    width="medium",
+                    format="%,d"
+                ),
+
+                "盈虧金額": st.column_config.NumberColumn(
+                    "盈虧金額",
+                    width="medium",
+                    format="%,d"
+                ),
+
+                "結算總分": st.column_config.NumberColumn(
+                    "結算總分",
+                    width="large",
+                    format="%,d"
+                ),
+
+            }
+
+        )
+
+    else:
+
+        st.info("目前尚無歷史紀錄。")
        
     with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
