@@ -8,6 +8,111 @@ from datetime import datetime, timedelta, timezone
 # 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
 
+# =========================
+# CCL-Live 首頁入口界面
+# =========================
+
+if "enter_system" not in st.session_state:
+    st.session_state.enter_system = False
+
+# 尚未進入系統時
+if not st.session_state.enter_system:
+
+    st.markdown("""
+    <style>
+    .main {
+        background-color: #f7f9fc;
+    }
+
+    .welcome-box {
+        text-align: center;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .welcome-title {
+        font-size: 48px;
+        font-weight: bold;
+        color: #0A4FB3;
+        margin-top: 10px;
+    }
+
+    .welcome-subtitle {
+        font-size: 20px;
+        color: #555;
+        margin-top: 15px;
+        margin-bottom: 30px;
+    }
+
+    .enter-btn button {
+        width: 320px;
+        height: 65px;
+        font-size: 28px;
+        font-weight: bold;
+        border-radius: 15px;
+        background-color: #0A4FB3;
+        color: white;
+        border: none;
+    }
+
+    .enter-btn button:hover {
+        background-color: #083c87;
+        color: white;
+    }
+
+    .footer-text {
+        text-align: center;
+        color: #888;
+        margin-top: 40px;
+        font-size: 15px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # LOGO
+    st.image("ccl_logo_header.jpg", use_container_width=True)
+
+    st.markdown("""
+    <div class="welcome-box">
+
+        <div class="welcome-title">
+            CCL-Live 體育走地賽事管理系統
+        </div>
+
+        <div class="welcome-subtitle">
+            Professional Sports Live Management Platform
+        </div>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    # 中間按鈕
+    col1, col2, col3 = st.columns([1,2,1])
+
+    with col2:
+
+        st.markdown('<div class="enter-btn">', unsafe_allow_html=True)
+
+        if st.button("🚀 進入下單賽事管理系統"):
+
+            st.session_state.enter_system = True
+            st.rerun()
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # 下方說明
+    st.markdown("""
+    <div class="footer-text">
+
+    繁體中文 ｜ English Version Coming Soon<br><br>
+
+    © 2026 CCL-Live Sports Platform
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.stop()
+
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
