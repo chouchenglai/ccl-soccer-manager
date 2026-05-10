@@ -640,25 +640,23 @@ with tab2:
                         width="small"
                     ),
 
-                    "金額": st.column_config.NumberColumn(
+                                        "金額": st.column_config.NumberColumn(
                         "金額",
-                        width="small",
-                        format="%d"
+                        width="medium",
+                        format="%,d"
                     ),
 
                     "盈虧金額": st.column_config.NumberColumn(
                         "盈虧金額",
-                        width="small",
-                        format="%d"
+                        width="medium",
+                        format="%,d"
                     ),
 
                     "結算總分": st.column_config.NumberColumn(
                         "結算總分",
-                        width="small",
-                        format="%d"
+                        width="large",
+                        format="%,d"
                     ),
-                }
-            )
 
         else:
             st.info("目前尚無歷史紀錄。")
