@@ -628,7 +628,7 @@ with tab2:
 
         "結算總分": st.column_config.NumberColumn(
             "結算總分",
-            width="small",
+            width="medium",
             format="%,d"
         )
 
