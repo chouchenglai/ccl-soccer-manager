@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
-st.set_page_config(page_title="CCL-Soccer 體育賽事管理系統", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
@@ -95,12 +95,47 @@ img_path = "ccl_logo_header.jpg"
 if os.path.exists(img_path):
     img_b64 = get_base64_img(img_path)
     st.markdown(f"""
-        <style>
-            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
-            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
-        </style>
-        <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
-    """, unsafe_allow_html=True)
+    <style>
+
+        .banner-box {{
+
+            width: 100%;
+
+            text-align: center;
+
+            background-color: #ffffff;
+
+            padding: 0px;
+
+            margin-top: -30px;
+
+            margin-bottom: -10px;
+
+            overflow: hidden;
+
+        }}
+
+        .banner-img {{
+
+            width: 72%;
+
+            height: auto;
+
+            display: block;
+
+            margin: 0 auto;
+
+        }}
+
+    </style>
+
+    <div class="banner-box">
+
+        <img src="data:image/jpeg;base64,{img_b64}" class="banner-img">
+
+    </div>
+
+""", unsafe_allow_html=True)
 
 # ==========================================
 # 🚀 全局討論區提醒系統 
@@ -567,61 +602,21 @@ with tab2:
         # 第三行：嵌入外部比分網[cite: 1]
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
-        with tab3: # 📋 歷史記錄
-
+    with tab3: # 📋 歷史記錄
         st.subheader("📜 完整賽事歷史紀錄")
-
-        # 1. 定義染色邏輯
+        
+        # 1. 定義染色邏輯 (確保縮排正確)
         def color_row(row):
-
             style = ['color: black'] * len(row)
-
-            # 盈虧金額顏色
-            if row['盈虧金額'] > 0:
+            # 判斷盈虧顏色
+            if row['盈虧金額'] > 0: 
                 target_color = 'color: green'
-
-            elif row['盈虧金額'] < 0:
+            elif row['盈虧金額'] < 0: 
                 target_color = 'color: red'
-
-            else:
+            else: 
                 target_color = 'color: black'
-
-            # 結算總分顏色
-            total_score = row['結算總分']
-
-            base_money = 60000
-
-            if total_score > base_money:
-                total_color = 'color: green'
-
-            elif total_score < base_money:
-                total_color = 'color: red'
-
-            else:
-                total_color = 'color: black'
-
-            # 套用欄位顏色
-            style[row.index.get_loc('類型')] = target_color
-
-            style[row.index.get_loc('盈虧金額')] = target_color
-
-            style[row.index.get_loc('結算總分')] = total_color
-
-            return style
-
-
-        # 2. 顯示表格
-        if not main_df.empty:
-
-            display_df = main_df.iloc[::-1].copy()
-
-            # 日期只顯示年月日
-            display_df["日期"] = pd.to_datetime(
-                display_df["日期"],
-                errors="coerce"
-            ).dt.strftime("%Y-%m-%d")
-
-            # 套用樣式
+            
+            # 將顏色套用到「類型」與「盈虧金額」這兩欄
             styled_df = display_df.style.apply(
                 color_row,
                 axis=1
@@ -635,56 +630,74 @@ with tab2:
 
             })
 
-            # 顯示表格
+        # 2. 顯示表格 (包含倒序處理與千分位格式化)                
+        if not main_df.empty:
+
+            # 建立顯示專用 DataFrame
+            display_df = main_df.iloc[::-1].copy()
+
+            # 日期只顯示年月日
+            display_df["日期"] = pd.to_datetime(
+                display_df["日期"],
+                errors="coerce"
+            ).dt.strftime("%Y-%m-%d")
+
+            # 套用表格樣式
+            styled_df = display_df.style.apply(
+                color_row,
+                axis=1
+            ).format({
+
+                "金額": "{:,}",
+
+                "盈虧金額": "{:+,.0f}",
+
+                "結算總分": "{:,}"
+
+            })
             st.dataframe(
+    styled_df,
+    width=1400,
+    height=420,
+    column_config={
 
-                styled_df,
+        "日期": st.column_config.TextColumn(
+            "日期",
+            width="small"
+        ),
 
-                width=1400,
+        "賽事項目": st.column_config.TextColumn(
+            "賽事項目",
+            width="large"
+        ),
 
-                height=420,
+        "類型": st.column_config.TextColumn(
+            "類型",
+            width="small"
+        ),
 
-                column_config={
+        "金額": st.column_config.NumberColumn(
+            "金額",
+            width="small",
+            format="%,d"
+        ),
 
-                    "日期": st.column_config.TextColumn(
-                        "日期",
-                        width="small"
-                    ),
+        "盈虧金額": st.column_config.NumberColumn(
+            "盈虧金額",
+            width="small",
+            format="%+d"
+        ),
 
-                    "賽事項目": st.column_config.TextColumn(
-                        "賽事項目",
-                        width="large"
-                    ),
+        "結算總分": st.column_config.NumberColumn(
+            "結算總分",
+            width="small",
+            format="%,d"
+        )
 
-                    "類型": st.column_config.TextColumn(
-                        "類型",
-                        width="small"
-                    ),
-
-                    "金額": st.column_config.NumberColumn(
-                        "金額",
-                        width="small",
-                        format="%,d"
-                    ),
-
-                    "盈虧金額": st.column_config.NumberColumn(
-                        "盈虧金額",
-                        width="small",
-                        format="%+d"
-                    ),
-
-                    "結算總分": st.column_config.NumberColumn(
-                        "結算總分",
-                        width="small",
-                        format="%,d"
-                    )
-
-                }
-
-            )
+    }
+)
 
         else:
-
             st.info("目前尚無歷史紀錄。")
 
     with tab4: # 統計圖表[cite: 2]        
@@ -787,4 +800,4 @@ with tab2:
                
 # --- 底部 ---
 st.divider()
-st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來賽事管理系統版權所有</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來足球管理系統版權所有</div>""", unsafe_allow_html=True)
