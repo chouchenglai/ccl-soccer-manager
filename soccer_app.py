@@ -586,74 +586,87 @@ with tab2:
             style[row.index.get_loc('盈虧金額')] = target_color
             return style
 
-        # 2. 顯示表格 (包含倒序處理與千分位格式化)
+                # 2. 顯示表格 (包含倒序處理與千分位格式化)
         if not main_df.empty:
-            # iloc[::-1] 讓最新的資料排在最上面
+
+            # 建立安全顯示 DataFrame
             display_df = main_df.iloc[::-1].copy()
 
-display_df["金額"] = pd.to_numeric(
-    display_df["金額"],
-    errors='coerce'
-).fillna(0)
+            # 數值安全轉換
+            display_df["金額"] = pd.to_numeric(
+                display_df["金額"],
+                errors='coerce'
+            ).fillna(0)
 
-display_df["盈虧金額"] = pd.to_numeric(
-    display_df["盈虧金額"],
-    errors='coerce'
-).fillna(0)
+            display_df["盈虧金額"] = pd.to_numeric(
+                display_df["盈虧金額"],
+                errors='coerce'
+            ).fillna(0)
 
-display_df["結算總分"] = pd.to_numeric(
-    display_df["結算總分"],
-    errors='coerce'
-).fillna(0)
+            display_df["結算總分"] = pd.to_numeric(
+                display_df["結算總分"],
+                errors='coerce'
+            ).fillna(0)
 
-styled_df = display_df.style.apply(
-    color_row,
-    axis=1
-).format({
-    "金額": "{:,}",
-    "盈虧金額": "{:+,.0f}",
-    "結算總分": "{:,}"
-})
+            # 套用顏色與格式
+            styled_df = display_df.style.apply(
+                color_row,
+                axis=1
+            ).format({
+                "金額": "{:,}",
+                "盈虧金額": "{:+,.0f}",
+                "結算總分": "{:,}"
+            })
 
-st.dataframe(
-    styled_df,
-    use_container_width=True,
-    column_config={
-        "日期": st.column_config.TextColumn(
-            "日期",
-            width="medium"
-        ),
+            # 顯示表格（強制欄位寬度）
+            st.dataframe(
+                styled_df,
+                use_container_width=True,
+                height=420,
+                column_config={
 
-        "賽事項目": st.column_config.TextColumn(
-            "賽事項目",
-            width="large"
-        ),
+                    "日期": st.column_config.TextColumn(
+                        "日期",
+                        width="medium"
+                    ),
 
-        "類型": st.column_config.TextColumn(
-            "類型",
-            width="small"
-        ),
+                    "賽事項目": st.column_config.TextColumn(
+                        "賽事項目",
+                        width="large"
+                    ),
 
-        "金額": st.column_config.NumberColumn(
-            "金額",
-            width="small",
-            format="%d"
-        ),
+                    "類型": st.column_config.TextColumn(
+                        "類型",
+                        width="small"
+                    ),
 
-        "盈虧金額": st.column_config.NumberColumn(
-            "盈虧金額",
-            width="small",
-            format="%d"
-        ),
+                    "金額": st.column_config.NumberColumn(
+                        "金額",
+                        width="small",
+                        format="%d"
+                    ),
 
-        "結算總分": st.column_config.NumberColumn(
-            "結算總分",
-            width="small",
-            format="%d"
-        ),
-    },
-    height=420
-)      
+                    "盈虧金額": st.column_config.NumberColumn(
+                        "盈虧金額",
+                        width="small",
+                        format="%d"
+                    ),
+
+                    "結算總分": st.column_config.NumberColumn(
+                        "結算總分",
+                        width="small",
+                        format="%d"
+                    ),
+                }
+            )
+
+        else:
+            st.info("目前尚無歷史紀錄。")
+
+    with tab4: # 統計圖表[cite: 2]        
+        st.subheader("📈 統計表曲線圖")
+        st.write("")
+        st.line_chart(main_df["結算總分"], height=320)      
 
 # ---------------------------------------------------------
     # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
