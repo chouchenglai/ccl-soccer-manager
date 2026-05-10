@@ -662,13 +662,7 @@ with tab2:
             )
 
         else:
-            st.info("目前尚無歷史紀錄。")
-
-        else:
-            st.info("目前尚無歷史紀錄。")
-
-        else:
-            st.info("目前尚無歷史紀錄。")
+            st.info("目前尚無歷史紀錄。") 
 
     with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
