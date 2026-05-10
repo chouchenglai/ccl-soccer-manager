@@ -596,13 +596,13 @@ with tab2:
             })
             st.dataframe(
     styled_df,
-    width=1600,
+    width=1400,
     height=420,
     column_config={
 
         "日期": st.column_config.TextColumn(
             "日期",
-            width="medium"
+            width="small"
         ),
 
         "賽事項目": st.column_config.TextColumn(
