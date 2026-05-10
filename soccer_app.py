@@ -606,8 +606,8 @@ with tab2:
         ),
 
         "賽事項目": st.column_config.TextColumn(
-            "賽事項目",
-            width="medium"
+           "賽事項目",
+           width="medium"
         ),
 
         "類型": st.column_config.TextColumn(
