@@ -107,7 +107,7 @@ if os.path.exists(img_path):
 
             padding: 0px;
 
-            margin-top: -40px;
+            margin-top: -30px;
 
             margin-bottom: -10px;
 
