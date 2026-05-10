@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
-st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
@@ -586,13 +586,30 @@ with tab2:
             style[row.index.get_loc('盈虧金額')] = target_color
             return style
 
-        # 2. 顯示表格 (包含倒序處理與千分位格式化)
+                # 2. 顯示表格 (包含倒序處理與千分位格式化)
         if not main_df.empty:
-            # iloc[::-1] 讓最新的資料排在最上面
-            styled_df = main_df.iloc[::-1].style.apply(color_row, axis=1).format({
-                "金額": "{:,}", 
-                "盈虧金額": "{:+,.0f}", 
+
+            # 建立顯示專用 DataFrame
+            display_df = main_df.iloc[::-1].copy()
+
+            # 日期只顯示年月日
+            display_df["日期"] = pd.to_datetime(
+                display_df["日期"],
+                errors="coerce"
+            ).dt.strftime("%Y-%m-%d")
+
+            # 套用表格樣式
+            styled_df = display_df.style.apply(
+                color_row,
+                axis=1
+            ).format({
+
+                "金額": "{:,}",
+
+                "盈虧金額": "{:+,.0f}",
+
                 "結算總分": "{:,}"
+
             })
             st.dataframe(
     styled_df,
@@ -739,4 +756,4 @@ with tab2:
                
 # --- 底部 ---
 st.divider()
-st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來足球管理系統版權所有</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來賽事球管理系統版權所有</div>""", unsafe_allow_html=True)
