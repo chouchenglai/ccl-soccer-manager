@@ -607,8 +607,7 @@ with tab2:
 
         "賽事項目": st.column_config.TextColumn(
             "賽事項目",
-            width="medium",
-            format="%,d""
+            width="medium",            
 
         "類型": st.column_config.TextColumn(
             "類型",
