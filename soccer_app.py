@@ -6,7 +6,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
-st.set_page_config(page_title="CCL-Soccer 足球賽事管理系統", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="CCL-Soccer 體育賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
@@ -567,38 +567,52 @@ with tab2:
         # 第三行：嵌入外部比分網[cite: 1]
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
-    with tab3: # 📋 歷史記錄
+        with tab3: # 📋 歷史記錄
+
         st.subheader("📜 完整賽事歷史紀錄")
-        
-        # 1. 定義染色邏輯 (確保縮排正確)
+
+        # 1. 定義染色邏輯
         def color_row(row):
+
             style = ['color: black'] * len(row)
-            # 判斷盈虧顏色
-            if row['盈虧金額'] > 0: 
+
+            # 盈虧金額顏色
+            if row['盈虧金額'] > 0:
                 target_color = 'color: green'
-            elif row['盈虧金額'] < 0: 
+
+            elif row['盈虧金額'] < 0:
                 target_color = 'color: red'
-            else: 
+
+            else:
                 target_color = 'color: black'
-            
-            # 將顏色套用到「類型」與「盈虧金額」這兩欄
-            styled_df = display_df.style.apply(
-                color_row,
-                axis=1
-            ).format({
 
-                "金額": "{:,}",
+            # 結算總分顏色
+            total_score = row['結算總分']
 
-                "盈虧金額": "{:+,.0f}",
+            base_money = 60000
 
-                "結算總分": "{:,}"
+            if total_score > base_money:
+                total_color = 'color: green'
 
-            })
+            elif total_score < base_money:
+                total_color = 'color: red'
 
-        # 2. 顯示表格 (包含倒序處理與千分位格式化)                
+            else:
+                total_color = 'color: black'
+
+            # 套用欄位顏色
+            style[row.index.get_loc('類型')] = target_color
+
+            style[row.index.get_loc('盈虧金額')] = target_color
+
+            style[row.index.get_loc('結算總分')] = total_color
+
+            return style
+
+
+        # 2. 顯示表格
         if not main_df.empty:
 
-            # 建立顯示專用 DataFrame
             display_df = main_df.iloc[::-1].copy()
 
             # 日期只顯示年月日
@@ -607,7 +621,7 @@ with tab2:
                 errors="coerce"
             ).dt.strftime("%Y-%m-%d")
 
-            # 套用表格樣式
+            # 套用樣式
             styled_df = display_df.style.apply(
                 color_row,
                 axis=1
@@ -620,49 +634,57 @@ with tab2:
                 "結算總分": "{:,}"
 
             })
+
+            # 顯示表格
             st.dataframe(
-    styled_df,
-    width=1400,
-    height=420,
-    column_config={
 
-        "日期": st.column_config.TextColumn(
-            "日期",
-            width="small"
-        ),
+                styled_df,
 
-        "賽事項目": st.column_config.TextColumn(
-            "賽事項目",
-            width="large"
-        ),
+                width=1400,
 
-        "類型": st.column_config.TextColumn(
-            "類型",
-            width="small"
-        ),
+                height=420,
 
-        "金額": st.column_config.NumberColumn(
-            "金額",
-            width="small",
-            format="%,d"
-        ),
+                column_config={
 
-        "盈虧金額": st.column_config.NumberColumn(
-            "盈虧金額",
-            width="small",
-            format="%+d"
-        ),
+                    "日期": st.column_config.TextColumn(
+                        "日期",
+                        width="small"
+                    ),
 
-        "結算總分": st.column_config.NumberColumn(
-            "結算總分",
-            width="small",
-            format="%,d"
-        )
+                    "賽事項目": st.column_config.TextColumn(
+                        "賽事項目",
+                        width="large"
+                    ),
 
-    }
-)
+                    "類型": st.column_config.TextColumn(
+                        "類型",
+                        width="small"
+                    ),
+
+                    "金額": st.column_config.NumberColumn(
+                        "金額",
+                        width="small",
+                        format="%,d"
+                    ),
+
+                    "盈虧金額": st.column_config.NumberColumn(
+                        "盈虧金額",
+                        width="small",
+                        format="%+d"
+                    ),
+
+                    "結算總分": st.column_config.NumberColumn(
+                        "結算總分",
+                        width="small",
+                        format="%,d"
+                    )
+
+                }
+
+            )
 
         else:
+
             st.info("目前尚無歷史紀錄。")
 
     with tab4: # 統計圖表[cite: 2]        
@@ -765,4 +787,4 @@ with tab2:
                
 # --- 底部 ---
 st.divider()
-st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來足球管理系統版權所有</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 周振來賽事管理系統版權所有</div>""", unsafe_allow_html=True)
