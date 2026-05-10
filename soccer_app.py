@@ -594,46 +594,49 @@ with tab2:
                 "盈虧金額": "{:+,.0f}", 
                 "結算總分": "{:,}"
             })
-            st.dataframe(
-    styled_df,
-    width=1400,
-    height=420,
-    column_config={
+                        st.dataframe(
+                styled_df,
+                width=1400,
+                height=420,
+                column_config={
 
-        "日期": st.column_config.TextColumn(
-            "日期",
-            width="medium"
-        ),
+                    "日期": st.column_config.TextColumn(
+                        "日期",
+                        width="medium"
+                    ),
 
-        "賽事項目": st.column_config.TextColumn(
-            "賽事項目"
-        ),
+                    "賽事項目": st.column_config.TextColumn(
+                        "賽事項目"
+                    ),
 
-        "類型": st.column_config.TextColumn(
-            "類型",
-            width="small"
-        ),
+                    "類型": st.column_config.TextColumn(
+                        "類型",
+                        width="small"
+                    ),
 
-        "金額": st.column_config.NumberColumn(
-            "金額",
-            width="small",
-            format="%,d"
-        ),
+                    "金額": st.column_config.NumberColumn(
+                        "金額",
+                        width="small",
+                        format="%,d"
+                    ),
 
-        "盈虧金額": st.column_config.NumberColumn(
-            "盈虧金額",
-            width="small",
-            format="%+d"
-        ),
+                    "盈虧金額": st.column_config.NumberColumn(
+                        "盈虧金額",
+                        width="small",
+                        format="%+d"
+                    ),
 
-        "結算總分": st.column_config.NumberColumn(
-            "結算總分",
-            width="medium",
-            format="%,d"
-        )
+                    "結算總分": st.column_config.NumberColumn(
+                        "結算總分",
+                        width="medium",
+                        format="%,d"
+                    )
 
-    }
-)      
+                }
+            )
+
+        else:
+            st.info("目前尚無歷史紀錄。")      
 
 # ---------------------------------------------------------
     # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
