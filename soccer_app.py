@@ -257,88 +257,6 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-# =========================
-# CCL-Live 首頁入口畫面
-# =========================
-
-st.markdown("""
-<style>
-
-.welcome-container{
-    background: linear-gradient(135deg,#ffffff,#f5f9ff);
-    padding:40px;
-    border-radius:25px;
-    text-align:center;
-    box-shadow:0 8px 30px rgba(0,0,0,0.08);
-    margin-top:20px;
-    margin-bottom:25px;
-}
-
-.welcome-title{
-    font-size:42px;
-    font-weight:800;
-    color:#1565c0;
-    margin-top:10px;
-}
-
-.welcome-subtitle{
-    font-size:18px;
-    color:#666666;
-    margin-top:10px;
-    margin-bottom:20px;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# 顯示 LOGO
-st.image("ccl_logo_header.jpg", use_container_width=True)
-
-# 首頁入口畫面
-st.markdown("""
-<div class="welcome-container">
-
-<div class="welcome-title">
-CCL-Live 體育走地賽事管理系統
-</div>
-
-<div class="welcome-subtitle">
-Professional Sports Live Management Platform
-</div>
-
-</div>
-""", unsafe_allow_html=True)
-
-# 超連結入口
-st.markdown("""
-<div style="text-align:center;margin-bottom:30px;">
-
-<a href="#註冊會員管理中心" target="_self">
-
-<button style="
-background:#1565c0;
-color:white;
-font-size:22px;
-padding:15px 40px;
-border:none;
-border-radius:15px;
-cursor:pointer;
-box-shadow:0 4px 15px rgba(0,0,0,0.2);
-">
-🚀 進入下單賽事管理系統
-</button>
-
-</a>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div style='text-align:center;color:gray;margin-top:20px'>
-繁體中文 ｜ English Version Coming Soon
-</div>
-""", unsafe_allow_html=True)  
-
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
     with tab1: # 下單投注
@@ -457,7 +375,8 @@ st.markdown("""
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
 with tab2:    
-    st.markdown(""" <h1 id="註冊會員管理中心"> 📂 登錄會員管理中心 </h1> """, unsafe_allow_html=True)
+    st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
+    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
     
     # --- 1. 初始化檔案與欄位 ---
     req_file = "pending_requests.csv"
