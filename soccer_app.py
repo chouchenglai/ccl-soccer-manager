@@ -267,7 +267,7 @@ else:
         balance = 0
 
     # =========================
-    # 台北時間
+    # 台北時區
     # =========================
 
     st.components.v1.html("""
@@ -588,9 +588,7 @@ else:
 
                 st.session_state.show_add_funds = False
 
-                st.rerun()
-
-        st.divider()
+                st.rerun()       
 
     # =========================
     # 快速補倉
