@@ -259,7 +259,7 @@ else:
 
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
-    with tab1: # 下單投注
+with tab1: # 下單投注
 
     try:
         balance = int(main_df["結算總分"].iloc[-1])
@@ -267,7 +267,7 @@ else:
         balance = 0
 
     # =========================
-    # 台北時區
+    # 台北時間
     # =========================
 
     st.components.v1.html("""
@@ -588,87 +588,7 @@ else:
 
                 st.session_state.show_add_funds = False
 
-                st.rerun()       
-
-    # =========================
-    # 快速補倉
-    # =========================
-
-    st.write("")
-
-    if st.button(
-        "🔗 再投入補倉"
-    ):
-
-        st.session_state.show_add_funds = True
-
-    if st.session_state.get(
-        'show_add_funds',
-        False
-    ):
-
-        st.divider()
-
-        st.subheader(
-            "📥 快速補倉面板"
-        )
-
-        with st.form("quick_add_funds"):
-
-            add_amt = st.number_input(
-                "請輸入補倉金額",
-                min_value=1000,
-                step=1000,
-                value=30000
-            )
-
-            c_submit, c_cancel = st.columns([2, 8])
-
-            if c_submit.form_submit_button(
-                "確認補倉"
-            ):
-
-                current_bal = int(
-                    main_df["結算總分"].iloc[-1]
-                )
-
-                new_row = {
-                    "日期": get_now_time(),
-                    "賽事項目": "手動補倉 (快捷)",
-                    "類型": "補倉",
-                    "金額": int(add_amt),
-                    "盈虧金額": 0,
-                    "結算總分":
-                        current_bal + int(add_amt)
-                }
-
-                save_data(
-                    pd.concat(
-                        [
-                            main_df,
-                            pd.DataFrame([new_row])
-                        ],
-                        ignore_index=True
-                    )
-                )
-
-                st.session_state.show_add_funds = False
-
-                st.success(
-                    f"成功補倉 ${add_amt:,}！"
-                )
-
-                time.sleep(0.5)
-
-                st.rerun()
-
-            if c_cancel.form_submit_button(
-                "取消"
-            ):
-
-                st.session_state.show_add_funds = False
-
-                st.rerun()
+                st.rerun()    
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
