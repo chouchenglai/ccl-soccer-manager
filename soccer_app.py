@@ -300,7 +300,7 @@ else:
                 st.rerun()
             if c_conf2.button("取消", use_container_width=True):
                 st.rerun()            
-        m_info = st.text_area("賽事資訊", placeholder="請複製粘貼，您的賽事比分，等待結束後，再按下方結果", key="input_info")
+        m_info = st.text_area("賽事資訊", placeholder="請複製粘貼，您的賽事比分，結束按結果", key="input_info")
 
 # =========================
 # 多筆賽事輸入（固定5場）
