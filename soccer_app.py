@@ -266,11 +266,8 @@ else:
     except:
         balance = 0
 
-    if "bet_val" not in st.session_state:
-        st.session_state.bet_val = 5000
-
     # =========================
-    # 台北時區
+    # 台北時間
     # =========================
 
     st.components.v1.html("""
@@ -344,39 +341,31 @@ else:
     st.write("")
 
     # =========================
-    # 賽事資訊標題 + 快速導航
+    # 賽事資訊 + 快速索引
     # =========================
+
+    st.markdown("## 🏆 賽事資訊")
 
     nav_html = """
     <div style="
         display:flex;
         flex-wrap:wrap;
         gap:10px;
-        margin-bottom:30px;
-        align-items:center;
+        margin-bottom:25px;
     ">
-
-        <span style="
-            font-size:36px;
-            font-weight:bold;
-            color:#222;
-        ">
-            🏆 賽事資訊
-        </span>
     """
 
     for x in range(1, 11):
 
         nav_html += f"""
         <a href="#match_{x}"
-           target="_self"
            style="
                 text-decoration:none;
                 background:#f1f3f6;
-                padding:10px 18px;
-                border-radius:12px;
+                padding:10px 20px;
+                border-radius:10px;
                 color:#333;
-                font-weight:600;
+                font-weight:bold;
            ">
            第{x}場
         </a>
@@ -384,10 +373,9 @@ else:
 
     nav_html += "</div>"
 
-    st.markdown(
-        nav_html,
-        unsafe_allow_html=True
-    )
+    st.markdown(nav_html, unsafe_allow_html=True)
+
+    st.divider()
 
     # =========================
     # 建立 10 場賽事
@@ -402,30 +390,20 @@ else:
             unsafe_allow_html=True
         )
 
-        st.markdown(
-            f"## 📌 第{i}場賽事"
-        )
-
-        # =========================
-        # 賽事輸入
-        # =========================
+        st.markdown(f"## 📌 第{i}場賽事")
 
         match_info = st.text_area(
             f"請輸入第{i}場賽事",
             placeholder="例如：英超 阿仙奴 vs 車路士",
-            key=f"match_{i}"
+            key=f"match_input_{i}"
         )
-
-        # =========================
-        # 折疊下注設定
-        # =========================
 
         with st.expander(f"⚙️ 第{i}場下注設定"):
 
             bet_amt = st.number_input(
                 f"第{i}場下注金額",
                 min_value=0,
-                max_value=max(1000000, balance),
+                max_value=1000000,
                 value=5000,
                 step=1000,
                 key=f"bet_{i}"
@@ -472,15 +450,15 @@ else:
                         "結算總分": new_balance
                     }
 
-                    save_data(
-                        pd.concat(
-                            [
-                                main_df,
-                                pd.DataFrame([new_row])
-                            ],
-                            ignore_index=True
-                        )
+                    updated_df = pd.concat(
+                        [
+                            main_df,
+                            pd.DataFrame([new_row])
+                        ],
+                        ignore_index=True
                     )
+
+                    save_data(updated_df)
 
                     st.success(
                         f"第{i}場已記錄為過關"
@@ -518,21 +496,99 @@ else:
                         "結算總分": new_balance
                     }
 
-                    save_data(
-                        pd.concat(
-                            [
-                                main_df,
-                                pd.DataFrame([new_row])
-                            ],
-                            ignore_index=True
-                        )
+                    updated_df = pd.concat(
+                        [
+                            main_df,
+                            pd.DataFrame([new_row])
+                        ],
+                        ignore_index=True
                     )
+
+                    save_data(updated_df)
 
                     st.error(
                         f"第{i}場已記錄為未過關"
                     )
 
                     st.rerun()
+
+        st.divider()
+
+    # =========================
+    # 快速補倉
+    # =========================
+
+    st.write("")
+
+    if st.button("🔗 再投入補倉"):
+
+        st.session_state.show_add_funds = True
+
+    if st.session_state.get(
+        'show_add_funds',
+        False
+    ):
+
+        st.divider()
+
+        st.subheader("📥 快速補倉面板")
+
+        with st.form("quick_add_funds"):
+
+            add_amt = st.number_input(
+                "請輸入補倉金額",
+                min_value=1000,
+                step=1000,
+                value=30000
+            )
+
+            c_submit, c_cancel = st.columns([2, 8])
+
+            if c_submit.form_submit_button(
+                "確認補倉"
+            ):
+
+                current_bal = int(
+                    main_df["結算總分"].iloc[-1]
+                )
+
+                new_row = {
+                    "日期": get_now_time(),
+                    "賽事項目": "手動補倉 (快捷)",
+                    "類型": "補倉",
+                    "金額": int(add_amt),
+                    "盈虧金額": 0,
+                    "結算總分":
+                        current_bal + int(add_amt)
+                }
+
+                updated_df = pd.concat(
+                    [
+                        main_df,
+                        pd.DataFrame([new_row])
+                    ],
+                    ignore_index=True
+                )
+
+                save_data(updated_df)
+
+                st.session_state.show_add_funds = False
+
+                st.success(
+                    f"成功補倉 ${add_amt:,}！"
+                )
+
+                time.sleep(0.5)
+
+                st.rerun()
+
+            if c_cancel.form_submit_button(
+                "取消"
+            ):
+
+                st.session_state.show_add_funds = False
+
+                st.rerun()
 
         st.divider()
 
