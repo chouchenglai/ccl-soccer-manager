@@ -301,9 +301,45 @@ else:
             if c_conf2.button("取消", use_container_width=True):
                 st.rerun()                            
 
-# =========================
-# 多筆賽事輸入（獨立控制版）
-# =========================
+# --- 再投入補倉 ---
+        st.write("")   
+        col_link, col_empty = st.columns([2, 8]) # 放在左側
+        with col_link:
+            # 超鏈接按鈕
+            if st.button("🔗 再投入補倉", help="點擊直接進行補倉操作", use_container_width=False):                
+                st.session_state.show_add_funds = True
+                st.rerun()
+
+        # --- 如果標記為 True，則彈出補倉輸入框 ---
+        if st.session_state.get('show_add_funds', False):
+            st.divider()
+            st.subheader("📥 快速補倉面板")
+            with st.form("quick_add_funds"):
+                add_amt = st.number_input("請輸入補倉金額", min_value=1000, step=1000, value=30000)
+                c_submit, c_cancel = st.columns([2, 8])
+                if c_submit.form_submit_button("確認補倉"):
+                    # 執行補倉邏輯
+                    current_bal = int(main_df["結算總分"].iloc[-1])
+                    new_row = {
+                        "日期": get_now_time(),
+                        "賽事項目": "手動補倉 (快捷)",
+                        "類型": "補倉",
+                        "金額": int(add_amt),
+                        "盈虧金額": 0,
+                        "結算總分": current_bal + int(add_amt)
+                    }
+                    save_data(pd.concat([main_df, pd.DataFrame([new_row])], ignore_index=True))
+                    st.session_state.show_add_funds = False # 關閉面板
+                    st.success(f"成功補倉 ${add_amt:,}！")
+                    time.sleep(0.5)
+                    st.rerun()
+                if c_cancel.form_submit_button("取消"):
+                    st.session_state.show_add_funds = False
+                    st.rerun()
+
+    # =========================
+    # 多筆賽事輸入（獨立控制版）
+    # =========================
 
 st.markdown("### 🏆 賽事資訊")
 
@@ -440,42 +476,6 @@ with st.expander(f"⚙️ 第{i}場下注設定"):
 
             st.error(f"第{i}場已記錄為未過關")
             st.rerun()
-
-# --- 再投入補倉 ---
-        st.write("")   
-        col_link, col_empty = st.columns([2, 8]) # 放在左側
-        with col_link:
-            # 超鏈接按鈕
-            if st.button("🔗 再投入補倉", help="點擊直接進行補倉操作", use_container_width=False):                
-                st.session_state.show_add_funds = True
-                st.rerun()
-
-        # --- 如果標記為 True，則彈出補倉輸入框 ---
-        if st.session_state.get('show_add_funds', False):
-            st.divider()
-            st.subheader("📥 快速補倉面板")
-            with st.form("quick_add_funds"):
-                add_amt = st.number_input("請輸入補倉金額", min_value=1000, step=1000, value=30000)
-                c_submit, c_cancel = st.columns([2, 8])
-                if c_submit.form_submit_button("確認補倉"):
-                    # 執行補倉邏輯
-                    current_bal = int(main_df["結算總分"].iloc[-1])
-                    new_row = {
-                        "日期": get_now_time(),
-                        "賽事項目": "手動補倉 (快捷)",
-                        "類型": "補倉",
-                        "金額": int(add_amt),
-                        "盈虧金額": 0,
-                        "結算總分": current_bal + int(add_amt)
-                    }
-                    save_data(pd.concat([main_df, pd.DataFrame([new_row])], ignore_index=True))
-                    st.session_state.show_add_funds = False # 關閉面板
-                    st.success(f"成功補倉 ${add_amt:,}！")
-                    time.sleep(0.5)
-                    st.rerun()
-                if c_cancel.form_submit_button("取消"):
-                    st.session_state.show_add_funds = False
-                    st.rerun()
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
