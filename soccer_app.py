@@ -347,35 +347,37 @@ with tab1: # 下單投注
     st.markdown("## 🏆 賽事資訊")
 
     nav_html = """
-    <div style="
-        display:flex;
-        flex-wrap:wrap;
-        gap:10px;
-        margin-bottom:25px;
-    ">
+<div style="
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:25px;
+">
+"""
+
+for x in range(1, 11):
+
+    nav_html += f"""
+    <a href="#match_{x}" 
+       style="
+            text-decoration:none;
+            background:#f1f3f6;
+            padding:10px 20px;
+            border-radius:10px;
+            color:#333333;
+            font-weight:bold;
+            display:inline-block;
+       ">
+       第{x}場
+    </a>
     """
 
-    for x in range(1, 11):
+nav_html += "</div>"
 
-        nav_html += f"""
-        <a href="#match_{x}"
-           style="
-                text-decoration:none;
-                background:#f1f3f6;
-                padding:10px 20px;
-                border-radius:10px;
-                color:#333;
-                font-weight:bold;
-           ">
-           第{x}場
-        </a>
-        """
-
-    nav_html += "</div>"
-
-    st.markdown(nav_html, unsafe_allow_html=True)
-
-    st.divider()
+st.markdown(
+    nav_html,
+    unsafe_allow_html=True
+)
 
     # =========================
     # 建立 10 場賽事
