@@ -299,52 +299,52 @@ else:
                 st.session_state.bet_val = balance
                 st.rerun()
             if c_conf2.button("取消", use_container_width=True):
-                st.rerun()            
-        
-# =========================
-# 多筆賽事輸入（固定5場）
-# =========================
+                st.rerun()           
+   
+        # =========================
+        # 多筆賽事輸入（固定5場）
+        # =========================
 
-st.markdown("### 🏆 賽事資訊")
+        st.markdown("### 🏆 賽事資訊")
 
-match1 = st.text_area(
-    "第1場賽事",
-    placeholder="例如：英超 阿仙奴 vs 車路士",
-    key="match1"
-)
+        match1 = st.text_area(
+            "第1場賽事",
+            placeholder="例如：英超 阿仙奴 vs 車路士",
+            key="match1"
+        )
 
-match2 = st.text_area(
-    "第2場賽事",
-    placeholder="例如：西甲 皇馬 vs 巴塞",
-    key="match2"
-)
+        match2 = st.text_area(
+            "第2場賽事",
+            placeholder="例如：西甲 皇馬 vs 巴塞",
+            key="match2"
+        )
 
-match3 = st.text_area(
-    "第3場賽事",
-    placeholder="例如：NBA 湖人 vs 勇士",
-    key="match3"
-)
+        match3 = st.text_area(
+            "第3場賽事",
+            placeholder="例如：NBA 湖人 vs 勇士",
+            key="match3"
+        )
 
-match4 = st.text_area(
-    "第4場賽事",
-    placeholder="例如：日職 巨人 vs 阪神",
-    key="match4"
-)
+        match4 = st.text_area(
+            "第4場賽事",
+            placeholder="例如：日職 巨人 vs 阪神",
+            key="match4"
+        )
 
-match5 = st.text_area(
-    "第5場賽事",
-    placeholder="例如：歐冠 曼城 vs 拜仁",
-    key="match5"
-)
+        match5 = st.text_area(
+            "第5場賽事",
+            placeholder="例如：歐冠 曼城 vs 拜仁",
+            key="match5"
+        )
 
-# 合併全部賽事資訊
-m_info = "\n".join([
-    match1,
-    match2,
-    match3,
-    match4,
-    match5
-])        
+        # 合併全部賽事資訊
+        m_info = "\n".join([
+            match1,
+            match2,
+            match3,
+            match4,
+            match5
+        ])        
 
         colb = st.columns(5)
         amounts = [5000, 10000, 15000, 20000]
