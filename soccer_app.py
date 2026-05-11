@@ -332,8 +332,17 @@ else:
         }
     </style>
     """, unsafe_allow_html=True)
+    
+    default_tab = 1 if st.session_state.get("go_register", False) else 0 
+    tabs = st.tabs([
+    "💰 下單投注",
+    "📋 註冊帳號",
+    "🌍 即時比分",
+    "📜 歷史記錄",
+    "📊 統計圖表"
+])
 
-    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
+tab1, tab2, tab3, tab4, tab5 = tabs
        
     with tab1: # 下單投注
         try: balance = int(main_df["結算總分"].iloc[-1])
@@ -451,6 +460,10 @@ else:
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
 with tab2:    
+
+    if st.session_state.get("go_register", False):
+    st.session_state.go_register = False
+
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
     
