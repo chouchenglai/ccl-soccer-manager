@@ -301,16 +301,53 @@ else:
             if c_conf2.button("取消", use_container_width=True):
                 st.rerun()                            
 
-        # =========================
+# =========================
 # 多筆賽事輸入（獨立控制版）
 # =========================
 
 st.markdown("### 🏆 賽事資訊")
 
+# =========================
+# 快速索引導航
+# =========================
+
+st.markdown("#### 📌 快速索引")
+
+col_idx = st.columns(5)
+
+for idx in range(5):
+    with col_idx[idx]:
+        st.markdown(
+            f"""
+            <a href="#match_{idx+1}" target="_self">
+                <button style="
+                    width:100%;
+                    padding:8px;
+                    border-radius:10px;
+                    border:none;
+                    background:#f0f2f6;
+                    cursor:pointer;
+                ">
+                    第{idx+1}場
+                </button>
+            </a>
+            """,
+            unsafe_allow_html=True
+        )
+
+st.write("")
+
 # 建立 5 場賽事
 for i in range(1, 6):
 
-    st.markdown(f"---")
+    st.markdown(
+    f"""
+    <h2 id="match_{i}">
+    📌 第{i}場賽事
+    </h2>
+    """,
+    unsafe_allow_html=True
+)
     st.subheader(f"📌 第{i}場賽事")
 
     # 賽事內容
@@ -320,7 +357,13 @@ for i in range(1, 6):
         key=f"match_{i}"
     )
 
-    # 金額
+# 金額
+# =========================
+# 折疊下注設定
+# =========================
+
+with st.expander(f"⚙️ 第{i}場下注設定"):
+
     bet_amt = st.number_input(
         f"第{i}場下注金額",
         min_value=0,
@@ -330,7 +373,6 @@ for i in range(1, 6):
         key=f"bet_{i}"
     )
 
-    # 盈利
     gain_amt = st.number_input(
         f"第{i}場盈利金額",
         min_value=0,
