@@ -273,8 +273,6 @@ with tab1: # 下單投注
     # 台北時間
     # =========================
 
-    st.components.v1.html(...)
-
     st.components.v1.html("""
         <style>
             #clock-container {
