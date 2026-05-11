@@ -255,9 +255,8 @@ else:
             font-weight: bold !important;   /* 強制字體加粗 */
         }
     </style>
-    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)    
     
-    ```python
 # =========================
 # CCL-Live 首頁入口畫面
 # =========================
