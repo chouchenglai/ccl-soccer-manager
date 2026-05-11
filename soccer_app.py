@@ -335,15 +335,9 @@ else:
     
     default_tab = 1 if st.session_state.get("go_register", False) else 0 
 
-    tabs = st.tabs([
-    "💰 下單投注",
-    "📋 註冊帳號",
-    "🌍 即時比分",
-    "📜 歷史記錄",
-    "📊 統計圖表"
-])
+    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
 
-tab1, tab2, tab3, tab4, tab5 = tabs
+
        
     with tab1: # 下單投注
         try: balance = int(main_df["結算總分"].iloc[-1])
