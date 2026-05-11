@@ -414,10 +414,10 @@ else:
                     st.session_state.show_add_funds = False
                     st.rerun()
 
-  # ==========================================
+# ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
-with tab2:    
+with tab2: 
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
     
