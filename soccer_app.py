@@ -344,9 +344,7 @@ m_info = "\n".join([
     match3,
     match4,
     match5
-])
-
-        if "match_count" not in st.session_state:
+])        
 
         colb = st.columns(5)
         amounts = [5000, 10000, 15000, 20000]
