@@ -8,82 +8,6 @@ from datetime import datetime, timedelta, timezone
 # 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
 
-# =========================
-# CCL-Live 首頁入口界面
-# =========================
-
-if "enter_system" not in st.session_state:
-    st.session_state.enter_system = False
-
-if "go_register" not in st.session_state:
-    st.session_state.go_register = False
-
-# 尚未進入系統
-if not st.session_state.enter_system:
-
-    st.markdown("""
-    <style>
-
-    .welcome-box{
-        background: linear-gradient(135deg,#ffffff,#f5f9ff);
-        padding:40px;
-        border-radius:25px;
-        text-align:center;
-        box-shadow:0 8px 30px rgba(0,0,0,0.08);
-        margin-top:20px;
-        margin-bottom:30px;
-    }
-
-    .welcome-title{
-        font-size:42px;
-        font-weight:800;
-        color:#1565c0;
-        margin-bottom:10px;
-    }
-
-    .welcome-subtitle{
-        font-size:20px;
-        color:#666;
-        margin-bottom:30px;
-    }
-
-    </style>
-    """, unsafe_allow_html=True)
-
-    st.image("ccl_logo_header.jpg", use_container_width=True)
-
-    st.markdown("""
-    <div class="welcome-box">
-
-        <div class="welcome-title">
-            CCL-Live 體育走地賽事管理系統
-        </div>
-
-        <div class="welcome-subtitle">
-            Professional Sports Live Management Platform
-        </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-    col1,col2,col3 = st.columns([1,2,1])
-
-    with col2:
-
-        if st.button("🚀 進入下單賽事管理系統", use_container_width=True):
-
-            st.session_state.enter_system = True
-            st.session_state.go_register = True
-            st.rerun()
-
-    st.markdown("""
-    <div style='text-align:center;color:gray;margin-top:40px'>
-    繁體中文 ｜ English Version Coming Soon
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.stop()
-
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
@@ -332,8 +256,6 @@ else:
         }
     </style>
     """, unsafe_allow_html=True)
-    
-    default_tab = 1 if st.session_state.get("go_register", False) else 0 
 
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
@@ -453,9 +375,6 @@ else:
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
 with tab2:    
-
-    if st.session_state.get("go_register", False):
-    st.session_state.go_register = False
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
     
