@@ -261,13 +261,13 @@ else:
        
 with tab1: # 下單投注
 
-    st.write("")
+     st.write("")
 
-    try:
-        balance = int(main_df["結算總分"].iloc[-1])
+   try:
+       balance = int(main_df["結算總分"].iloc[-1])
 
-    except:
-        balance = 0
+   except:
+       balance = 0
 
     # =========================
     # 台北時間
