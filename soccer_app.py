@@ -400,16 +400,6 @@ with tab1: # 下單投注
         st.write("")
         st.divider()
 
-    # =========================
-    # 更多賽事
-    # =========================
-
-    if st.button("➕ 更多賽事"):
-
-        st.info("後續可自行增加第6場以上賽事區塊")
-
-    st.write("")
-
    # --- 再投入補倉 ---
         st.write("")   
         col_link, col_empty = st.columns([2, 8]) # 放在左側
