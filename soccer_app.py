@@ -410,7 +410,7 @@ with tab1: # 下單投注
 
     st.write("")
 
-# --- 再投入補倉 ---
+   # --- 再投入補倉 ---
         st.write("")   
         col_link, col_empty = st.columns([2, 8]) # 放在左側
         with col_link:
@@ -445,8 +445,6 @@ with tab1: # 下單投注
                 if c_cancel.form_submit_button("取消"):
                     st.session_state.show_add_funds = False
                     st.rerun()
-
-    
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
