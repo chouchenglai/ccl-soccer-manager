@@ -341,180 +341,231 @@ with tab1: # 下單投注
     st.write("")
 
     # =========================
-    # 賽事資訊 + 快速索引
-    # =========================
+# 賽事資訊
+# =========================
 
-    st.markdown("## 🏆 賽事資訊")
+st.markdown("## 🏆 賽事資訊")
 
-    nav_html = """
+# =========================
+# 快速索引
+# =========================
+
+st.markdown("""
 <div style="
     display:flex;
     flex-wrap:wrap;
-    gap:10px;
+    gap:12px;
     margin-bottom:25px;
 ">
-"""
+""", unsafe_allow_html=True)
 
-for x in range(1, 11):
+col_nav = st.columns(5)
 
-    nav_html += f"""
-    <a href="#match_{x}" 
-       style="
-            text-decoration:none;
-            background:#f1f3f6;
-            padding:10px 20px;
-            border-radius:10px;
-            color:#333333;
-            font-weight:bold;
-            display:inline-block;
-       ">
-       第{x}場
-    </a>
-    """
+for x in range(1, 6):
 
-nav_html += "</div>"
-
-st.markdown(
-    nav_html,
-    unsafe_allow_html=True
-)
-
-    # =========================
-    # 建立 10 場賽事
-    # =========================
-
-    for i in range(1, 11):
+    with col_nav[x-1]:
 
         st.markdown(
             f"""
-            <div id="match_{i}"></div>
+            <a href="#match_{x}"
+                style="
+                    text-decoration:none;
+                    background:#f1f3f6;
+                    padding:12px;
+                    border-radius:10px;
+                    color:#333;
+                    font-weight:bold;
+                    display:block;
+                    text-align:center;
+                ">
+                第{x}場
+            </a>
             """,
             unsafe_allow_html=True
         )
 
-        st.markdown(f"## 📌 第{i}場賽事")
+st.markdown("</div>", unsafe_allow_html=True)
 
-        match_info = st.text_area(
-            f"請輸入第{i}場賽事",
-            placeholder="例如：英超 阿仙奴 vs 車路士",
-            key=f"match_input_{i}"
+st.divider()
+
+# =========================
+# 建立賽事區塊
+# =========================
+
+for i in range(1, 6):
+
+    # -------------------------
+    # 錨點定位
+    # -------------------------
+
+    st.markdown(
+        f"""
+        <div id="match_{i}"></div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # -------------------------
+    # 賽事標題
+    # -------------------------
+
+    st.markdown(f"## 📌 第{i}場賽事")
+
+    # -------------------------
+    # 賽事輸入
+    # -------------------------
+
+    match_info = st.text_area(
+        f"請輸入第{i}場賽事",
+        placeholder="例如：英超 阿仙奴 vs 車路士",
+        key=f"match_input_{i}"
+    )
+
+    # -------------------------
+    # 摺疊下注設定
+    # -------------------------
+
+    with st.expander(f"⚙️ 第{i}場下注設定"):
+
+        bet_amt = st.number_input(
+            f"第{i}場下注金額",
+            min_value=0,
+            max_value=1000000,
+            value=5000,
+            step=1000,
+            key=f"bet_{i}"
         )
 
-        with st.expander(f"⚙️ 第{i}場下注設定"):
+        gain_amt = st.number_input(
+            f"第{i}場盈利金額",
+            min_value=0,
+            max_value=1000000,
+            value=0,
+            step=1000,
+            key=f"gain_{i}"
+        )
 
-            bet_amt = st.number_input(
-                f"第{i}場下注金額",
-                min_value=0,
-                max_value=1000000,
-                value=5000,
-                step=1000,
-                key=f"bet_{i}"
-            )
+        col_win, col_lose = st.columns(2)
 
-            gain_amt = st.number_input(
-                f"第{i}場盈利金額",
-                min_value=0,
-                max_value=1000000,
-                value=0,
-                step=1000,
-                key=f"gain_{i}"
-            )
+        # =====================
+        # 過關
+        # =====================
 
-            col_win, col_lose = st.columns(2)
+        if col_win.button(
+            f"✅ 第{i}場過關",
+            key=f"win_{i}"
+        ):
 
-            # =========================
-            # 過關
-            # =========================
+            if match_info.strip() == "":
 
-            if col_win.button(
-                f"✅ 第{i}場過關",
-                key=f"win_{i}"
-            ):
+                st.warning(
+                    f"請先輸入第{i}場賽事資訊"
+                )
 
-                if match_info.strip() == "":
+            else:
 
-                    st.warning(
-                        f"請先輸入第{i}場賽事資訊"
-                    )
+                latest_df = load_data()
 
-                else:
+                latest_balance = int(
+                    latest_df["結算總分"].iloc[-1]
+                )
 
-                    new_balance = (
-                        balance + int(gain_amt)
-                    )
+                new_balance = (
+                    latest_balance + int(gain_amt)
+                )
 
-                    new_row = {
-                        "日期": get_now_time(),
-                        "賽事項目": match_info,
-                        "類型": "贏 (+)",
-                        "金額": int(gain_amt),
-                        "盈虧金額": int(gain_amt),
-                        "結算總分": new_balance
-                    }
+                new_row = {
+                    "日期": get_now_time(),
+                    "賽事項目": match_info,
+                    "類型": "贏 (+)",
+                    "金額": int(gain_amt),
+                    "盈虧金額": int(gain_amt),
+                    "結算總分": new_balance
+                }
 
-                    updated_df = pd.concat(
-                        [
-                            main_df,
-                            pd.DataFrame([new_row])
-                        ],
-                        ignore_index=True
-                    )
+                updated_df = pd.concat(
+                    [
+                        latest_df,
+                        pd.DataFrame([new_row])
+                    ],
+                    ignore_index=True
+                )
 
-                    save_data(updated_df)
+                save_data(updated_df)
 
-                    st.success(
-                        f"第{i}場已記錄為過關"
-                    )
+                st.success(
+                    f"第{i}場已記錄為過關"
+                )
 
-                    st.rerun()
+                st.rerun()
 
-            # =========================
-            # 未過關
-            # =========================
+        # =====================
+        # 未過關
+        # =====================
 
-            if col_lose.button(
-                f"❌ 第{i}場未過關",
-                key=f"lose_{i}"
-            ):
+        if col_lose.button(
+            f"❌ 第{i}場未過關",
+            key=f"lose_{i}"
+        ):
 
-                if match_info.strip() == "":
+            if match_info.strip() == "":
 
-                    st.warning(
-                        f"請先輸入第{i}場賽事資訊"
-                    )
+                st.warning(
+                    f"請先輸入第{i}場賽事資訊"
+                )
 
-                else:
+            else:
 
-                    new_balance = (
-                        balance - int(bet_amt)
-                    )
+                latest_df = load_data()
 
-                    new_row = {
-                        "日期": get_now_time(),
-                        "賽事項目": match_info,
-                        "類型": "輸 (-)",
-                        "金額": int(bet_amt),
-                        "盈虧金額": -int(bet_amt),
-                        "結算總分": new_balance
-                    }
+                latest_balance = int(
+                    latest_df["結算總分"].iloc[-1]
+                )
 
-                    updated_df = pd.concat(
-                        [
-                            main_df,
-                            pd.DataFrame([new_row])
-                        ],
-                        ignore_index=True
-                    )
+                new_balance = (
+                    latest_balance - int(bet_amt)
+                )
 
-                    save_data(updated_df)
+                new_row = {
+                    "日期": get_now_time(),
+                    "賽事項目": match_info,
+                    "類型": "輸 (-)",
+                    "金額": int(bet_amt),
+                    "盈虧金額": -int(bet_amt),
+                    "結算總分": new_balance
+                }
 
-                    st.error(
-                        f"第{i}場已記錄為未過關"
-                    )
+                updated_df = pd.concat(
+                    [
+                        latest_df,
+                        pd.DataFrame([new_row])
+                    ],
+                    ignore_index=True
+                )
 
-                    st.rerun()
+                save_data(updated_df)
 
-        st.divider()
+                st.error(
+                    f"第{i}場已記錄為未過關"
+                )
+
+                st.rerun()
+
+    st.divider()
+
+# =========================
+# 更多賽事
+# =========================
+
+if "extra_match_count" not in st.session_state:
+
+    st.session_state.extra_match_count = 5
+
+if st.button("➕ 更多賽事（再新增5場）"):
+
+    st.session_state.extra_match_count += 5
+
+    st.rerun()
 
     # =========================
     # 快速補倉
