@@ -301,7 +301,60 @@ else:
             if c_conf2.button("取消", use_container_width=True):
                 st.rerun()
 
+            if "match_count" not in st.session_state:
+            st.session_state.match_count = 5
+
         m_info = st.text_area("賽事資訊", placeholder="請複製粘貼，您的賽事比分，等待結束後，再按下方結果", key="input_info")
+
+        match_results = []
+
+for i in range(st.session_state.match_count):
+
+    st.markdown(f"#### 第 {i+1} 場賽事")
+
+    col1, col2, col3 = st.columns([6, 1, 1])
+
+    with col1:
+        match_text = st.text_input(
+            f"賽事資訊 {i+1}",
+            placeholder="例如：英超 阿仙奴 vs 車路士",
+            key=f"match_{i}"
+        )
+
+    with col2:
+        win_btn = st.button(
+            "✅贏",
+            key=f"win_{i}"
+        )
+
+    with col3:
+        lose_btn = st.button(
+            "❌輸",
+            key=f"lose_{i}"
+        )
+
+    result = ""
+
+    if win_btn:
+        result = "贏"
+
+    if lose_btn:
+        result = "輸"
+
+    match_results.append({
+        "match": match_text,
+        "result": result
+    })
+
+    st.divider()
+
+# =========================
+# 更多賽事按鈕
+# =========================
+
+if st.button("➕ 更多賽事資訊輸入"):
+    st.session_state.match_count += 5
+    st.rerun()
 
         colb = st.columns(5)
         amounts = [5000, 10000, 15000, 20000]
