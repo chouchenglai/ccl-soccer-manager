@@ -334,6 +334,7 @@ else:
     """, unsafe_allow_html=True)
     
     default_tab = 1 if st.session_state.get("go_register", False) else 0 
+
     tabs = st.tabs([
     "💰 下單投注",
     "📋 註冊帳號",
@@ -463,7 +464,6 @@ with tab2:
 
     if st.session_state.get("go_register", False):
     st.session_state.go_register = False
-
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
     
