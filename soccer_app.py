@@ -255,8 +255,8 @@ else:
             font-weight: bold !important;   /* 強制字體加粗 */
         }
     </style>
-    """, unsafe_allow_html=True)    
-    
+    """, unsafe_allow_html=True)
+
 # =========================
 # CCL-Live 首頁入口畫面
 # =========================
@@ -313,7 +313,7 @@ Professional Sports Live Management Platform
 st.markdown("""
 <div style="text-align:center;margin-bottom:30px;">
 
-<a href="#register_area" target="_self">
+<a href="#註冊會員管理中心" target="_self">
 
 <button style="
 background:#1565c0;
@@ -337,8 +337,8 @@ st.markdown("""
 <div style='text-align:center;color:gray;margin-top:20px'>
 繁體中文 ｜ English Version Coming Soon
 </div>
-""", unsafe_allow_html=True)
-    
+""", unsafe_allow_html=True)  
+
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
     with tab1: # 下單投注
@@ -457,8 +457,7 @@ st.markdown("""
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
 with tab2:    
-    st.markdown('<div id="register_area"></div>', unsafe_allow_html=True) st.markdown("## 📂 登錄帳號管理中心")
-    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
+    st.markdown(""" <h1 id="註冊會員管理中心"> 📂 登錄會員管理中心 </h1> """, unsafe_allow_html=True)
     
     # --- 1. 初始化檔案與欄位 ---
     req_file = "pending_requests.csv"
