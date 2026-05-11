@@ -261,7 +261,7 @@ else:
        
 with tab1: # 下單投注
      
-    st.write("")
+      st.write("")
 
     try:
         balance = int(main_df["結算總分"].iloc[-1])
@@ -560,6 +560,7 @@ for i in range(1, 6):
 # =========================
 
 if "extra_match_count" not in st.session_state:
+
     st.session_state.extra_match_count = 5
 
 if st.button("➕ 更多賽事（再新增5場）"):
@@ -568,81 +569,81 @@ if st.button("➕ 更多賽事（再新增5場）"):
 
     st.rerun()
 
-# =========================
-# 快速補倉
-# =========================
+    # =========================
+    # 快速補倉
+    # =========================
 
-st.write("")
+    st.write("")
 
-if st.button("🔗 再投入補倉"):
+    if st.button("🔗 再投入補倉"):
 
-    st.session_state.show_add_funds = True
+        st.session_state.show_add_funds = True
 
-if st.session_state.get(
-    'show_add_funds',
-    False
-):
+    if st.session_state.get(
+        'show_add_funds',
+        False
+    ):
 
-    st.divider()
+        st.divider()
 
-    st.subheader("📥 快速補倉面板")
+        st.subheader("📥 快速補倉面板")
 
-    with st.form("quick_add_funds"):
+        with st.form("quick_add_funds"):
 
-        add_amt = st.number_input(
-            "請輸入補倉金額",
-            min_value=1000,
-            step=1000,
-            value=30000
-        )
-
-        c_submit, c_cancel = st.columns([2, 8])
-
-        if c_submit.form_submit_button(
-            "確認補倉"
-        ):
-
-            current_bal = int(
-                main_df["結算總分"].iloc[-1]
+            add_amt = st.number_input(
+                "請輸入補倉金額",
+                min_value=1000,
+                step=1000,
+                value=30000
             )
 
-            new_row = {
-                "日期": get_now_time(),
-                "賽事項目": "手動補倉 (快捷)",
-                "類型": "補倉",
-                "金額": int(add_amt),
-                "盈虧金額": 0,
-                "結算總分":
-                    current_bal + int(add_amt)
-            }
+            c_submit, c_cancel = st.columns([2, 8])
 
-            updated_df = pd.concat(
-                [
-                    main_df,
-                    pd.DataFrame([new_row])
-                ],
-                ignore_index=True
-            )
+            if c_submit.form_submit_button(
+                "確認補倉"
+            ):
 
-            save_data(updated_df)
+                current_bal = int(
+                    main_df["結算總分"].iloc[-1]
+                )
 
-            st.session_state.show_add_funds = False
+                new_row = {
+                    "日期": get_now_time(),
+                    "賽事項目": "手動補倉 (快捷)",
+                    "類型": "補倉",
+                    "金額": int(add_amt),
+                    "盈虧金額": 0,
+                    "結算總分":
+                        current_bal + int(add_amt)
+                }
 
-            st.success(
-                f"成功補倉 ${add_amt:,}！"
-            )
+                updated_df = pd.concat(
+                    [
+                        main_df,
+                        pd.DataFrame([new_row])
+                    ],
+                    ignore_index=True
+                )
 
-            time.sleep(0.5)
+                save_data(updated_df)
 
-            st.rerun()
+                st.session_state.show_add_funds = False
 
-        if c_cancel.form_submit_button(
-            "取消"
-        ):
+                st.success(
+                    f"成功補倉 ${add_amt:,}！"
+                )
 
-            st.session_state.show_add_funds = False
+                time.sleep(0.5)
 
-            st.rerun()    
+                st.rerun()
+
+            if c_cancel.form_submit_button(
+                "取消"
+            ):
+
+                st.session_state.show_add_funds = False
+
+                st.rerun()    
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
