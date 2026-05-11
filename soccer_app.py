@@ -261,7 +261,7 @@ else:
        
 with tab1: # 下單投注
      
-      st.write("")
+    st.write("")
 
     try:
         balance = int(main_df["結算總分"].iloc[-1])
