@@ -301,7 +301,7 @@ else:
             if c_conf2.button("取消", use_container_width=True):
                 st.rerun()
 
-        m_info = st.text_area("賽事資訊", placeholder="例如：英超 阿仙奴 vs 車路士", key="input_info")
+        m_info = st.text_area("賽事資訊", placeholder="請複製粘貼，您的賽事比分，等待結束後，再按下方結果", key="input_info")
 
         colb = st.columns(5)
         amounts = [5000, 10000, 15000, 20000]
