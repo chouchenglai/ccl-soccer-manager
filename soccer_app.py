@@ -299,8 +299,8 @@ else:
                 st.session_state.bet_val = balance
                 st.rerun()
             if c_conf2.button("取消", use_container_width=True):
-                st.rerun()           
-   
+                st.rerun()                            
+
         # =========================
         # 多筆賽事輸入（固定5場）
         # =========================
@@ -344,7 +344,7 @@ else:
             match3,
             match4,
             match5
-        ])        
+        ])
 
         colb = st.columns(5)
         amounts = [5000, 10000, 15000, 20000]
