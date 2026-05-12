@@ -360,16 +360,50 @@ st.markdown("""
 ">
 """, unsafe_allow_html=True)
 
-col_nav = st.columns(
-    min(st.session_state.extra_match_count, 5)
+# =========================
+# 初始化賽事數量
+# =========================
+
+if "extra_match_count" not in st.session_state:
+
+    st.session_state.extra_match_count = 5
+
+# =========================
+# 快速索引
+# =========================
+
+show_count = min(
+    st.session_state.extra_match_count,
+    10
 )
 
-for x in range(
-    1,
-    st.session_state.extra_match_count + 1
-):
+col_nav = st.columns(5)
 
-for x in range(1, 6):
+for x in range(1, show_count + 1):
+
+    current_col = col_nav[(x - 1) % 5]
+
+    with current_col:
+
+        st.markdown(
+            f"""
+            <a href="#match_{x}"
+                style="
+                    text-decoration:none;
+                    background:#f1f3f6;
+                    padding:12px;
+                    border-radius:10px;
+                    color:#333;
+                    font-weight:bold;
+                    display:block;
+                    text-align:center;
+                    margin-bottom:10px;
+                ">
+                第{x}場
+            </a>
+            """,
+            unsafe_allow_html=True
+        )
 
 st.divider()
 
