@@ -261,11 +261,11 @@ else:
        
 with tab1:  # 下單投注
 
-   try:
-       balance = int(main_df["結算總分"].iloc[-1])
+    try:
+        balance = int(main_df["結算總分"].iloc[-1])
 
-   except:
-       balance = 0
+    except:
+        balance = 0
 
     # =========================
     # 台北時間
@@ -370,29 +370,6 @@ for x in range(
 ):
 
 for x in range(1, 6):
-
-    with col_nav[x-1]:
-
-        st.markdown(
-            f"""
-            <a href="#match_{x}"
-                style="
-                    text-decoration:none;
-                    background:#f1f3f6;
-                    padding:12px;
-                    border-radius:10px;
-                    color:#333;
-                    font-weight:bold;
-                    display:block;
-                    text-align:center;
-                ">
-                第{x}場
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
-
-st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
 
