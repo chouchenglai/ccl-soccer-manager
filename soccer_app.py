@@ -611,6 +611,8 @@ style="
 
 if st.button("🔗 再投入補倉"):
 
+    st.write("")
+
     st.session_state.show_add_funds = True
 
 if st.session_state.get(
