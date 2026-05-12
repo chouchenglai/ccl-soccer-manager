@@ -260,84 +260,181 @@ else:
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
     with tab1: # 下單投注
-        try: balance = int(main_df["結算總分"].iloc[-1])
-        except: balance = 0
-        if "bet_val" not in st.session_state: st.session_state.bet_val = 5000
-        st.components.v1.html("""
-            <style>
-                #clock-container { display: flex; align-items: center; background-color: #f8f9fb; padding: 8px 15px; border-radius: 6px; border-left: 5px solid #ff4b4b; font-family: sans-serif; margin-bottom: 5px; }
-                #clock { font-size: 15px; font-weight: 600; color: #31333f; letter-spacing: 0.8px; }
-                .prefix { font-size: 14px; color: #666; margin-right: 12px; }
-            </style>
-            <div id="clock-container"><span class="prefix">台北標準時間 (GMT+8) :</span><span id="clock">載入中...</span></div>
-            <audio id="winAudio" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
-            <audio id="loseAudio" src="https://assets.mixkit.co/active_storage/sfx/2511/2511-preview.mp3" preload="auto"></audio>
-            <audio id="clickAudio" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
-            <audio id="alertAudio" src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3" preload="auto"></audio>
-            <script>
-                function updateClock() {
-                    const now = new Date();
-                    const hh = String(now.getHours()).padStart(2, '0');
-                    const mm = String(now.getMinutes()).padStart(2, '0');
-                    const ss = String(now.getSeconds()).padStart(2, '0');
-                    document.getElementById('clock').textContent = now.toLocaleDateString() + " " + hh + ":" + mm + ":" + ss;
-                }
-                setInterval(updateClock, 1000); updateClock();
-                window.parent.playAppSound = function(type) {
-                    var audio = document.getElementById(type + 'Audio');
-                    if (audio) { audio.pause(); audio.currentTime = 0; audio.play().catch(e => console.log(e)); }
-                };
-            </script>
-        """, height=52)
 
-        @st.dialog("⚠️全額下注確認⚠️")
-        def confirm_all_in():
-            st.warning(f"確定要將全部餘額 {balance:,} 元一次下注嗎？")
-            c_conf1, c_conf2 = st.columns(2)
-            if c_conf1.button("💎 確定全額下注", type="primary", use_container_width=True):
-                st.components.v1.html("<script>window.parent.playAppSound('click');</script>", height=0)
-                st.session_state.bet_val = balance
-                st.rerun()
-            if c_conf2.button("取消", use_container_width=True):
-                st.rerun()                            
+    st.write("")
 
-# =========================
-# 多筆賽事輸入（獨立控制版）
-# =========================
+    # 台北時間
+    taiwan_time = datetime.now(
+        pytz.timezone("Asia/Taipei")
+    ).strftime("%Y/%m/%d %H:%M:%S")
 
-st.markdown("### 🏆 賽事資訊")
+    st.markdown(f"""
+    <div style="
+        padding:10px;
+        border-left:5px solid #ff4b4b;
+        background:#f8f9fa;
+        border-radius:8px;
+        margin-bottom:20px;
+    ">
+    台北標準時間 (GMT+8)： <b>{taiwan_time}</b>
+    </div>
+    """, unsafe_allow_html=True)
 
-# =========================
-# 快速索引導航
-# =========================
+    # =========================
+    # 賽事資訊
+    # =========================
 
-st.markdown("#### 📌 快速索引")
+    st.markdown("## 🏆 賽事資訊")
 
-col_idx = st.columns(5)
+    # 快速索引
+    nav_cols = st.columns(5)
 
-for idx in range(5):
-    with col_idx[idx]:
-        st.markdown(
-            f"""
-            <a href="#match_{idx+1}" target="_self">
-                <button style="
-                    width:100%;
-                    padding:8px;
-                    border-radius:10px;
-                    border:none;
-                    background:#f0f2f6;
-                    cursor:pointer;
-                ">
-                    第{idx+1}場
-                </button>
+    for x in range(1, 6):
+
+        with nav_cols[x - 1]:
+
+            st.markdown(f"""
+            <a href="#match_{x}"
+            style="
+                text-decoration:none;
+                background:#f1f3f6;
+                padding:10px 20px;
+                border-radius:10px;
+                color:#333;
+                font-weight:bold;
+                display:block;
+                text-align:center;
+            ">
+            第{x}場
             </a>
-            """,
-            unsafe_allow_html=True
+            """, unsafe_allow_html=True)
+
+    st.write("")
+    st.divider()
+
+    # =========================
+    # 第1~5場賽事
+    # =========================
+
+    for i in range(1, 6):
+
+        st.markdown(f"""
+        <h1 id="match_{i}">
+        📌 第{i}場賽事
+        </h1>
+        """, unsafe_allow_html=True)
+
+        match_info = st.text_area(
+            f"請輸入第{i}場賽事",
+            placeholder="例如：英超 阿仙奴 vs 車路士",
+            key=f"match_{i}"
         )
 
-st.write("")
+        with st.expander(f"⚙️ 第{i}場下注設定"):
 
-if "extra_match_count" not in st.session_state:
+            stake = st.number_input(
+                f"第{i}場下注金額",
+                min_value=0,
+                value=5000,
+                step=1000,
+                key=f"stake_{i}"
+            )
+
+            profit = st.number_input(
+                f"第{i}場盈利金額",
+                value=0,
+                step=1000,
+                key=f"profit_{i}"
+            )
+
+            col_win, col_lose = st.columns(2)
+
+            with col_win:
+
+                if st.button(f"✅ 第{i}場過關", key=f"win_{i}"):
+
+                    new_row = {
+                        "時間": taiwan_time,
+                        "類型": "過關",
+                        "賽事": match_info,
+                        "下注": stake,
+                        "盈虧金額": profit,
+                        "結算總分": balance + profit
+                    }
+
+                    main_df = pd.concat([
+                        main_df,
+                        pd.DataFrame([new_row])
+                    ], ignore_index=True)
+
+                    main_df.to_csv(current_file, index=False)
+
+                    st.success(f"第{i}場已結算成功")
+
+                    st.rerun()
+
+            with col_lose:
+
+                if st.button(f"❌ 第{i}場未過關", key=f"lose_{i}"):
+
+                    new_row = {
+                        "時間": taiwan_time,
+                        "類型": "未過關",
+                        "賽事": match_info,
+                        "下注": stake,
+                        "盈虧金額": -stake,
+                        "結算總分": balance - stake
+                    }
+
+                    main_df = pd.concat([
+                        main_df,
+                        pd.DataFrame([new_row])
+                    ], ignore_index=True)
+
+                    main_df.to_csv(current_file, index=False)
+
+                    st.error(f"第{i}場已結算失敗")
+
+                    st.rerun()
+
+        st.write("")
+        st.divider()
+
+    # =========================
+    # 更多賽事
+    # =========================
+
+    if st.button("➕ 更多賽事"):
+
+        st.info("後續可自行增加第6場以上賽事區塊")
+
+    st.write("")
+
+    # =========================
+    # 補倉
+    # =========================
+
+    if st.button("🔗 再投入補倉"):
+
+        reinvest = {
+            "時間": taiwan_time,
+            "類型": "補倉",
+            "賽事": "再次投入",
+            "下注": balance,
+            "盈虧金額": 0,
+            "結算總分": balance
+        }
+
+        main_df = pd.concat([
+            main_df,
+            pd.DataFrame([reinvest])
+        ], ignore_index=True)
+
+        main_df.to_csv(current_file, index=False)
+
+        st.success("補倉成功")
+
+        st.rerun()
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
