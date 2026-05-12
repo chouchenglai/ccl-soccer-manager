@@ -261,11 +261,11 @@ else:
        
 with tab1:  # 下單投注
 
-    try:
-        balance = int(main_df["結算總分"].iloc[-1])
+   try:
+       balance = int(main_df["結算總分"].iloc[-1])
 
-    except:
-        balance = 0
+   except:
+       balance = 0
 
     # =========================
     # 台北時間
@@ -565,15 +565,13 @@ for i in range(1, st.session_state.extra_match_count + 1):
 # 更多賽事
 # =========================
 
-if "extra_match_count" not in st.session_state:
-
-    st.session_state.extra_match_count = 5
-
 if st.button("➕ 更多賽事（再新增5場）"):
 
-    st.session_state.extra_match_count += 5
+    if st.session_state.extra_match_count < 10:
 
-    st.rerun()
+        st.session_state.extra_match_count += 5
+
+        st.rerun()
 
     # =========================
     # 快速補倉
