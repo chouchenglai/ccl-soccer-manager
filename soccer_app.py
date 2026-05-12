@@ -360,7 +360,14 @@ st.markdown("""
 ">
 """, unsafe_allow_html=True)
 
-col_nav = st.columns(5)
+col_nav = st.columns(
+    min(st.session_state.extra_match_count, 5)
+)
+
+for x in range(
+    1,
+    st.session_state.extra_match_count + 1
+):
 
 for x in range(1, 6):
 
@@ -393,7 +400,7 @@ st.divider()
 # 建立賽事區塊
 # =========================
 
-for i in range(1, 6):
+for i in range(1, st.session_state.extra_match_count + 1):
 
     # -------------------------
     # 錨點定位
