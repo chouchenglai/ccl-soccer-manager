@@ -259,391 +259,211 @@ else:
 
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
-with tab1: # 下單投注
-     
-      st.write("")
+    with tab1: # 下單投注
+        try: balance = int(main_df["結算總分"].iloc[-1])
+        except: balance = 0
+        if "bet_val" not in st.session_state: st.session_state.bet_val = 5000
+        st.components.v1.html("""
+            <style>
+                #clock-container { display: flex; align-items: center; background-color: #f8f9fb; padding: 8px 15px; border-radius: 6px; border-left: 5px solid #ff4b4b; font-family: sans-serif; margin-bottom: 5px; }
+                #clock { font-size: 15px; font-weight: 600; color: #31333f; letter-spacing: 0.8px; }
+                .prefix { font-size: 14px; color: #666; margin-right: 12px; }
+            </style>
+            <div id="clock-container"><span class="prefix">台北標準時間 (GMT+8) :</span><span id="clock">載入中...</span></div>
+            <audio id="winAudio" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
+            <audio id="loseAudio" src="https://assets.mixkit.co/active_storage/sfx/2511/2511-preview.mp3" preload="auto"></audio>
+            <audio id="clickAudio" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+            <audio id="alertAudio" src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3" preload="auto"></audio>
+            <script>
+                function updateClock() {
+                    const now = new Date();
+                    const hh = String(now.getHours()).padStart(2, '0');
+                    const mm = String(now.getMinutes()).padStart(2, '0');
+                    const ss = String(now.getSeconds()).padStart(2, '0');
+                    document.getElementById('clock').textContent = now.toLocaleDateString() + " " + hh + ":" + mm + ":" + ss;
+                }
+                setInterval(updateClock, 1000); updateClock();
+                window.parent.playAppSound = function(type) {
+                    var audio = document.getElementById(type + 'Audio');
+                    if (audio) { audio.pause(); audio.currentTime = 0; audio.play().catch(e => console.log(e)); }
+                };
+            </script>
+        """, height=52)
 
-    try:
-        balance = int(main_df["結算總分"].iloc[-1])
-    except:
-        balance = 0
-
-    # =========================
-    # 台北時間
-    # =========================
-
-    st.components.v1.html("""
-        <style>
-            #clock-container {
-                display: flex;
-                align-items: center;
-                background-color: #f8f9fb;
-                padding: 8px 15px;
-                border-radius: 6px;
-                border-left: 5px solid #ff4b4b;
-                font-family: sans-serif;
-                margin-bottom: 5px;
-            }
-
-            #clock {
-                font-size: 15px;
-                font-weight: 600;
-                color: #31333f;
-                letter-spacing: 0.8px;
-            }
-
-            .prefix {
-                font-size: 14px;
-                color: #666;
-                margin-right: 12px;
-            }
-        </style>
-
-        <div id="clock-container">
-            <span class="prefix">
-                台北標準時間 (GMT+8) :
-            </span>
-
-            <span id="clock">
-                載入中...
-            </span>
-        </div>
-
-        <script>
-            function updateClock() {
-
-                const now = new Date();
-
-                const hh = String(
-                    now.getHours()
-                ).padStart(2, '0');
-
-                const mm = String(
-                    now.getMinutes()
-                ).padStart(2, '0');
-
-                const ss = String(
-                    now.getSeconds()
-                ).padStart(2, '0');
-
-                document.getElementById('clock')
-                    .textContent =
-                    now.toLocaleDateString()
-                    + " "
-                    + hh + ":" + mm + ":" + ss;
-            }
-
-            setInterval(updateClock, 1000);
-
-            updateClock();
-        </script>
-
-    """, height=52)
-
-    st.write("")
-
-    # =========================
-# 賽事資訊
-# =========================
-
-st.markdown("## 🏆 賽事資訊")
+        @st.dialog("⚠️全額下注確認⚠️")
+        def confirm_all_in():
+            st.warning(f"確定要將全部餘額 {balance:,} 元一次下注嗎？")
+            c_conf1, c_conf2 = st.columns(2)
+            if c_conf1.button("💎 確定全額下注", type="primary", use_container_width=True):
+                st.components.v1.html("<script>window.parent.playAppSound('click');</script>", height=0)
+                st.session_state.bet_val = balance
+                st.rerun()
+            if c_conf2.button("取消", use_container_width=True):
+                st.rerun()                            
 
 # =========================
-# 快速索引
+# 多筆賽事輸入（獨立控制版）
 # =========================
 
-st.markdown("""
-<div style="
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    margin-bottom:25px;
-">
-""", unsafe_allow_html=True)
+st.markdown("### 🏆 賽事資訊")
 
-col_nav = st.columns(5)
+# =========================
+# 快速索引導航
+# =========================
 
-for x in range(1, 6):
+st.markdown("#### 📌 快速索引")
 
-    with col_nav[x-1]:
+col_idx = st.columns(5)
 
+for idx in range(5):
+    with col_idx[idx]:
         st.markdown(
             f"""
-            <a href="#match_{x}"
-                style="
-                    text-decoration:none;
-                    background:#f1f3f6;
-                    padding:12px;
+            <a href="#match_{idx+1}" target="_self">
+                <button style="
+                    width:100%;
+                    padding:8px;
                     border-radius:10px;
-                    color:#333;
-                    font-weight:bold;
-                    display:block;
-                    text-align:center;
+                    border:none;
+                    background:#f0f2f6;
+                    cursor:pointer;
                 ">
-                第{x}場
+                    第{idx+1}場
+                </button>
             </a>
             """,
             unsafe_allow_html=True
         )
 
-st.markdown("</div>", unsafe_allow_html=True)
+st.write("")
 
-st.divider()
-
-# =========================
-# 建立賽事區塊
-# =========================
-
+# 建立 5 場賽事
 for i in range(1, 6):
 
-    # -------------------------
-    # 錨點定位
-    # -------------------------
+    st.markdown(f"---")
+    st.subheader(f"📌 第{i}場賽事")
 
-    st.markdown(
-        f"""
-        <div id="match_{i}"></div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # -------------------------
-    # 賽事標題
-    # -------------------------
-
-    st.markdown(f"## 📌 第{i}場賽事")
-
-    # -------------------------
-    # 賽事輸入
-    # -------------------------
-
+    # 賽事內容
     match_info = st.text_area(
         f"請輸入第{i}場賽事",
         placeholder="例如：英超 阿仙奴 vs 車路士",
-        key=f"match_input_{i}"
+        key=f"match_{i}"
     )
 
-    # -------------------------
-    # 摺疊下注設定
-    # -------------------------
+    # 金額
+    bet_amt = st.number_input(
+        f"第{i}場下注金額",
+        min_value=0,
+        max_value=max(1000000, balance),
+        value=5000,
+        step=1000,
+        key=f"bet_{i}"
+    )
 
-    with st.expander(f"⚙️ 第{i}場下注設定"):
+    # 盈利
+    gain_amt = st.number_input(
+        f"第{i}場盈利金額",
+        min_value=0,
+        max_value=1000000,
+        value=0,
+        step=1000,
+        key=f"gain_{i}"
+    )
 
-        bet_amt = st.number_input(
-            f"第{i}場下注金額",
-            min_value=0,
-            max_value=1000000,
-            value=5000,
-            step=1000,
-            key=f"bet_{i}"
-        )
+    # 按鈕
+    col_win, col_lose = st.columns(2)
 
-        gain_amt = st.number_input(
-            f"第{i}場盈利金額",
-            min_value=0,
-            max_value=1000000,
-            value=0,
-            step=1000,
-            key=f"gain_{i}"
-        )
+    # 贏
+    if col_win.button(f"✅ 第{i}場過關", key=f"win_{i}"):
 
-        col_win, col_lose = st.columns(2)
+        if match_info.strip() == "":
+            st.warning(f"請先輸入第{i}場賽事資訊")
+        else:
 
-        # =====================
-        # 過關
-        # =====================
+            new_balance = balance + int(gain_amt)
 
-        if col_win.button(
-            f"✅ 第{i}場過關",
-            key=f"win_{i}"
-        ):
+            new_row = {
+                "日期": get_now_time(),
+                "賽事項目": match_info,
+                "類型": "贏 (+)",
+                "金額": int(gain_amt),
+                "盈虧金額": int(gain_amt),
+                "結算總分": new_balance
+            }
 
-            if match_info.strip() == "":
-
-                st.warning(
-                    f"請先輸入第{i}場賽事資訊"
-                )
-
-            else:
-
-                latest_df = load_data()
-
-                latest_balance = int(
-                    latest_df["結算總分"].iloc[-1]
-                )
-
-                new_balance = (
-                    latest_balance + int(gain_amt)
-                )
-
-                new_row = {
-                    "日期": get_now_time(),
-                    "賽事項目": match_info,
-                    "類型": "贏 (+)",
-                    "金額": int(gain_amt),
-                    "盈虧金額": int(gain_amt),
-                    "結算總分": new_balance
-                }
-
-                updated_df = pd.concat(
-                    [
-                        latest_df,
-                        pd.DataFrame([new_row])
-                    ],
+            save_data(
+                pd.concat(
+                    [main_df, pd.DataFrame([new_row])],
                     ignore_index=True
                 )
-
-                save_data(updated_df)
-
-                st.success(
-                    f"第{i}場已記錄為過關"
-                )
-
-                st.rerun()
-
-        # =====================
-        # 未過關
-        # =====================
-
-        if col_lose.button(
-            f"❌ 第{i}場未過關",
-            key=f"lose_{i}"
-        ):
-
-            if match_info.strip() == "":
-
-                st.warning(
-                    f"請先輸入第{i}場賽事資訊"
-                )
-
-            else:
-
-                latest_df = load_data()
-
-                latest_balance = int(
-                    latest_df["結算總分"].iloc[-1]
-                )
-
-                new_balance = (
-                    latest_balance - int(bet_amt)
-                )
-
-                new_row = {
-                    "日期": get_now_time(),
-                    "賽事項目": match_info,
-                    "類型": "輸 (-)",
-                    "金額": int(bet_amt),
-                    "盈虧金額": -int(bet_amt),
-                    "結算總分": new_balance
-                }
-
-                updated_df = pd.concat(
-                    [
-                        latest_df,
-                        pd.DataFrame([new_row])
-                    ],
-                    ignore_index=True
-                )
-
-                save_data(updated_df)
-
-                st.error(
-                    f"第{i}場已記錄為未過關"
-                )
-
-                st.rerun()
-
-    st.divider()
-
-# =========================
-# 更多賽事
-# =========================
-
-if "extra_match_count" not in st.session_state:
-
-    st.session_state.extra_match_count = 5
-
-if st.button("➕ 更多賽事（再新增5場）"):
-
-    st.session_state.extra_match_count += 5
-
-    st.rerun()
-
-    # =========================
-    # 快速補倉
-    # =========================
-
-    st.write("")
-
-    if st.button("🔗 再投入補倉"):
-
-        st.session_state.show_add_funds = True
-
-    if st.session_state.get(
-        'show_add_funds',
-        False
-    ):
-
-        st.divider()
-
-        st.subheader("📥 快速補倉面板")
-
-        with st.form("quick_add_funds"):
-
-            add_amt = st.number_input(
-                "請輸入補倉金額",
-                min_value=1000,
-                step=1000,
-                value=30000
             )
 
-            c_submit, c_cancel = st.columns([2, 8])
+            st.success(f"第{i}場已記錄為過關")
+            st.rerun()
 
-            if c_submit.form_submit_button(
-                "確認補倉"
-            ):
+    # 輸
+    if col_lose.button(f"❌ 第{i}場未過關", key=f"lose_{i}"):
 
-                current_bal = int(
-                    main_df["結算總分"].iloc[-1]
-                )
+        if match_info.strip() == "":
+            st.warning(f"請先輸入第{i}場賽事資訊")
+        else:
 
-                new_row = {
-                    "日期": get_now_time(),
-                    "賽事項目": "手動補倉 (快捷)",
-                    "類型": "補倉",
-                    "金額": int(add_amt),
-                    "盈虧金額": 0,
-                    "結算總分":
-                        current_bal + int(add_amt)
-                }
+            new_balance = balance - int(bet_amt)
 
-                updated_df = pd.concat(
-                    [
-                        main_df,
-                        pd.DataFrame([new_row])
-                    ],
+            new_row = {
+                "日期": get_now_time(),
+                "賽事項目": match_info,
+                "類型": "輸 (-)",
+                "金額": int(bet_amt),
+                "盈虧金額": -int(bet_amt),
+                "結算總分": new_balance
+            }
+
+            save_data(
+                pd.concat(
+                    [main_df, pd.DataFrame([new_row])],
                     ignore_index=True
                 )
+            )
 
-                save_data(updated_df)
+            st.error(f"第{i}場已記錄為未過關")
+            st.rerun()
 
-                st.session_state.show_add_funds = False
-
-                st.success(
-                    f"成功補倉 ${add_amt:,}！"
-                )
-
-                time.sleep(0.5)
-
+# --- 再投入補倉 ---
+        st.write("")   
+        col_link, col_empty = st.columns([2, 8]) # 放在左側
+        with col_link:
+            # 超鏈接按鈕
+            if st.button("🔗 再投入補倉", help="點擊直接進行補倉操作", use_container_width=False):                
+                st.session_state.show_add_funds = True
                 st.rerun()
 
-            if c_cancel.form_submit_button(
-                "取消"
-            ):
-
-                st.session_state.show_add_funds = False
-
-                st.rerun()    
+        # --- 如果標記為 True，則彈出補倉輸入框 ---
+        if st.session_state.get('show_add_funds', False):
+            st.divider()
+            st.subheader("📥 快速補倉面板")
+            with st.form("quick_add_funds"):
+                add_amt = st.number_input("請輸入補倉金額", min_value=1000, step=1000, value=30000)
+                c_submit, c_cancel = st.columns([2, 8])
+                if c_submit.form_submit_button("確認補倉"):
+                    # 執行補倉邏輯
+                    current_bal = int(main_df["結算總分"].iloc[-1])
+                    new_row = {
+                        "日期": get_now_time(),
+                        "賽事項目": "手動補倉 (快捷)",
+                        "類型": "補倉",
+                        "金額": int(add_amt),
+                        "盈虧金額": 0,
+                        "結算總分": current_bal + int(add_amt)
+                    }
+                    save_data(pd.concat([main_df, pd.DataFrame([new_row])], ignore_index=True))
+                    st.session_state.show_add_funds = False # 關閉面板
+                    st.success(f"成功補倉 ${add_amt:,}！")
+                    time.sleep(0.5)
+                    st.rerun()
+                if c_cancel.form_submit_button("取消"):
+                    st.session_state.show_add_funds = False
+                    st.rerun()
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
@@ -831,7 +651,7 @@ with tab2:
     else:
         st.info("暫無已授權之清單。")
 
-with tab_live:
+    with tab_live:
         # 第一行：大標題
             st.markdown("### 📡 即時比分同步觀看 (Live)")
         
@@ -841,7 +661,7 @@ with tab_live:
         # 第三行：嵌入外部比分網[cite: 1]
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
-with tab3: # 📋 歷史記錄
+    with tab3: # 📋 歷史記錄
         st.subheader("📜 完整賽事歷史紀錄")
         
         # 1. 定義染色邏輯 (確保縮排正確)
@@ -930,7 +750,7 @@ with tab3: # 📋 歷史記錄
         else:
             st.info("目前尚無歷史紀錄。")
 
-with tab4: # 統計圖表[cite: 2]        
+    with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
         st.write("")
         st.line_chart(main_df["結算總分"], height=320)      
@@ -938,7 +758,7 @@ with tab4: # 統計圖表[cite: 2]
 # ---------------------------------------------------------
     # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
     # ---------------------------------------------------------
-with tab5:
+    with tab5:
         st.markdown("### 💬 足球現場實況滾球推薦")
         
         def get_chat_safely():
