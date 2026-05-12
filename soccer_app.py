@@ -517,14 +517,11 @@ for i in range(1, st.session_state.extra_match_count + 1):
 
                 save_data(updated_df)
 
-                st.toast(
-                 f"✅ 第{i}場過關成功！",
-                 icon="🎉"
-                 )
+                st.success(
+                    f"第{i}場已記錄為過關"
+                )
 
-                 time.sleep(1)
-
-                 st.rerun()
+                st.rerun()
 
         # =====================
         # 未過關
@@ -572,16 +569,13 @@ for i in range(1, st.session_state.extra_match_count + 1):
 
                 save_data(updated_df)
 
-                st.toast(
-                f"❌ 第{i}場未過關",
-                icon="⚠️"
+                st.error(
+                    f"第{i}場已記錄為未過關"
                 )
-
-                time.sleep(1)
 
                 st.rerun()
 
-                st.divider()
+    st.divider()
 
 # =========================
 # 更多賽事
@@ -616,6 +610,7 @@ style="
 """, unsafe_allow_html=True)
 
 if st.button("🔗 再投入補倉"):
+
     st.write("")
 
     st.session_state.show_add_funds = True
@@ -685,8 +680,6 @@ if st.session_state.get(
             st.session_state.show_add_funds = False
 
             st.rerun()    
-            
-            st.divider()
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
