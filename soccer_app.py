@@ -259,86 +259,6 @@ else:
     """, unsafe_allow_html=True)
 
 # =========================
-# 🌐 語言初始化
-# =========================
-
-if "lang" not in st.session_state:
-    st.session_state.lang = "zh"
-
-# =========================
-# Tabs + 語言切換
-# =========================
-
-top_col1, top_col2 = st.columns([8.5, 1.5])
-
-with top_col2:
-
-    lang_html = """
-    <div style="
-        text-align:right;
-        margin-top:8px;
-        font-size:14px;
-        font-weight:bold;
-    ">
-    """
-
-    if st.session_state.lang == "zh":
-
-        lang_html += """
-        <span style="color:#1E90FF;">
-            繁體中文
-        </span>
-         |
-        """
-
-        if st.button(
-            "English",
-            key="lang_en_top"
-        ):
-            st.session_state.lang = "en"
-            st.rerun()
-
-    else:
-
-        if st.button(
-            "繁體中文",
-            key="lang_zh_top"
-        ):
-            st.session_state.lang = "zh"
-            st.rerun()
-
-        lang_html += """
-         |
-        <span style="color:#1E90FF;">
-            English
-        </span>
-        """
-
-    st.markdown(
-        lang_html,
-        unsafe_allow_html=True
-    )
-
-# =========================
-# 翻譯函數
-# =========================
-
-def t(text):
-
-    if st.session_state.lang == "en":
-
-        try:
-            return GoogleTranslator(
-                source='zh-TW',
-                target='en'
-            ).translate(text)
-
-        except:
-            return text
-
-    return text
-
-# =========================
 # Tabs
 # =========================
 
@@ -351,8 +271,7 @@ tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs([
     t("💬 討論區")
 ])
 
-    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
-       
+          
 with tab1:  # 下單投注
 
     st.markdown(
@@ -1157,6 +1076,36 @@ with tab5:
                     st.write("") 
             else:
                 st.write("目前尚無討論。")
+
+# =========================
+# 🌐 English 語言切換
+# =========================
+
+with tab_lang:
+
+    st.markdown("## 🌐 Language")
+
+    st.write("Choose Website Language")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        if st.button("繁體中文"):
+
+            st.session_state.lang = "zh"
+
+            st.rerun()
+
+    with col2:
+
+        if st.button("English"):
+
+            st.session_state.lang = "en"
+
+            st.rerun()
+
+    st.success(f"目前語言：{st.session_state.lang}")
                
 # --- 底部 ---
 st.divider()
