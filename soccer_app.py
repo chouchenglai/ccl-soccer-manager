@@ -3,27 +3,6 @@ import streamlit as st
 import pandas as pd
 import os
 import time
-# 語言字典定義
-LANG_DICT = {
-    "繁體中文": {
-        "forum_title": "💬 站內討論區",
-        "post_btn": "發布留言",
-        "nickname": "您的暱稱",
-        "content": "留言內容",
-        "refresh": "刷新討論",
-    },
-    "English": {
-        "forum_title": "💬 Community Forum",
-        "post_btn": "Post Message",
-        "nickname": "Nickname",
-        "content": "Message Content",
-        "refresh": "Refresh",
-    }
-}
-
-# 初始化語言狀態
-if 'lang' not in st.session_state:
-    st.session_state.lang = "繁體中文"
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
@@ -191,28 +170,6 @@ if new_msg_count > st.session_state.last_chat_count:
             st.rerun()
 
 # --- Sidebar (側邊欄) ---
-# --- 側邊欄修改 ---
-with st.sidebar:
-    # 💡 關鍵修正：把語言切換放在最上面，不要放進 if admin_authenticated 裡面
-    st.markdown("### 🌐 Language / 語言")
-    target_lang = "English" if st.session_state.lang == "繁體中文" else "繁體中文"
-    
-    if st.button(f"切換至 {target_lang} / Switch to {target_lang}", use_container_width=True):
-        st.session_state.lang = target_lang
-        st.rerun()
-    
-    st.divider() # 分隔線
-
-    # --- 這裡開始才是原本的管理員登入判斷 ---
-    if not st.session_state.get('admin_authenticated'):
-        st.header("🔑 管理員登入")
-        # ... 原本的密碼輸入代碼 ...
-    else:
-        st.header("📊 數據管理")
-        # ... 原本的管理員功能 ...
-
-curr = LANG_DICT[st.session_state.lang]
-
 with st.sidebar:
 
     st.header("💰 資金與統計中心")
@@ -299,9 +256,6 @@ else:
         }
     </style>
     """, unsafe_allow_html=True)
-
-# 在您的側邊欄代碼最後面，或是 tabs 定義之前加入這行
-curr_lang = LANG_DICT[st.session_state.lang]
 
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
