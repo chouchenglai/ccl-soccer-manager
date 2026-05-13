@@ -1,320 +1,128 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
-# =========================
-# 頁面設定
-# =========================
+# 1. 頁面基礎設定
+st.set_page_config(page_title="網站維護中 - CCL-Soccer", page_icon="⚙️", layout="centered")
 
-st.set_page_config(
-    page_title="CCL-Live",
-    page_icon="⚽",
-    layout="wide"
-)
-
-# =========================
-# CSS 美化
-# =========================
-
+# 2. 隱藏所有 Streamlit 預設組件 (選單、註腳、頂部導覽)
 st.markdown("""
-<style>
-
-.main {
-    background-color:#f5f7fb;
-}
-
-/* HERO */
-
-.hero-box{
-    background:linear-gradient(135deg,#0f172a,#1d4ed8);
-    border-radius:35px;
-    padding:80px 50px;
-    margin-top:20px;
-    margin-bottom:50px;
-    text-align:center;
-    box-shadow:0 12px 35px rgba(0,0,0,0.18);
-}
-
-.hero-title{
-    font-size:80px;
-    font-weight:900;
-    color:white;
-    margin-bottom:25px;
-    letter-spacing:1px;
-}
-
-.hero-sub{
-    font-size:34px;
-    color:#e0e7ff;
-    margin-bottom:20px;
-}
-
-.hero-desc{
-    font-size:20px;
-    color:#dbeafe;
-    letter-spacing:2px;
-}
-
-/* 區塊 */
-
-.section-title{
-    font-size:42px;
-    font-weight:900;
-    color:#0f172a;
-    margin-bottom:30px;
-}
-
-/* 卡片 */
-
-.card{
-    background:white;
-    border-radius:24px;
-    padding:35px;
-    box-shadow:0 4px 18px rgba(0,0,0,0.08);
-    margin-bottom:25px;
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 8px 24px rgba(0,0,0,0.12);
-}
-
-.card-title{
-    font-size:22px;
-    font-weight:800;
-    margin-bottom:18px;
-    color:#111827;
-}
-
-.card-text{
-    font-size:18px;
-    line-height:1.8;
-    color:#374151;
-}
-
-/* 特色區 */
-
-.feature-box{
-    background:linear-gradient(135deg,#1d4ed8,#2563eb);
-    border-radius:28px;
-    padding:50px;
-    margin-top:40px;
-    margin-bottom:40px;
-    color:white;
-    text-align:center;
-}
-
-.feature-title{
-    font-size:42px;
-    font-weight:900;
-    margin-bottom:20px;
-}
-
-.feature-text{
-    font-size:22px;
-    line-height:2;
-}
-
-/* Footer */
-
-.footer{
-    text-align:center;
-    color:#6b7280;
-    margin-top:60px;
-    margin-bottom:20px;
-    font-size:16px;
-}
-
-</style>
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stApp {
+        background: transparent;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# HERO 區
-# =========================
+# 3. 嵌入美化過的維護 HTML 頁面
+components.html("""
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>網站維護中 - CCL-Soccer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 60px 40px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            width: 90%;
+        }
+        .logo {
+            font-size: 56pt;
+            font-weight: 900;
+            color: #00d2ff;
+            text-shadow: 0 0 30px rgba(0, 210, 255, 0.6);
+            margin-bottom: 5px;
+            letter-spacing: 5px;
+        }
+        .subtitle {
+            font-size: 14pt;
+            color: #bdc3c7;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+        .illustration {
+            margin: 40px 0;
+        }
+        svg {
+            width: 140px;
+            height: 140px;
+            fill: #00d2ff;
+            filter: drop-shadow(0 0 10px rgba(0,210,255,0.4));
+            animation: rotate 6s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        h1 {
+            font-size: 26pt;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        p {
+            font-size: 13pt;
+            line-height: 1.8;
+            color: #ecf0f1;
+            font-weight: 300;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #e67e22;
+            color: #fff;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 11pt;
+            font-weight: bold;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(230,126,34,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">CCL</div>
+        <div class="subtitle">SOCCER SYSTEM</div>
+        
+        <div class="illustration">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.82,11.36,4.8,11.68,4.8,12c0,0.33,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.21,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+        </div>
 
-st.markdown("""
-<div class="hero-box">
-
-<div class="hero-title">
-⚽ CCL-Live
-</div>
-
-<div class="hero-sub">
-體育模擬交易與賽事分析平臺
-</div>
-
-<div class="hero-desc">
-即時比分｜歷史數據｜模擬倉管理｜交流討論
-</div>
-
-</div>
-""", unsafe_allow_html=True)
-
-# =========================
-# 平台介紹
-# =========================
-
-st.markdown("""
-<div class="section-title">
-🔥 平台核心功能
-</div>
-""", unsafe_allow_html=True)
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-
-    st.markdown("""
-    <div class="card">
-
-    <div class="card-title">
-    💰 模擬交易
+        <div class="status-badge">SYSTEM MAINTENANCE</div>
+        <h1>網站維護進行中</h1>
+        <p>
+            為了提供更優質的賽事管理體驗<br>
+            現正在系統優化與數據維護<br>
+            目前暫時關閉運作<br>
+            請稍候再回來查看
+        </p>
+        <p style="margin-top: 40px; font-size: 10pt; color: #bdc3c7;">
+            © 2026 CCL-Soccer | 足球數據管理系統
+        </p>
     </div>
-
-    <div class="card-text">
-    自動結算盈虧，<br>
-    即時同步總資金變化。
-    </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-
-    st.markdown("""
-    <div class="card">
-
-    <div class="card-title">
-    📈 統計圖表
-    </div>
-
-    <div class="card-text">
-    自動生成資金曲線圖，<br>
-    分析長期操作表現。
-    </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-with col3:
-
-    st.markdown("""
-    <div class="card">
-
-    <div class="card-title">
-    💬 討論交流
-    </div>
-
-    <div class="card-text">
-    即時討論熱門賽事，<br>
-    站長免費分享賽事觀點。
-    </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-# =========================
-# 第二列
-# =========================
-
-col4, col5, col6 = st.columns(3)
-
-with col4:
-
-    st.markdown("""
-    <div class="card">
-
-    <div class="card-title">
-    📋 歷史紀錄
-    </div>
-
-    <div class="card-text">
-    完整保存每場紀錄，<br>
-    方便後續回測分析。
-    </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-with col5:
-
-    st.markdown("""
-    <div class="card">
-
-    <div class="card-title">
-    ⚽ 即時比分
-    </div>
-
-    <div class="card-text">
-    同步全球足球賽事，<br>
-    即時查看最新動態。
-    </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-with col6:
-
-    st.markdown("""
-    <div class="card">
-
-    <div class="card-title">
-    🧠 AI 分析
-    </div>
-
-    <div class="card-text">
-    未來將加入 AI 分析，<br>
-    提升賽事預測效率。
-    </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-# =========================
-# 特色區塊
-# =========================
-
-st.markdown("""
-<div class="feature-box">
-
-<div class="feature-title">
-🚀 CCL-Live 正式上線
-</div>
-
-<div class="feature-text">
-全球體育模擬交易系統正式開放使用<br>
-支援模擬倉、自動結算、歷史分析與社群交流功能
-</div>
-
-</div>
-""", unsafe_allow_html=True)
-
-# =========================
-# 進入按鈕
-# =========================
-
-st.write("")
-st.write("")
-
-col_btn1, col_btn2, col_btn3 = st.columns([1,2,1])
-
-with col_btn2:
-
-    if st.button("🚀 立即進入正式平台", use_container_width=True):
-
-        st.switch_page("ccl-live.py")
-
-# =========================
-# Footer
-# =========================
-
-st.markdown("""
-<div class="footer">
-
-CCL-Live 體育賽事管理系統 © 2026
-
-<br><br>
-
-www.ccl-live.tw
-
-</div>
-""", unsafe_allow_html=True)
+</body>
+</html>
+""", height=1000, scrolling=False)
