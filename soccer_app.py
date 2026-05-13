@@ -3,6 +3,27 @@ import streamlit as st
 import pandas as pd
 import os
 import time
+# 語言字典定義
+LANG_DICT = {
+    "繁體中文": {
+        "forum_title": "💬 站內討論區",
+        "post_btn": "發布留言",
+        "nickname": "您的暱稱",
+        "content": "留言內容",
+        "refresh": "刷新討論",
+    },
+    "English": {
+        "forum_title": "💬 Community Forum",
+        "post_btn": "Post Message",
+        "nickname": "Nickname",
+        "content": "Message Content",
+        "refresh": "Refresh",
+    }
+}
+
+# 初始化語言狀態
+if 'lang' not in st.session_state:
+    st.session_state.lang = "繁體中文"
 from datetime import datetime, timedelta, timezone
 
 # 1. 頁面設定 (最頂端)
@@ -170,6 +191,25 @@ if new_msg_count > st.session_state.last_chat_count:
             st.rerun()
 
 # --- Sidebar (側邊欄) ---
+# --- 在側邊欄最上方加入語言切換 ---
+with st.sidebar:
+    # 💡 建立一個小巧的切換區
+    st.markdown("### 🌐 Language / 語言")
+    
+    # 判斷下一個語言是什麼
+    target_lang = "English" if st.session_state.lang == "繁體中文" else "繁體中文"
+    
+    # 使用按鈕觸發切換
+    if st.button(f"切換至 {target_lang} / Switch to {target_lang}", use_container_width=True):
+        st.session_state.lang = target_lang
+        st.rerun()
+    
+    st.divider() # 畫一條分隔線，跟下方的「新增數據」分開
+    
+    # --- 您原本的側邊欄代碼從這裡開始 ---
+    st.header("📊 數據管理")
+    # ... 原本的 st.date_input, st.selectbox 等等 ...
+
 with st.sidebar:
 
     st.header("💰 資金與統計中心")
