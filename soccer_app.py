@@ -1,6 +1,5 @@
 import pytz
 import streamlit as st
-from deep_translator import GoogleTranslator
 import pandas as pd
 import os
 import time
@@ -258,20 +257,8 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-# =========================
-# Tabs
-# =========================
-
-tab1, tab2, tab_live, tab3, tab4, tab5, tab_lang = st.tabs([
-    "💰 下單投注",
-    "📝 註冊帳號",
-    "⚽ 即時比分",
-    "📋 歷史記錄",
-    "📊 統計圖表",
-    "💬 討論區",
-    "🌐 English"
-])
-          
+    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
+       
 with tab1:  # 下單投注
 
     st.markdown(
@@ -286,7 +273,7 @@ with tab1:  # 下單投注
         balance = 0
 
     # =========================
-    # 台北時區
+    # 台北時間
     # =========================
 
     st.components.v1.html("""
@@ -499,7 +486,7 @@ for i in range(1, st.session_state.extra_match_count + 1):
                     f"請先輸入第{i}場賽事資訊"
                 )
 
-                        else:
+            else:
 
                 latest_df = load_data()
 
@@ -508,15 +495,15 @@ for i in range(1, st.session_state.extra_match_count + 1):
                 )
 
                 new_balance = (
-                    latest_balance - int(bet_amt)
+                    latest_balance + int(gain_amt)
                 )
 
                 new_row = {
                     "日期": get_now_time(),
                     "賽事項目": match_info,
-                    "類型": "輸 (-)",
-                    "金額": int(bet_amt),
-                    "盈虧金額": -int(bet_amt),
+                    "類型": "贏 (+)",
+                    "金額": int(gain_amt),
+                    "盈虧金額": int(gain_amt),
                     "結算總分": new_balance
                 }
 
@@ -555,12 +542,8 @@ for i in range(1, st.session_state.extra_match_count + 1):
 
                 latest_df = load_data()
 
-                               latest_balance = int(
+                latest_balance = int(
                     latest_df["結算總分"].iloc[-1]
-                )
-
-                new_balance = (
-                    latest_balance + int(gain_amt)
                 )
 
                 new_balance = (
@@ -1080,39 +1063,6 @@ with tab5:
                     st.write("") 
             else:
                 st.write("目前尚無討論。")
-
-# =========================
-# 🌐 English 語言切換
-# =========================
-
-if "lang" not in st.session_state:
-    st.session_state.lang = "zh"
-
-with tab_lang:
-
-    st.markdown("## 🌐 Language")
-
-    st.write("Choose Website Language")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        if st.button("繁體中文"):
-
-            st.session_state.lang = "zh"
-
-            st.rerun()
-
-    with col2:
-
-        if st.button("English"):
-
-            st.session_state.lang = "en"
-
-            st.rerun()
-
-    st.success(f"目前語言：{st.session_state.lang}")
                
 # --- 底部 ---
 st.divider()
