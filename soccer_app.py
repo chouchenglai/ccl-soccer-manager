@@ -1,5 +1,6 @@
 import pytz
 import streamlit as st
+from deep_translator import GoogleTranslator
 import pandas as pd
 import os
 import time
@@ -257,6 +258,99 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
+# =========================
+# 🌐 語言初始化
+# =========================
+
+if "lang" not in st.session_state:
+    st.session_state.lang = "zh"
+
+# =========================
+# Tabs + 語言切換
+# =========================
+
+top_col1, top_col2 = st.columns([8.5, 1.5])
+
+with top_col2:
+
+    lang_html = """
+    <div style="
+        text-align:right;
+        margin-top:8px;
+        font-size:14px;
+        font-weight:bold;
+    ">
+    """
+
+    if st.session_state.lang == "zh":
+
+        lang_html += """
+        <span style="color:#1E90FF;">
+            繁體中文
+        </span>
+         |
+        """
+
+        if st.button(
+            "English",
+            key="lang_en_top"
+        ):
+            st.session_state.lang = "en"
+            st.rerun()
+
+    else:
+
+        if st.button(
+            "繁體中文",
+            key="lang_zh_top"
+        ):
+            st.session_state.lang = "zh"
+            st.rerun()
+
+        lang_html += """
+         |
+        <span style="color:#1E90FF;">
+            English
+        </span>
+        """
+
+    st.markdown(
+        lang_html,
+        unsafe_allow_html=True
+    )
+
+# =========================
+# 翻譯函數
+# =========================
+
+def t(text):
+
+    if st.session_state.lang == "en":
+
+        try:
+            return GoogleTranslator(
+                source='zh-TW',
+                target='en'
+            ).translate(text)
+
+        except:
+            return text
+
+    return text
+
+# =========================
+# Tabs
+# =========================
+
+tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs([
+    t("💰 下單投注"),
+    t("📝 註冊帳號"),
+    t("⚽ 即時比分"),
+    t("📋 歷史記錄"),
+    t("📊 統計圖表"),
+    t("💬 討論區")
+])
+
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
 with tab1:  # 下單投注
@@ -273,7 +367,7 @@ with tab1:  # 下單投注
         balance = 0
 
     # =========================
-    # 台北時間
+    # 台北時區
     # =========================
 
     st.components.v1.html("""
@@ -546,7 +640,7 @@ for i in range(1, st.session_state.extra_match_count + 1):
                     latest_df["結算總分"].iloc[-1]
                 )
 
-                new_balance = (
+                new_balance = (tab5 = st.tabs
                     latest_balance - int(bet_amt)
                 )
 
