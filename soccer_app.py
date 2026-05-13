@@ -514,9 +514,9 @@ for i in range(1, st.session_state.extra_match_count + 1):
                 new_row = {
                     "日期": get_now_time(),
                     "賽事項目": match_info,
-                    "類型": "贏 (+)",
-                    "金額": int(gain_amt),
-                    "盈虧金額": int(gain_amt),
+                    "類型": "輸 (-)",
+                    "金額": int(bet_amt),
+                    "盈虧金額": -int(bet_amt),
                     "結算總分": new_balance
                 }
 
