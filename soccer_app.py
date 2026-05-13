@@ -555,11 +555,15 @@ for i in range(1, st.session_state.extra_match_count + 1):
 
                 latest_df = load_data()
 
-                latest_balance = int(
+                               latest_balance = int(
                     latest_df["結算總分"].iloc[-1]
                 )
 
-                new_balance = (tab5 = st.tabs
+                new_balance = (
+                    latest_balance + int(gain_amt)
+                )
+
+                new_balance = (
                     latest_balance - int(bet_amt)
                 )
 
@@ -1080,6 +1084,9 @@ with tab5:
 # =========================
 # 🌐 English 語言切換
 # =========================
+
+if "lang" not in st.session_state:
+    st.session_state.lang = "zh"
 
 with tab_lang:
 
