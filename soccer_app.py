@@ -499,17 +499,17 @@ for i in range(1, st.session_state.extra_match_count + 1):
                     f"請先輸入第{i}場賽事資訊"
                 )
 
-            else:
+                        else:
 
                 latest_df = load_data()
 
                 latest_balance = int(
                     latest_df["結算總分"].iloc[-1]
                 )
-                
-                               new_balance = (
-                                    latest_balance - int(bet_amt)
-                                )
+
+                new_balance = (
+                    latest_balance - int(bet_amt)
+                )
 
                 new_row = {
                     "日期": get_now_time(),
