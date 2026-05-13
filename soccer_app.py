@@ -298,6 +298,9 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
+# 在您的側邊欄代碼最後面，或是 tabs 定義之前加入這行
+curr_lang = LANG_DICT[st.session_state.lang]
+
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
 with tab1:  # 下單投注
