@@ -262,15 +262,15 @@ else:
 # Tabs
 # =========================
 
-tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs([
-    t("💰 下單投注"),
-    t("📝 註冊帳號"),
-    t("⚽ 即時比分"),
-    t("📋 歷史記錄"),
-    t("📊 統計圖表"),
-    t("💬 討論區")
+tab1, tab2, tab_live, tab3, tab4, tab5, tab_lang = st.tabs([
+    "💰 下單投注",
+    "📝 註冊帳號",
+    "⚽ 即時比分",
+    "📋 歷史記錄",
+    "📊 統計圖表",
+    "💬 討論區",
+    "🌐 English"
 ])
-
           
 with tab1:  # 下單投注
 
@@ -506,10 +506,10 @@ for i in range(1, st.session_state.extra_match_count + 1):
                 latest_balance = int(
                     latest_df["結算總分"].iloc[-1]
                 )
-
-                new_balance = (
-                    latest_balance + int(gain_amt)
-                )
+                
+                               new_balance = (
+                                    latest_balance - int(bet_amt)
+                                )
 
                 new_row = {
                     "日期": get_now_time(),
