@@ -191,24 +191,25 @@ if new_msg_count > st.session_state.last_chat_count:
             st.rerun()
 
 # --- Sidebar (側邊欄) ---
-# --- 在側邊欄最上方加入語言切換 ---
+# --- 側邊欄修改 ---
 with st.sidebar:
-    # 💡 建立一個小巧的切換區
+    # 💡 關鍵修正：把語言切換放在最上面，不要放進 if admin_authenticated 裡面
     st.markdown("### 🌐 Language / 語言")
-    
-    # 判斷下一個語言是什麼
     target_lang = "English" if st.session_state.lang == "繁體中文" else "繁體中文"
     
-    # 使用按鈕觸發切換
     if st.button(f"切換至 {target_lang} / Switch to {target_lang}", use_container_width=True):
         st.session_state.lang = target_lang
         st.rerun()
     
-    st.divider() # 畫一條分隔線，跟下方的「新增數據」分開
-    
-    # --- 您原本的側邊欄代碼從這裡開始 ---
-    st.header("📊 數據管理")
-    # ... 原本的 st.date_input, st.selectbox 等等 ...
+    st.divider() # 分隔線
+
+    # --- 這裡開始才是原本的管理員登入判斷 ---
+    if not st.session_state.get('admin_authenticated'):
+        st.header("🔑 管理員登入")
+        # ... 原本的密碼輸入代碼 ...
+    else:
+        st.header("📊 數據管理")
+        # ... 原本的管理員功能 ...
 
 with st.sidebar:
 
