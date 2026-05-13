@@ -211,6 +211,8 @@ with st.sidebar:
         st.header("📊 數據管理")
         # ... 原本的管理員功能 ...
 
+curr = LANG_DICT[st.session_state.lang]
+
 with st.sidebar:
 
     st.header("💰 資金與統計中心")
