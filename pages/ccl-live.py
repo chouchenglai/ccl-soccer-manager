@@ -689,7 +689,7 @@ with tab2:
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
         
         st.write("")
-        st.info("💡 提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！")
+        st.caption("💡 提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！")
     
     # --- 1. 初始化檔案與欄位 ---
     req_file = "pending_requests.csv"
