@@ -254,7 +254,7 @@ with col5:
     <div class="card">
     <div class="card-title">⚽ 即時比分</div>
     <div class="card-text">
-    同步全球足球賽事<br>
+    同步全球體育賽事<br>
     即時查看最新動態
     </div>
     </div>
