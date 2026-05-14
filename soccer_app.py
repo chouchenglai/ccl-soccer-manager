@@ -267,7 +267,7 @@ with col6:
 
     st.markdown("""
     <div class="card">
-    <div class="card-title">🔥 最新站內新聞公告</div>
+    <div class="card-title">🔥 最新公告</div>
     <div class="card-text">
     走地報明牌資訊欄<br>
     現場即時同步發佈
@@ -275,7 +275,7 @@ with col6:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("最新站內新聞公告", key="ai"):
+    if st.button("最新公告", key="ai"):
         st.switch_page("pages/ccl-live.py")
 
 # ====================================
