@@ -1,8 +1,9 @@
 import streamlit as st
+import base64
 
-# =========================
+# ====================================
 # 頁面設定
-# =========================
+# ====================================
 
 st.set_page_config(
     page_title="CCL-Live",
@@ -11,11 +12,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# =========================
-# CSS
-# =========================
+# ====================================
+# 隱藏左側導航
+# ====================================
 
 st.markdown("""
+<style>
+
+/* 隱藏左側導航 */
+
 [data-testid="stSidebar"] {
     display: none;
 }
@@ -31,127 +36,89 @@ section[data-testid="stSidebar"] {
 [data-testid="stSidebarNav"] {
     display: none;
 }
-<style>
+
+/* 主背景 */
 
 .main {
-    background:#f5f7fb;
+    background: #f4f7fb;
 }
 
-/* HERO */
+/* Hero */
 
 .hero-box{
-    background:linear-gradient(135deg,#0f172a,#1d4ed8);
-    border-radius:35px;
-    padding:70px 50px;
-    margin-top:20px;
-    margin-bottom:50px;
-    text-align:center;
-    box-shadow:0 12px 35px rgba(0,0,0,0.18);
+    background: linear-gradient(135deg,#0f172a,#2563eb);
+    border-radius: 35px;
+    padding: 60px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.18);
 }
+
+/* Logo */
 
 .hero-logo{
-    width:100%;
-    max-width:1100px;
-    margin:auto;
-    display:block;
-    margin-bottom:35px;
+    width: 100%;
+    max-width: 1100px;
+    display: block;
+    margin: auto;
+    margin-bottom: 35px;
 }
+
+/* 副標 */
 
 .hero-sub{
-    font-size:34px;
-    color:#e0e7ff;
-    margin-bottom:18px;
-    font-weight:700;
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 18px;
 }
+
+/* 說明 */
 
 .hero-desc{
-    font-size:20px;
-    color:#dbeafe;
-    letter-spacing:2px;
+    font-size: 22px;
+    color: #dbeafe;
+    letter-spacing: 2px;
 }
 
-/* 區塊 */
+/* 標題 */
 
 .section-title{
-    font-size:42px;
-    font-weight:900;
-    color:#0f172a;
-    margin-bottom:30px;
+    font-size: 42px;
+    font-weight: 900;
+    color: #111827;
+    margin-bottom: 30px;
 }
 
 /* 卡片 */
 
-.card-link{
-    text-decoration:none;
-}
-
 .card{
-    background:white;
-    border-radius:24px;
-    padding:35px;
-    box-shadow:0 4px 18px rgba(0,0,0,0.08);
-    margin-bottom:25px;
-    transition:0.3s;
-    min-height:240px;
+    background: white;
+    border-radius: 24px;
+    padding: 35px;
+    min-height: 230px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    margin-bottom: 25px;
 }
 
 .card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 10px 30px rgba(0,0,0,0.14);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
 .card-title{
-    font-size:26px;
-    font-weight:800;
-    margin-bottom:20px;
-    color:#111827;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: #111827;
 }
 
 .card-text{
-    font-size:18px;
-    line-height:1.9;
-    color:#374151;
-}
-
-/* 特色區 */
-
-.feature-box{
-    background:linear-gradient(135deg,#1d4ed8,#2563eb);
-    border-radius:28px;
-    padding:55px;
-    margin-top:40px;
-    margin-bottom:50px;
-    color:white;
-    text-align:center;
-}
-
-.feature-title{
-    font-size:42px;
-    font-weight:900;
-    margin-bottom:20px;
-}
-
-.feature-text{
-    font-size:22px;
-    line-height:2;
-}
-
-/* 按鈕 */
-
-.stButton>button{
-    background:#2563eb;
-    color:white;
-    border:none;
-    border-radius:16px;
-    padding:16px 20px;
-    font-size:24px;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-.stButton>button:hover{
-    background:#1d4ed8;
-    transform:scale(1.03);
+    font-size: 18px;
+    color: #4b5563;
+    line-height: 1.9;
 }
 
 /* Footer */
@@ -159,7 +126,7 @@ section[data-testid="stSidebar"] {
 .footer{
     text-align:center;
     color:#6b7280;
-    margin-top:70px;
+    margin-top:60px;
     margin-bottom:20px;
     font-size:16px;
 }
@@ -167,16 +134,26 @@ section[data-testid="stSidebar"] {
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# HERO
-# =========================
+# ====================================
+# 讀取 LOGO
+# ====================================
 
-st.markdown("""
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
+logo_base64 = get_base64("ccl_logo_header.jpg")
+
+# ====================================
+# Hero
+# ====================================
+
+st.markdown(f"""
 <div class="hero-box">
 
 <img class="hero-logo"
-src="https://www.ccl-live.tw/logo.jpg">
+src="data:image/jpg;base64,{logo_base64}">
 
 <div class="hero-sub">
 體育模擬交易與賽事分析平臺
@@ -187,12 +164,11 @@ src="https://www.ccl-live.tw/logo.jpg">
 </div>
 
 </div>
-
 """, unsafe_allow_html=True)
 
-# =========================
+# ====================================
 # 平臺功能
-# =========================
+# ====================================
 
 st.markdown("""
 <div class="section-title">
@@ -200,74 +176,60 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ====================================
+# 第一列
+# ====================================
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
 
     st.markdown("""
-    <a class="card-link" href="#">
-
     <div class="card">
-
-    <div class="card-title">
-    💰 模擬交易
-    </div>
-
+    <div class="card-title">💰 模擬交易</div>
     <div class="card-text">
-    自動結算盈虧，<br>
-    即時同步總資金變化。
+    自動結算盈虧<br>
+    即時同步總資金變化
     </div>
-
     </div>
-
-    </a>
     """, unsafe_allow_html=True)
+
+    if st.button("進入模擬交易", key="trade"):
+        st.switch_page("pages/ccl-live.py")
 
 with col2:
 
     st.markdown("""
-    <a class="card-link" href="#">
-
     <div class="card">
-
-    <div class="card-title">
-    📈 統計圖表
-    </div>
-
+    <div class="card-title">📈 統計圖表</div>
     <div class="card-text">
-    自動生成資金曲線圖，<br>
-    分析長期操作表現。
+    自動生成資金曲線圖<br>
+    分析長期操作表現
     </div>
-
     </div>
-
-    </a>
     """, unsafe_allow_html=True)
+
+    if st.button("查看統計圖表", key="chart"):
+        st.switch_page("pages/ccl-live.py")
 
 with col3:
 
     st.markdown("""
-    <a class="card-link" href="#">
-
     <div class="card">
-
-    <div class="card-title">
-    💬 討論交流
-    </div>
-
+    <div class="card-title">💬 討論交流</div>
     <div class="card-text">
-    即時討論熱門賽事，<br>
-    站長免費分享賽事觀點。
+    即時討論熱門賽事<br>
+    免費分享賽事觀點
     </div>
-
     </div>
-
-    </a>
     """, unsafe_allow_html=True)
 
-# =========================
+    if st.button("進入討論區", key="chat"):
+        st.switch_page("pages/ccl-live.py")
+
+# ====================================
 # 第二列
-# =========================
+# ====================================
 
 col4, col5, col6 = st.columns(3)
 
@@ -275,89 +237,50 @@ with col4:
 
     st.markdown("""
     <div class="card">
-
-    <div class="card-title">
-    📋 歷史記錄
-    </div>
-
+    <div class="card-title">📋 歷史記錄</div>
     <div class="card-text">
-    完整保存每場記錄，<br>
-    方便後續回測分析。
+    完整保存歷史數據<br>
+    支援後續分析回測
     </div>
-
     </div>
     """, unsafe_allow_html=True)
+
+    if st.button("查看歷史記錄", key="history"):
+        st.switch_page("pages/ccl-live.py")
 
 with col5:
 
     st.markdown("""
     <div class="card">
-
-    <div class="card-title">
-    ⚽ 即時比分
-    </div>
-
+    <div class="card-title">⚽ 即時比分</div>
     <div class="card-text">
-    同步全球足球賽事，<br>
-    即時查看最新動態。
+    同步全球足球賽事<br>
+    即時查看最新動態
     </div>
-
     </div>
     """, unsafe_allow_html=True)
+
+    if st.button("查看即時比分", key="live"):
+        st.switch_page("pages/ccl-live.py")
 
 with col6:
 
     st.markdown("""
     <div class="card">
-
-    <div class="card-title">
-    🧠 AI 分析
-    </div>
-
+    <div class="card-title">🧠 AI 分析</div>
     <div class="card-text">
-    未來將加入 AI 分析，<br>
-    提升賽事預測效率。
+    未來將加入 AI 預測<br>
+    提升賽事分析效率
     </div>
-
     </div>
     """, unsafe_allow_html=True)
 
-# =========================
-# 特色區
-# =========================
-
-st.markdown("""
-
-<div class="feature-box">
-
-<div class="feature-title">
-🚀 CCL-Live 正式上線
-</div>
-
-<div class="feature-text">
-體育賽事模擬交易系統正式開放使用<br>
-支援模擬倉、自動結算、歷史分析與社群交流功能
-</div>
-
-</div>
-
-""", unsafe_allow_html=True)
-
-# =========================
-# 進入平臺
-# =========================
-
-col_a, col_b, col_c = st.columns([1,2,1])
-
-with col_b:
-
-    if st.button("🚀 立即進入正式平臺", use_container_width=True):
-
+    if st.button("AI 分析系統", key="ai"):
         st.switch_page("pages/ccl-live.py")
 
-# =========================
-# Footer
-# =========================
+# ====================================
+# 底部
+# ====================================
 
 st.markdown("""
 <div class="footer">
