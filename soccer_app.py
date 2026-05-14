@@ -4,8 +4,10 @@ import streamlit as st
 # 頁面設定
 # =========================
 
-# 1. 頁面設定 (最頂端)
-st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
+st.set_page_config(
+    page_title="CCL-Live",
+    page_icon="⚽",
+    layout="wide"
 )
 
 # =========================
@@ -153,7 +155,7 @@ st.markdown("""
 
 st.markdown("""
 <div class="section-title">
-🔥 平台核心功能
+🔥 平臺核心功能
 </div>
 """, unsafe_allow_html=True)
 
@@ -204,7 +206,7 @@ with col3:
 
     <div class="card-text">
     即時討論熱門賽事，<br>
-    站長免費分享賽事觀點。
+    站長免費分享報明牌推薦。
     </div>
 
     </div>
@@ -222,11 +224,11 @@ with col4:
     <div class="card">
 
     <div class="card-title">
-    📋 歷史紀錄
+    📋 歷史記錄
     </div>
 
     <div class="card-text">
-    完整保存每場紀錄，<br>
+    完整保存每場記錄，<br>
     方便後續回測分析。
     </div>
 
@@ -279,7 +281,7 @@ st.markdown("""
 </div>
 
 <div class="feature-text">
-全球體育模擬交易系統正式開放使用<br>
+體育賽事模擬交易系統正式開放使用<br>
 支援模擬倉、自動結算、歷史分析與社群交流功能
 </div>
 
@@ -297,7 +299,7 @@ col_btn1, col_btn2, col_btn3 = st.columns([1,2,1])
 
 with col_btn2:
 
-    if st.button("🚀 立即進入正式平台", use_container_width=True):
+    if st.button("🚀 立即進入正式平臺", use_container_width=True):
 
         st.switch_page("ccl-live.py")
 
