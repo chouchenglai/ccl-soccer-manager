@@ -1,5 +1,7 @@
 import pytz
 import streamlit as st
+if "target_tab" not in st.session_state:
+    st.session_state.target_tab = 0
 import pandas as pd
 import os
 import time
@@ -258,8 +260,13 @@ else:
     """, unsafe_allow_html=True)
 
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
+
+         selected_tab = st.session_state.target_tab
        
 with tab1:  # 下單投注
+
+       if selected_tab == 0:
+    st.success("已進入：模擬倉管理")
 
     st.markdown(
     '<div id="top_page"></div>',
@@ -878,6 +885,10 @@ with tab_live:
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
 with tab3: # 📋 歷史記錄
+
+                if selected_tab == 3:
+            st.success("已進入：歷史數據")
+
         st.subheader("📜 完整賽事歷史紀錄")
         
         # 1. 定義染色邏輯 (確保縮排正確)
@@ -975,6 +986,10 @@ with tab4: # 統計圖表[cite: 2]
     # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
     # ---------------------------------------------------------
 with tab5:
+         
+                if selected_tab == 5:
+            st.success("已進入：交流討論")         
+       
         st.markdown("### 💬 足球現場實況滾球推薦")
         
         def get_chat_safely():
