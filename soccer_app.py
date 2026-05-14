@@ -80,19 +80,6 @@ section[data-testid="stSidebar"] {
     font-size: 22px;
     color: #dbeafe;
     letter-spacing: 2px;
-    margin-top: 10px;
-}
-
-.hero-desc a{
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 8px;
-    transition: 0.3s;
-}
-
-.hero-desc a:hover{
-    color: #facc15;
 }
 
 /* 標題 */
@@ -159,32 +146,6 @@ def get_base64(file_path):
 logo_base64 = get_base64("ccl_logo_header.jpg")
 
 # ====================================
-# 首頁欄目跳轉
-# ====================================
-
-query = st.query_params
-
-if "page" in query:
-
-    page = query["page"]
-
-    if page == "trade":
-        st.session_state.target_tab = 0
-        st.switch_page("pages/ccl-live.py")
-
-    elif page == "live":
-        st.session_state.target_tab = 2
-        st.switch_page("pages/ccl-live.py")
-
-    elif page == "history":
-        st.session_state.target_tab = 3
-        st.switch_page("pages/ccl-live.py")
-
-    elif page == "chat":
-        st.session_state.target_tab = 5
-        st.switch_page("pages/ccl-live.py")
-
-# ====================================
 # Hero
 # ====================================
 
@@ -198,6 +159,11 @@ src="data:image/jpg;base64,{logo_base64}">
 體育賽事模擬交易與分析平臺
 </div>
 
+<div class="hero-desc">
+即時比分｜歷史數據｜模擬倉管理｜交流討論
+</div>
+
+</div>
 """, unsafe_allow_html=True)
 
 # ====================================
