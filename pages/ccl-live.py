@@ -687,7 +687,8 @@ if st.session_state.get(
 with tab2: 
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
-with st.expander("💡 溫馨提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！"):
+
+    with st.expander("💡 溫馨提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！")
 
     
     # --- 1. 初始化檔案與欄位 ---
