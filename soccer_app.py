@@ -1,4 +1,4 @@
-import streamlit as st
+.import streamlit as st
 import base64
 
 # ====================================
@@ -219,7 +219,7 @@ with col3:
     <div class="card-title">💬 討論交流</div>
     <div class="card-text">
     即時討論熱門賽事<br>
-    站長報免費報明牌
+    站長免費送報明牌
     </div>
     </div>
     """, unsafe_allow_html=True)
