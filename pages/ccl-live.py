@@ -685,7 +685,11 @@ if st.session_state.get(
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
 with tab2:
-    st.caption("💡 溫馨提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！")
+    st.markdown("""
+    <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
+    💡 提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！
+    </p>
+    """, unsafe_allow_html=True)
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)     
   
