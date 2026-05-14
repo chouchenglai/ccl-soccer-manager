@@ -16,6 +16,21 @@ st.set_page_config(
 # =========================
 
 st.markdown("""
+[data-testid="stSidebar"] {
+    display: none;
+}
+
+[data-testid="collapsedControl"] {
+    display: none;
+}
+
+section[data-testid="stSidebar"] {
+    display: none;
+}
+
+[data-testid="stSidebarNav"] {
+    display: none;
+}
 <style>
 
 .main {
