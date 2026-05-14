@@ -7,18 +7,19 @@ import streamlit as st
 st.set_page_config(
     page_title="CCL-Live",
     page_icon="⚽",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 # =========================
-# CSS 美化
+# CSS
 # =========================
 
 st.markdown("""
 <style>
 
 .main {
-    background-color:#f5f7fb;
+    background:#f5f7fb;
 }
 
 /* HERO */
@@ -26,25 +27,26 @@ st.markdown("""
 .hero-box{
     background:linear-gradient(135deg,#0f172a,#1d4ed8);
     border-radius:35px;
-    padding:80px 50px;
+    padding:70px 50px;
     margin-top:20px;
     margin-bottom:50px;
     text-align:center;
     box-shadow:0 12px 35px rgba(0,0,0,0.18);
 }
 
-.hero-title{
-    font-size:80px;
-    font-weight:900;
-    color:white;
-    margin-bottom:25px;
-    letter-spacing:1px;
+.hero-logo{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    display:block;
+    margin-bottom:35px;
 }
 
 .hero-sub{
     font-size:34px;
     color:#e0e7ff;
-    margin-bottom:20px;
+    margin-bottom:18px;
+    font-weight:700;
 }
 
 .hero-desc{
@@ -64,6 +66,10 @@ st.markdown("""
 
 /* 卡片 */
 
+.card-link{
+    text-decoration:none;
+}
+
 .card{
     background:white;
     border-radius:24px;
@@ -71,23 +77,24 @@ st.markdown("""
     box-shadow:0 4px 18px rgba(0,0,0,0.08);
     margin-bottom:25px;
     transition:0.3s;
+    min-height:240px;
 }
 
 .card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 8px 24px rgba(0,0,0,0.12);
+    transform:translateY(-8px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.14);
 }
 
 .card-title{
-    font-size:22px;
+    font-size:26px;
     font-weight:800;
-    margin-bottom:18px;
+    margin-bottom:20px;
     color:#111827;
 }
 
 .card-text{
     font-size:18px;
-    line-height:1.8;
+    line-height:1.9;
     color:#374151;
 }
 
@@ -96,9 +103,9 @@ st.markdown("""
 .feature-box{
     background:linear-gradient(135deg,#1d4ed8,#2563eb);
     border-radius:28px;
-    padding:50px;
+    padding:55px;
     margin-top:40px;
-    margin-bottom:40px;
+    margin-bottom:50px;
     color:white;
     text-align:center;
 }
@@ -114,12 +121,30 @@ st.markdown("""
     line-height:2;
 }
 
+/* 按鈕 */
+
+.stButton>button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:16px;
+    padding:16px 20px;
+    font-size:24px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.stButton>button:hover{
+    background:#1d4ed8;
+    transform:scale(1.03);
+}
+
 /* Footer */
 
 .footer{
     text-align:center;
     color:#6b7280;
-    margin-top:60px;
+    margin-top:70px;
     margin-bottom:20px;
     font-size:16px;
 }
@@ -128,15 +153,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================
-# HERO 區
+# HERO
 # =========================
 
 st.markdown("""
+
 <div class="hero-box">
 
-<div class="hero-title">
-⚽ CCL-Live
-</div>
+<img class="hero-logo"
+src="https://www.ccl-live.tw/logo.jpg">
 
 <div class="hero-sub">
 體育模擬交易與賽事分析平臺
@@ -147,10 +172,11 @@ st.markdown("""
 </div>
 
 </div>
+
 """, unsafe_allow_html=True)
 
 # =========================
-# 平台介紹
+# 平臺功能
 # =========================
 
 st.markdown("""
@@ -164,6 +190,8 @@ col1, col2, col3 = st.columns(3)
 with col1:
 
     st.markdown("""
+    <a class="card-link" href="#">
+
     <div class="card">
 
     <div class="card-title">
@@ -176,11 +204,15 @@ with col1:
     </div>
 
     </div>
+
+    </a>
     """, unsafe_allow_html=True)
 
 with col2:
 
     st.markdown("""
+    <a class="card-link" href="#">
+
     <div class="card">
 
     <div class="card-title">
@@ -193,11 +225,15 @@ with col2:
     </div>
 
     </div>
+
+    </a>
     """, unsafe_allow_html=True)
 
 with col3:
 
     st.markdown("""
+    <a class="card-link" href="#">
+
     <div class="card">
 
     <div class="card-title">
@@ -206,10 +242,12 @@ with col3:
 
     <div class="card-text">
     即時討論熱門賽事，<br>
-    站長免費分享報明牌推薦。
+    站長免費分享賽事觀點。
     </div>
 
     </div>
+
+    </a>
     """, unsafe_allow_html=True)
 
 # =========================
@@ -270,10 +308,11 @@ with col6:
     """, unsafe_allow_html=True)
 
 # =========================
-# 特色區塊
+# 特色區
 # =========================
 
 st.markdown("""
+
 <div class="feature-box">
 
 <div class="feature-title">
@@ -286,22 +325,20 @@ st.markdown("""
 </div>
 
 </div>
+
 """, unsafe_allow_html=True)
 
 # =========================
-# 進入按鈕
+# 進入平臺
 # =========================
 
-st.write("")
-st.write("")
+col_a, col_b, col_c = st.columns([1,2,1])
 
-col_btn1, col_btn2, col_btn3 = st.columns([1,2,1])
-
-with col_btn2:
+with col_b:
 
     if st.button("🚀 立即進入正式平臺", use_container_width=True):
 
-        st.switch_page("ccl-live.py")
+        st.switch_page("pages/ccl-live.py")
 
 # =========================
 # Footer
