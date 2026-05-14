@@ -156,7 +156,7 @@ st.markdown(f"""
 src="data:image/jpg;base64,{logo_base64}">
 
 <div class="hero-sub">
-體育模擬交易與賽事分析平臺
+體育賽事模擬交易與分析平臺
 </div>
 
 <div class="hero-desc">
@@ -219,7 +219,7 @@ with col3:
     <div class="card-title">💬 討論交流</div>
     <div class="card-text">
     即時討論熱門賽事<br>
-    免費分享賽事觀點
+    站長報免費報明牌
     </div>
     </div>
     """, unsafe_allow_html=True)
@@ -267,15 +267,15 @@ with col6:
 
     st.markdown("""
     <div class="card">
-    <div class="card-title">🧠 AI 分析</div>
+    <div class="card-title">🧠新功能欄目</div>
     <div class="card-text">
-    未來將加入 AI 預測<br>
-    提升賽事分析效率
+    目前研發階段進行<br>
+    敬請留意期待關注
     </div>
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("AI 分析系統", key="ai"):
+    if st.button("新功能欄目", key="ai"):
         st.switch_page("pages/ccl-live.py")
 
 # ====================================
