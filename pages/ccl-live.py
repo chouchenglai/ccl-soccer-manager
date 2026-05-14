@@ -686,8 +686,9 @@ if st.session_state.get(
 # ==========================================
 with tab2:
     st.write("")
-    st.markdown("""
-    <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
+    # 💡 調整 font-size 為 18px (約等於 14-15 號字體)，並增加上下邊距
+st.markdown("""
+    <p style='color: black; font-weight: bold; font-size: 18px; margin-top: 15px; margin-bottom: 15px; text-align: left;'>
     💡 提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！
     </p>
     """, unsafe_allow_html=True)
