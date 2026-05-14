@@ -685,6 +685,7 @@ if st.session_state.get(
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
 with tab2:
+    st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
     💡 提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！
