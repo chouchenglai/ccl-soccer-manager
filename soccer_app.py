@@ -1,157 +1,189 @@
-# =========================
-# CCL-Live 首頁入口門面
-# =========================
+import streamlit as st
+
+st.set_page_config(
+    page_title="CCL-Live",
+    page_icon="⚽",
+    layout="wide"
+)
+
+# ======================
+# CSS
+# ======================
 
 st.markdown("""
 <style>
 
-.hero-box{
-    background: linear-gradient(135deg,#0f172a,#1e3a8a);
-    padding:45px;
-    border-radius:25px;
-    color:white;
-    margin-bottom:30px;
-    box-shadow:0 0 30px rgba(0,0,0,0.25);
+.main {
+    background-color: #f5f7fb;
 }
 
-.hero-title{
-    font-size:52px;
-    font-weight:900;
-    margin-bottom:10px;
-    color:white;
+.big-title {
+    font-size: 68px;
+    font-weight: 900;
+    color: white;
+    text-align: center;
 }
 
-.hero-sub{
-    font-size:24px;
-    color:#cbd5e1;
-    margin-bottom:30px;
+.sub-title {
+    font-size: 26px;
+    color: #dbeafe;
+    text-align: center;
 }
 
-.feature-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-    margin-top:30px;
+.hero-box {
+    background: linear-gradient(135deg,#0f172a,#1d4ed8);
+    padding: 70px 50px;
+    border-radius: 30px;
+    margin-top: 20px;
+    margin-bottom: 40px;
 }
 
-.feature-card{
-    background:white;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-    transition:0.3s;
+.feature-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
 }
 
-.feature-card:hover{
-    transform:translateY(-5px);
-}
-
-.feature-title{
-    font-size:24px;
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-.feature-text{
-    color:#555;
-    line-height:1.8;
-}
-
-.cta-box{
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    padding:35px;
-    border-radius:20px;
+.footer {
     text-align:center;
-    color:white;
-    margin-top:40px;
-}
-
-.cta-title{
-    font-size:36px;
-    font-weight:900;
-    margin-bottom:15px;
-}
-
-.cta-btn{
-    display:inline-block;
-    background:white;
-    color:#2563eb;
-    padding:14px 35px;
-    border-radius:14px;
-    font-weight:bold;
-    text-decoration:none;
-    font-size:20px;
+    color:#888;
+    margin-top:60px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# Hero 區塊
+# ======================
+# HERO
+# ======================
+
 st.markdown("""
 <div class="hero-box">
 
-<div class="hero-title">
+<div class="big-title">
 ⚽ CCL-Live
 </div>
 
-<div class="hero-sub">
-全球體育賽事模擬交易平台
-</div>
+<br>
 
-✅ 即時比分同步<br>
-✅ 自動盈虧結算<br>
-✅ 智能統計分析<br>
-✅ 足球社群交流<br>
+<div class="sub-title">
+全球體育模擬交易與賽事分析平台
+</div>
 
 </div>
 """, unsafe_allow_html=True)
 
-# 功能卡片
+# ======================
+# 平台介紹
+# ======================
+
+st.markdown("## 🔥 平台核心功能")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.markdown("""
+    <div class="feature-box">
+    <h3>💰 模擬交易</h3>
+    <p>
+    自動結算盈虧，<br>
+    即時更新總資金。
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+
+    st.markdown("""
+    <div class="feature-box">
+    <h3>📈 統計圖表</h3>
+    <p>
+    自動生成資金曲線圖，<br>
+    分析歷史表現。
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+
+    st.markdown("""
+    <div class="feature-box">
+    <h3>💬 討論區</h3>
+    <p>
+    即時交流討論，<br>
+    免費分享熱門賽事。
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ======================
+# 第二區
+# ======================
+
+col4, col5, col6 = st.columns(3)
+
+with col4:
+
+    st.markdown("""
+    <div class="feature-box">
+    <h3>📋 歷史紀錄</h3>
+    <p>
+    完整保存每場賽事，<br>
+    方便後期回測。
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col5:
+
+    st.markdown("""
+    <div class="feature-box">
+    <h3>⚽ 即時比分</h3>
+    <p>
+    同步全球足球賽事，<br>
+    即時查看動態。
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col6:
+
+    st.markdown("""
+    <div class="feature-box">
+    <h3>🧠 AI分析</h3>
+    <p>
+    未來將加入 AI 預測、<br>
+    勝率分析系統。
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ======================
+# 進入平台
+# ======================
+
+st.write("")
+st.write("")
+
+if st.button("🚀 立即進入正式平台"):
+
+    st.switch_page("pages/ccl-live.py")
+
+# ======================
+# Footer
+# ======================
+
 st.markdown("""
-<div class="feature-grid">
+<div class="footer">
 
-<div class="feature-card">
-<div class="feature-title">📡 即時比分</div>
-<div class="feature-text">
-同步全球足球賽事資訊與即時數據。
-</div>
-</div>
+CCL-Live 體育賽事管理系統 © 2026
 
-<div class="feature-card">
-<div class="feature-title">💰 模擬交易</div>
-<div class="feature-text">
-自動記錄下注、盈虧與總資金變化。
-</div>
-</div>
+<br>
 
-<div class="feature-card">
-<div class="feature-title">📈 統計分析</div>
-<div class="feature-text">
-智能生成曲線圖與歷史回測數據。
-</div>
-</div>
-
-<div class="feature-card">
-<div class="feature-title">💬 社群討論</div>
-<div class="feature-text">
-站長免費分享熱門賽事與交流分析。
-</div>
-</div>
+www.ccl-live.tw
 
 </div>
 """, unsafe_allow_html=True)
-
-# CTA 區塊
-st.markdown("""
-<div class="cta-box">
-
-<div class="cta-title">
-🚀 開始您的模擬交易之旅
-</div>
-
-立即體驗 CCL-Live 專業體育交易平台。
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
