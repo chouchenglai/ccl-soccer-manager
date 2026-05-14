@@ -74,12 +74,25 @@ section[data-testid="stSidebar"] {
     margin-bottom: 18px;
 }
 
-/* 說明 */
+/* 導航 */
 
 .hero-desc{
     font-size: 22px;
     color: #dbeafe;
     letter-spacing: 2px;
+    margin-top: 20px;
+}
+
+.hero-desc a{
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 12px;
+    transition: 0.3s;
+}
+
+.hero-desc a:hover{
+    color: #facc15;
 }
 
 /* 標題 */
@@ -146,7 +159,7 @@ def get_base64(file_path):
 logo_base64 = get_base64("ccl_logo_header.jpg")
 
 # ====================================
-# Hero
+# Hero 區塊
 # ====================================
 
 st.markdown(f"""
@@ -160,7 +173,29 @@ src="data:image/jpg;base64,{logo_base64}">
 </div>
 
 <div class="hero-desc">
-即時比分｜歷史數據｜模擬倉管理｜交流討論
+
+<a href="/ccl-live">
+即時比分
+</a>
+
+｜
+
+<a href="/ccl-live">
+歷史數據
+</a>
+
+｜
+
+<a href="/ccl-live">
+模擬倉管理
+</a>
+
+｜
+
+<a href="/ccl-live">
+交流討論
+</a>
+
 </div>
 
 </div>
@@ -194,8 +229,11 @@ with col1:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("進入模擬交易", key="trade"):
-        st.switch_page("pages/ccl-live.py")
+    st.link_button(
+        "進入模擬交易",
+        "/ccl-live",
+        use_container_width=True
+    )
 
 with col2:
 
@@ -209,8 +247,11 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("查看統計圖表", key="chart"):
-        st.switch_page("pages/ccl-live.py")
+    st.link_button(
+        "查看統計圖表",
+        "/ccl-live",
+        use_container_width=True
+    )
 
 with col3:
 
@@ -219,13 +260,16 @@ with col3:
     <div class="card-title">💬 討論交流</div>
     <div class="card-text">
     即時討論熱門賽事<br>
-    站長免費送報明牌
+    免費交流熱門資訊
     </div>
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("進入討論區", key="chat"):
-        st.switch_page("pages/ccl-live.py")
+    st.link_button(
+        "進入討論區",
+        "/ccl-live",
+        use_container_width=True
+    )
 
 # ====================================
 # 第二列
@@ -245,8 +289,11 @@ with col4:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("查看歷史記錄", key="history"):
-        st.switch_page("pages/ccl-live.py")
+    st.link_button(
+        "查看歷史記錄",
+        "/ccl-live",
+        use_container_width=True
+    )
 
 with col5:
 
@@ -254,32 +301,38 @@ with col5:
     <div class="card">
     <div class="card-title">⚽ 即時比分</div>
     <div class="card-text">
-    同步全球體育賽事<br>
+    同步全球足球賽事<br>
     即時查看最新動態
     </div>
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("查看即時比分", key="live"):
-        st.switch_page("pages/ccl-live.py")
+    st.link_button(
+        "查看即時比分",
+        "/ccl-live",
+        use_container_width=True
+    )
 
 with col6:
 
     st.markdown("""
     <div class="card">
-    <div class="card-title">🧠新功能欄目</div>
+    <div class="card-title">🧠 新功能開發</div>
     <div class="card-text">
-    目前進行研發階段<br>
-    敬請期待關注留意
+    AI 智能分析模組<br>
+    即將推出更多功能
     </div>
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("新功能欄目", key="ai"):
-        st.switch_page("pages/ccl-live.py")
+    st.link_button(
+        "查看最新功能",
+        "/ccl-live",
+        use_container_width=True
+    )
 
 # ====================================
-# 底部
+# 底部資訊
 # ====================================
 
 st.markdown("""
