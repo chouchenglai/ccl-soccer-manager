@@ -269,8 +269,8 @@ with col6:
     <div class="card">
     <div class="card-title">🧠新功能欄目</div>
     <div class="card-text">
-    目前研發階段進行<br>
-    敬請留意期待關注
+    目前進行研發階段<br>
+    敬請期待關注留意
     </div>
     </div>
     """, unsafe_allow_html=True)
