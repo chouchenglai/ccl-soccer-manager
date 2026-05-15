@@ -157,36 +157,15 @@ src="data:image/jpg;base64,{logo_base64}">
 
 <div class="hero-sub">
 體育賽事模擬交易與分析平臺
-</div>
 
-</div>
-""", unsafe_allow_html=True)
-
-# ====================================
-# 首頁功能導航
-# ====================================
-
-col_a, col_b, col_c, col_d = st.columns(4)
-
-with col_a:
-    if st.button("⚽ 即時比分", use_container_width=True):
-        st.session_state.target_tab = "live"
-        st.switch_page("pages/ccl-live.py")
-
-with col_b:
-    if st.button("📋 歷史數據", use_container_width=True):
-        st.session_state.target_tab = "history"
-        st.switch_page("pages/ccl-live.py")
-
-with col_c:
-    if st.button("📈 模擬倉管理", use_container_width=True):
-        st.session_state.target_tab = "trade"
-        st.switch_page("pages/ccl-live.py")
-
-with col_d:
-    if st.button("💬 交流討論", use_container_width=True):
-        st.session_state.target_tab = "chat"
-        st.switch_page("pages/ccl-live.py")            
+<div class="hero-desc">
+            <a href="/ccl-live#即時比分" style="color: white; text-decoration: none;">⚽ 即時比分</a> ｜ 
+            <a href="/ccl-live#歷史數據" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
+            <a href="/ccl-live#模擬倉管理" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
+            <a href="/ccl-live#交流討論" style="color: white; text-decoration: none;">💬 交流討論</a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
   
 # ====================================
 # 平臺功能
