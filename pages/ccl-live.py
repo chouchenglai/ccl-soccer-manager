@@ -853,7 +853,7 @@ with tab2:
                 st.markdown(f"📁 **{fname}**" + (" <span style='color:gray;'>(預設)</span>" if fname == DEFAULT_DB else ""), unsafe_allow_html=True)
             
             with col2:
-                st.link_button("🚀 啟動", "https://chouchenglai.streamlit.app/", use_container_width=True)
+                st.link_button("🚀 啟動", "https://www.ccl-live.tw/", use_container_width=True)
             
             with col3:
                 # 💡 只有當「是管理員」且「密鑰正確」且「不是預設檔」時，才顯示刪除按鈕
