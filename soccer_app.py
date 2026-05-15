@@ -197,7 +197,7 @@ with col1:
     """, unsafe_allow_html=True)
 
     if st.button("查看即時比分", key="live"):
-    st.switch_page("pages/live.py")
+            st.switch_page("pages/live.py")
 
 with col2:
 
