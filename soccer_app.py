@@ -220,7 +220,7 @@ with col3:
     <div class="card-title">💬 討論交流</div>
     <div class="card-text">
     即時討論熱門賽事<br>
-    站長免費送報明牌
+    現場即分享報明牌
     </div>
     </div>
     """, unsafe_allow_html=True)
@@ -270,8 +270,8 @@ with col6:
     <div class="card">
     <div class="card-title">🔥 最新公告</div>
     <div class="card-text">
-    走地報明牌資訊欄<br>
-    現場即時同步發佈
+    現場即時同步發佈<br>
+    本站報明牌資訊欄
     </div>
     </div>
     """, unsafe_allow_html=True)
