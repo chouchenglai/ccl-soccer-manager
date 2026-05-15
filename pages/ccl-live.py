@@ -8,33 +8,44 @@ from datetime import datetime, timedelta, timezone
 # 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
 
-# --- 1. 處理頁面跳轉參數 (放在 set_page_config 之後) ---
+# 💡 關鍵修正：先把字典搬到最上面，才不會報錯
+LANG_DICT = {
+    "繁體中文": {
+        "forum_title": "💬 站內討論區",
+        "post_btn": "發布留言",
+        "nickname": "您的暱稱",
+        "content": "留言內容",
+        "refresh": "刷新討論",
+    },
+    "English": {
+        "forum_title": "💬 Community Forum",
+        "post_btn": "Post Message",
+        "nickname": "Nickname",
+        "content": "Message Content",
+        "refresh": "Refresh",
+    }
+}
+
+# 初始化語言與 Tab 狀態
+if 'lang' not in st.session_state: st.session_state.lang = "繁體中文"
+
+# --- 2. 處理頁面跳轉參數 (在本頁切換的靈魂) ---
 target_map = {"sim": 0, "hist": 1, "live": 2, "chat": 3}
-
-# 獲取 URL 參數
 q_params = st.query_params
-if "target" in q_params:
-    t_key = q_params["target"]
-    if t_key in target_map:
-        # 將目標索引存入 session_state，命名為 tab_index
-        st.session_state.tab_index = target_map[t_key]
-        # 清除參數，避免 rerun 時重複觸發
-        st.query_params.clear()
 
-# 如果 session_state 裡沒有 index，預設選第一個 (0)
-if 'tab_index' not in st.session_state:
-    st.session_state.tab_index = 0
+# 如果網址有參數，優先使用參數，否則預設 0
+init_index = target_map.get(q_params.get("target"), 0)
 
-# --- 2. 在定義 Tabs 時使用鍵值 (Key) 鎖定 ---
-# 💡 這是 Streamlit 自動切換分頁最穩定的做法
-tab_list = ["📈 模擬倉管理", "📊 歷史數據", "🏟️ 即時比分", "💬 交流討論"]
+# --- 3. 渲染 Tab (使用帶有 index 的邏輯) ---
+tabs_labels = ["📈 模擬倉管理", "📊 歷史數據", "🏟️ 即時比分", "💬 交流討論"]
 
-# 關鍵在於使用一個可以控制的容器，目前 st.tabs 渲染是固定的，
-# 我們改用一個簡單的邏輯讓它「記住」位置
-tab1, tab2, tab3, tab4 = st.tabs(tab_list)
+# 💡 這裡我們改用一個技巧：讓渲染內容根據 init_index 動態調整
+# 由於 st.tabs 目前不支援動態 index 屬性，我們用一個 Radio 模擬導航感
+# 這樣一進頁面就會精準跳轉！
+st.markdown("<style>div.row-widget.stRadio > div{flex-direction:row;}</style>", unsafe_allow_html=True)
+choice = st.radio("導航路標", tabs_labels, index=init_index, label_visibility="collapsed")
 
-# 如果 session_state 強制要求跳轉，我們需要透過 JS 或是邏輯控制
-# 但最簡單、無報錯的方法是讓內容「動態加載」
+# 之後的代碼用 if choice == "..." 分類即可
 
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
