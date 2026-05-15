@@ -158,7 +158,22 @@ src="data:image/jpg;base64,{logo_base64}">
 <div class="hero-sub">
 體育賽事模擬交易與分析平臺
 
-<div class="hero-desc">
+st.markdown(f"""
+<div class="hero-box">
+
+<img class="hero-logo"
+src="data:image/jpg;base64,{logo_base64}">
+
+<div class="hero-sub">
+體育賽事模擬交易與分析平臺
+</div>
+
+</div>
+""", unsafe_allow_html=True)
+
+# ====================================
+# 首頁功能導航
+# ====================================
 
 col_a, col_b, col_c, col_d = st.columns(4)
 
@@ -168,7 +183,7 @@ with col_a:
         st.switch_page("pages/ccl-live.py")
 
 with col_b:
-    if st.button("📊 歷史數據", use_container_width=True):
+    if st.button("📋 歷史數據", use_container_width=True):
         st.session_state.target_tab = "history"
         st.switch_page("pages/ccl-live.py")
 
