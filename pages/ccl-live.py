@@ -8,45 +8,6 @@ from datetime import datetime, timedelta, timezone
 # 1. 頁面設定 (最頂端)
 st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
 
-# 💡 關鍵修正：先把字典搬到最上面，才不會報錯
-LANG_DICT = {
-    "繁體中文": {
-        "forum_title": "💬 站內討論區",
-        "post_btn": "發布留言",
-        "nickname": "您的暱稱",
-        "content": "留言內容",
-        "refresh": "刷新討論",
-    },
-    "English": {
-        "forum_title": "💬 Community Forum",
-        "post_btn": "Post Message",
-        "nickname": "Nickname",
-        "content": "Message Content",
-        "refresh": "Refresh",
-    }
-}
-
-# 初始化語言與 Tab 狀態
-if 'lang' not in st.session_state: st.session_state.lang = "繁體中文"
-
-# --- 2. 處理頁面跳轉參數 (在本頁切換的靈魂) ---
-target_map = {"sim": 0, "hist": 1, "live": 2, "chat": 3}
-q_params = st.query_params
-
-# 如果網址有參數，優先使用參數，否則預設 0
-init_index = target_map.get(q_params.get("target"), 0)
-
-# --- 3. 渲染 Tab (使用帶有 index 的邏輯) ---
-tabs_labels = ["📈 模擬倉管理", "📊 歷史數據", "🏟️ 即時比分", "💬 交流討論"]
-
-# 💡 這裡我們改用一個技巧：讓渲染內容根據 init_index 動態調整
-# 由於 st.tabs 目前不支援動態 index 屬性，我們用一個 Radio 模擬導航感
-# 這樣一進頁面就會精準跳轉！
-st.markdown("<style>div.row-widget.stRadio > div{flex-direction:row;}</style>", unsafe_allow_html=True)
-choice = st.radio("導航路標", tabs_labels, index=init_index, label_visibility="collapsed")
-
-# 之後的代碼用 if choice == "..." 分類即可
-
 # --- 基本設定 ---
 DEFAULT_DB = "ccl-soccer.csv"
 CHAT_DB = "ccl_chat_log.csv"
