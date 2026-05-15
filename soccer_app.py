@@ -157,15 +157,6 @@ src="data:image/jpg;base64,{logo_base64}">
 
 <div class="hero-sub">
 體育賽事模擬交易與分析平臺
-
-st.markdown(f"""
-<div class="hero-box">
-
-<img class="hero-logo"
-src="data:image/jpg;base64,{logo_base64}">
-
-<div class="hero-sub">
-體育賽事模擬交易與分析平臺
 </div>
 
 </div>
