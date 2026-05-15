@@ -270,5 +270,9 @@ with tab_live:
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
                
 # --- 底部 ---
-st.divider()
-st.markdown("""<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">謹慎理財 信用至上<br>Copyright © 2026 CCL-Live 體育賽事管理系統版權所有</div>""", unCCL-Livesafe_allow_html=True)
+st.markdown("""
+<div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">
+謹慎理財 信用至上<br>
+Copyright © 2026 CCL-Live 體育賽事管理系統版權所有
+</div>
+""", unsafe_allow_html=True)
