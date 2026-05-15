@@ -266,16 +266,23 @@ with col1:
 with col2:
     if st.button("🎯 返回主平台"):
         st.switch_page("ccl-live.py")
-       
-        # 第一行：大標題
-            st.markdown("### 📡 即時比分同步觀看 (Live)")
-        
-        # 第二行：藍色背景提示框
-            st.info("💡 提示：擇優場次後，請複製賽事，再點擊上方欄目，切換【下單投注】")
-           
-        # 第三行：嵌入外部比分網[cite: 1]
-            st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
-               
+
+# =========================
+# 即時比分頁內容
+# =========================
+
+st.markdown("### 📡 即時比分同步觀看 (Live)")
+
+st.info(
+    "💡 提示：擇優場次後，請複製賽事，再返回主平台進行投注。"
+)
+
+st.components.v1.iframe(
+    "https://live.titan007.com/indexall_big.aspx",
+    height=800,
+    scrolling=True
+)
+
 # --- 底部 ---
 st.markdown("""
 <div style="color: #888; font-size: 0.9em; text-align: left; padding-bottom: 20px;">
