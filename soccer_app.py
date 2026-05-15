@@ -168,9 +168,6 @@ src="data:image/jpg;base64,{logo_base64}">
     </div>
     """, unsafe_allow_html=True)
 
-</div>
-""", unsafe_allow_html=True)
-
 # ====================================
 # 平臺功能
 # ====================================
