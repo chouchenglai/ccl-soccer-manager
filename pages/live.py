@@ -255,11 +255,18 @@ else:
             font-weight: bold !important;   /* 強制字體加粗 */
         }
     </style>
-    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)  
 
-    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🏠 返回首頁"):
+        st.switch_page("soccer_app.py")
+
+with col2:
+    if st.button("🎯 返回主平台"):
+        st.switch_page("ccl-live.py")
        
-with tab_live:
         # 第一行：大標題
             st.markdown("### 📡 即時比分同步觀看 (Live)")
         
