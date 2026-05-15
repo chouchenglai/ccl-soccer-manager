@@ -160,7 +160,6 @@ src="data:image/jpg;base64,{logo_base64}">
 </div>
 
 # --- 優化後的 Hero 區塊與超連結導航 ---
-        <div class="hero-desc">
             <a href="/ccl-live#即時比分" style="color: white; text-decoration: none;">即時比分</a> ｜ 
             <a href="/ccl-live#歷史數據" style="color: white; text-decoration: none;">歷史數據</a> ｜ 
             <a href="/ccl-live#模擬倉管理" style="color: white; text-decoration: none;">模擬倉管理</a> ｜ 
