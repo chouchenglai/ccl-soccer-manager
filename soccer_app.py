@@ -158,14 +158,10 @@ src="data:image/jpg;base64,{logo_base64}">
 <div class="hero-sub">
 體育賽事模擬交易與分析平臺
 
-<div class="hero-desc">
-            <a href="/ccl-live#即時比分" style="color: white; text-decoration: none;">⚽ 即時比分</a> ｜ 
-            <a href="/ccl-live#歷史數據" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
-            <a href="/ccl-live#模擬倉管理" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
-            <a href="/ccl-live#交流討論" style="color: white; text-decoration: none;">💬 交流討論</a>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+<a href="/live" style="color: white; text-decoration: none;">⚽ 即時比分</a> ｜ 
+<a href="/history" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
+<a href="/trade" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
+<a href="/chat" style="color: white; text-decoration: none;">💬 交流討論</a>
   
 # ====================================
 # 平臺功能
@@ -195,8 +191,8 @@ with col1:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("進入模擬交易", key="trade"):
-        st.switch_page("pages/ccl-live.py")
+    if st.button("查看即時比分", key="live"):
+    st.switch_page("pages/live.py")
 
 with col2:
 
