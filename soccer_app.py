@@ -158,8 +158,10 @@ src="data:image/jpg;base64,{logo_base64}">
 <div class="hero-sub">
 體育賽事模擬交易與分析平臺
 
+st.markdown(f"""
+    <div class="hero-box">
 <div class="hero-desc">
-            <a href="/ccl-live?target=live" style="color: white; text-decoration: none;">⚽ 即時比分</a> ｜ 
+            <a href="/ccl-live?target=live" style="color: white; text-decoration: none;">🏟️ 即時比分</a> ｜ 
             <a href="/ccl-live?target=hist" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
             <a href="/ccl-live?target=sim" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
             <a href="/ccl-live?target=chat" style="color: white; text-decoration: none;">💬 交流討論</a>
