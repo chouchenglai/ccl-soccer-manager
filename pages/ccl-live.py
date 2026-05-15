@@ -688,7 +688,7 @@ with tab2:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
-    💡 提示：未註冊帳號，登錄模擬數據，將不會保留，註冊帳號後，就能建立報表保存數據！
+    💡 提示：未註冊帳號，登錄模擬數據，將不會被保留，註冊帳號後，就能建立報表保存數據！
     </p>
     """, unsafe_allow_html=True)
     st.write("")
@@ -853,7 +853,7 @@ with tab2:
                 st.markdown(f"📁 **{fname}**" + (" <span style='color:gray;'>(預設)</span>" if fname == DEFAULT_DB else ""), unsafe_allow_html=True)
             
             with col2:
-                st.link_button("🚀 啟動", "https://www.ccl-live.tw/", use_container_width=True)
+                st.link_button("🚀 啟動", "https://www.ccl-live.tw/ccl-live", use_container_width=True)
             
             with col3:
                 # 💡 只有當「是管理員」且「密鑰正確」且「不是預設檔」時，才顯示刪除按鈕
