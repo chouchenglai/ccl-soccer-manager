@@ -688,7 +688,7 @@ with tab2:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
-    💡 提示：未註冊帳號，登錄模擬數據，將不會被保留，註冊帳號後，就能建立報表保存數據！
+    💡 提示：未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！
     </p>
     """, unsafe_allow_html=True)
     st.write("")
@@ -837,7 +837,7 @@ with tab2:
 
     # --- 5. 區塊 C：已授權帳號清單 (具備密碼保護) ---
     st.subheader("已授權帳號清單", anchor=False)
-    st.caption("💡 溫馨提示：點擊啟動後將跳轉至主頁。")
+    st.caption("💡 溫馨提示：點擊啟動後將跳轉至主頁，在左側欄切換帳號，選擇您的報表名稱操作。")
     
     physical_files = [f for f in os.listdir('.') if f.endswith('.csv') and f not in [req_file, CHAT_DB]]
     passed_names = req_df[req_df['審核結果'].str.contains("過關|通過|OK", na=False)]['申請名稱'].tolist()
