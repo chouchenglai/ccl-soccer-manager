@@ -6,7 +6,7 @@ import base64
 # ====================================
 
 st.set_page_config(
-    page_title="CCL-Live",
+    page_title="CCL-Live 體育賽事管理系統",
     page_icon="⚽",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -159,7 +159,7 @@ src="data:image/jpg;base64,{logo_base64}">
 體育賽事模擬交易與分析平臺
 
 <div class="hero-desc">
-            <a href="/ccl-live#即時比分" style="color: white; text-decoration: none;">🏟️ 即時比分</a> ｜ 
+            <a href="/ccl-live#即時比分" style="color: white; text-decoration: none;">⚽ 即時比分</a> ｜ 
             <a href="/ccl-live#歷史數據" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
             <a href="/ccl-live#模擬倉管理" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
             <a href="/ccl-live#交流討論" style="color: white; text-decoration: none;">💬 交流討論</a>
