@@ -162,6 +162,11 @@ src="data:image/jpg;base64,{logo_base64}">
 <a href="/history" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
 <a href="/trade" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
 <a href="/chat" style="color: white; text-decoration: none;">💬 交流討論</a>
+
+</div>
+
+</div>
+""", unsafe_allow_html=True)
   
 # ====================================
 # 平臺功能
