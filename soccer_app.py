@@ -159,9 +159,18 @@ src="data:image/jpg;base64,{logo_base64}">
 體育賽事模擬交易與分析平臺
 </div>
 
-<div class="hero-desc">
-即時比分｜歷史數據｜模擬倉管理｜交流討論
-</div>
+# --- 優化後的 Hero 區塊與超連結導航 ---
+    st.markdown(f"""
+    <div class="hero-box">
+        <div class="hero-title">⚽ CCL-Live 體育賽事管理系統</div>
+        <div class="hero-desc">
+            <a href="/ccl-live#即時比分" style="color: white; text-decoration: none;">⚽ 即時比分</a> ｜ 
+            <a href="/ccl-live#歷史數據" style="color: white; text-decoration: none;">📊 歷史數據</a> ｜ 
+            <a href="/ccl-live#模擬倉管理" style="color: white; text-decoration: none;">📈 模擬倉管理</a> ｜ 
+            <a href="/ccl-live#交流討論" style="color: white; text-decoration: none;">💬 交流討論</a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 </div>
 """, unsafe_allow_html=True)
