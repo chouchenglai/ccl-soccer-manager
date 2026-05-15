@@ -257,65 +257,9 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-    # ==========================================
-# TAB 導航控制系統
-# ==========================================
-
-if "target_tab" not in st.session_state:
-    st.session_state.target_tab = "trade"
-
-tab_names = [
-    "💰 下單投注",
-    "📝 註冊帳號",
-    "⚽ 即時比分",
-    "📋 歷史記錄",
-    "📊 統計圖表",
-    "💬 討 論 區"
-]
-
-target_map = {
-    "trade": 0,
-    "register": 1,
-    "live": 2,
-    "history": 3,
-    "chart": 4,
-    "chat": 5
-}
-
-default_index = target_map.get(
-    st.session_state.target_tab,
-    0
-)
-
-selected_tab = st.radio(
-    "",
-    tab_names,
-    horizontal=True,
-    index=default_index,
-    label_visibility="collapsed"
-)
-
-# TAB 對應
-
-if selected_tab == "💰 下單投注":
-    current_tab = "trade"
-
-elif selected_tab == "📝 註冊帳號":
-    current_tab = "register"
-
-elif selected_tab == "⚽ 即時比分":
-    current_tab = "live"
-
-elif selected_tab == "📋 歷史記錄":
-    current_tab = "history"
-
-elif selected_tab == "📊 統計圖表":
-    current_tab = "chart"
-
-else:
-    current_tab = "chat"
+    tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
-if current_tab == "trade":  # 下單投注
+with tab1:  # 下單投注
 
     st.markdown(
     '<div id="top_page"></div>',
@@ -740,7 +684,7 @@ if st.session_state.get(
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
-if current_tab == "register":
+with tab2:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
@@ -930,7 +874,7 @@ if current_tab == "register":
     else:
         st.info("暫無已授權之清單。")
 
-if current_tab == "live":
+with tab_live:
         # 第一行：大標題
             st.markdown("### 📡 即時比分同步觀看 (Live)")
         
@@ -940,7 +884,7 @@ if current_tab == "live":
         # 第三行：嵌入外部比分網[cite: 1]
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
-if current_tab == "history": # 📋 歷史記錄
+with tab3: # 📋 歷史記錄
         st.subheader("📜 完整賽事歷史紀錄")
         
         # 1. 定義染色邏輯 (確保縮排正確)
@@ -1029,7 +973,7 @@ if current_tab == "history": # 📋 歷史記錄
         else:
             st.info("目前尚無歷史紀錄。")
 
-if current_tab == "chart": # 統計圖表[cite: 2]        
+with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
         st.write("")
         st.line_chart(main_df["結算總分"], height=320)      
@@ -1037,7 +981,7 @@ if current_tab == "chart": # 統計圖表[cite: 2]
 # ---------------------------------------------------------
     # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
     # ---------------------------------------------------------
-if current_tab == "chat":
+with tab5:
         st.markdown("### 💬 足球現場實況滾球推薦")
         
         def get_chat_safely():
