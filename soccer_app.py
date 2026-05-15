@@ -262,7 +262,7 @@ with col5:
     </div>
     """, unsafe_allow_html=True)
 
-    if st.button("查看即時比分", key="live"):
+    if st.button("查看即時比分", key="live2"):
         st.switch_page("pages/ccl-live.py")
 
 with col6:
