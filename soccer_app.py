@@ -290,8 +290,6 @@ st.markdown("""
 
 CCL-Live 體育賽事管理系統 © 2026
 
-<br><br>
-
 www.ccl-live.tw
 
 </div>
