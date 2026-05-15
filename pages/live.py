@@ -261,11 +261,11 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button("🏠 返回首頁"):
-        st.switch_page("soccer_app.py")
+        st.switch_page("https://www.ccl-live.tw/")
 
 with col2:
     if st.button("🎯 返回主平台"):
-        st.switch_page("ccl-live.py")
+        st.switch_page("https://www.ccl-live.tw/ccl-live")
 
 # =========================
 # 即時比分頁內容
