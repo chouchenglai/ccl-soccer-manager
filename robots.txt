@@ -1,0 +1,3 @@
+user-agent: Google-InspectionTool
+allow: /archive/1Q84
+disallow: /archive/
