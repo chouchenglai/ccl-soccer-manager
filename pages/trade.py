@@ -49,6 +49,20 @@ ensure_files()
 
 import base64 # 確保最上方有這行
 
+# 💡 定義一個萬用的圖片讀取器
+def get_img_as_base64(file):
+    try:
+        # 這裡會嘗試讀取跟 trade.py 同一個資料夾下的 pro.png
+        with open(file, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+    except Exception as e:
+        return None
+
+ensure_files()
+
+ensure_files()
+
 # --- 💡 專業 CSS 樣式：打造本站專屬藍色按鈕 ---
 st.markdown("""
 <style>
@@ -165,74 +179,7 @@ def save_chat(nickname, content):
 current_tw_date = datetime.now(TW_TZ).date()
 
 # --- 初始化 ---
-ensure_files() # 這裡是初始化檔案
-
-# =========================================================
-# 💡【新增位置】：註冊新帳號 + 心動升級按鈕
-# =========================================================
-
-# 1. 專業 CSS 樣式 (您最滿意的標誌藍按鈕)
-st.markdown("""
-<style>
-    .vip-btn {
-        background: linear-gradient(135deg, #1e40af, #0f172a);
-        color: white !important;
-        padding: 12px 28px;
-        text-align: center;
-        text-decoration: none !important;
-        display: inline-block;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 50px;
-        transition: 0.3s all ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    .vip-btn:hover {
-        background: linear-gradient(135deg, #2563eb, #1e40af);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-        text-decoration: none !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# 2. 標題與頂部 PRO 按鈕
-col_t, col_p = st.columns([4, 1.2])
-with col_t:
-    st.title("🔐 登錄會員管理中心")
-with col_p:
-    st.markdown('<div style="text-align: right; padding-top: 15px;"><a href="/vip" target="_self" class="vip-btn">🚀 升級 PRO</a></div>', unsafe_allow_html=True)
-
-st.divider()
-
-# 3. 註冊申請表單 (這就是您找不見的那段)
-st.subheader("📝 註冊新帳號")
-req_name = st.text_input("請輸入申請名稱", placeholder="例如：王小明 (建議使用中文)")
-
-col_btn1, col_btn2 = st.columns(2)
-
-with col_btn1:
-    if st.button("✅ 確定送出申請", use_container_width=True):
-        if req_name.strip():
-            req_file = "pending_requests.csv"
-            # 讀取或建立申請檔
-            if os.path.exists(req_file):
-                req_df = pd.read_csv(req_file)
-            else:
-                req_df = pd.DataFrame(columns=['時間', '申請名稱'])
-            
-            new_entry = pd.DataFrame([[get_now_time(), req_name.strip()]], columns=['時間', '申請名稱'])
-            req_df = pd.concat([req_df, new_entry], ignore_index=True)
-            req_df.to_csv(req_file, index=False, encoding='utf-8-sig')
-            
-            st.success(f"✅ 帳號【{req_name}】申請成功！請聯繫站長開通。")
-            time.sleep(1)
-            st.rerun()
-        else:
-            st.warning("請輸入申請名稱！")
-
-with col_btn2:
-
+ensure_files()
 if 'current_db' not in st.session_state: st.session_state.current_db = DEFAULT_DB
 all_reports = get_all_reports()
 if not all_reports: all_reports = [DEFAULT_DB]
