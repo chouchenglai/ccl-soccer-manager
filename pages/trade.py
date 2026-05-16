@@ -68,16 +68,13 @@ pro_img_data = get_img_as_base64("pro.png")
 # 這裡把比例拉開一點，[4.5, 1.5] 能確保圖片有足夠的寬度顯示
 col_title, col_pro = st.columns([4.5, 1.5])
 
-with col_title:
-    st.title("🔐 登錄會員管理中心")
-
 with col_pro:
     if pro_img_data:
         # 💡 重點：直接鑲嵌 Base64 數據，保證任何瀏覽器都能看到圖片
         st.markdown(f"""
             <div style="text-align: right; padding-top: 10px;">
                 <a href="/vip" target="_self">
-                    <img src="data:image/png;base64,{pro_img_data}" 
+                    <img src="data:pro.jpg;base64,{pro_img_data}" 
                          style="width: 110px; cursor: pointer; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));" 
                          title="點擊直接升級 PRO">
                 </a>
