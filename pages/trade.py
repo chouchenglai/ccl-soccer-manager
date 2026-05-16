@@ -47,25 +47,46 @@ def get_image_base64(path):
 
 ensure_files()
 
-# --- 1. 標題與 PRO 圖片並排區塊 ---
-img_base64 = get_image_base64("pro.png") # 這裡確保 pro.png 在您的伺服器根目錄
+import base64 # 確保最上方有這行
 
-col_title, col_pro = st.columns([4, 1.2]) # 微調比例，給圖片更多空間
+# 💡 定義一個萬用的圖片讀取器
+def get_img_as_base64(file):
+    try:
+        # 這裡會嘗試讀取跟 trade.py 同一個資料夾下的 pro.png
+        with open(file, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+    except Exception as e:
+        return None
+
+ensure_files()
+
+# --- 1. 標題與 PRO 圖片 (使用 Base64 內嵌法) ---
+# 讀取圖片數據
+pro_img_data = get_img_as_base64("pro.png")
+
+# 這裡把比例拉開一點，[4.5, 1.5] 能確保圖片有足夠的寬度顯示
+col_title, col_pro = st.columns([4.5, 1.5])
+
+with col_title:
+    st.title("🔐 登錄會員管理中心")
 
 with col_pro:
-    if img_base64:
-        # 使用 Base64 直接顯示，點擊圖片跳轉到 vip.py，本頁打開
+    if pro_img_data:
+        # 💡 重點：直接鑲嵌 Base64 數據，保證任何瀏覽器都能看到圖片
         st.markdown(f"""
             <div style="text-align: right; padding-top: 10px;">
                 <a href="/vip" target="_self">
-                    <img src="pro.jpg;base64,{img_base64}" width="100" style="cursor: pointer; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));" title="點擊升級 PRO 會員">
+                    <img src="data:image/png;base64,{pro_img_data}" 
+                         style="width: 110px; cursor: pointer; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));" 
+                         title="點擊直接升級 PRO">
                 </a>
             </div>
         """, unsafe_allow_html=True)
     else:
-        # 如果找不到圖片，顯示一個精美的文字按鈕當作後備
+        # 如果圖片真的讀不到，就在右邊放一個醒目的連結按鈕當備案
         st.write("")
-        st.link_button("🚀 升級 PRO", "/vip", use_container_width=True)
+        st.link_button("🚀 升級 PRO", "/vip", use_container_width=True, type="primary")
 
 st.divider()
 
