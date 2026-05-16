@@ -127,7 +127,7 @@ with col_pro:
     st.markdown(f"""
         <div style="text-align: right; padding-top: 15px;">
             <a href="/vip" target="_self" class="vip-btn">
-                升 級 帳 號 P R O
+                升 級 帳 號  P R O
             </a>
         </div>
     """, unsafe_allow_html=True)
