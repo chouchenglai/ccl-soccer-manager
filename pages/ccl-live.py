@@ -1,4 +1,4 @@
-import pytz
+8import pytz
 import streamlit as st
 import pandas as pd
 import os
@@ -692,8 +692,6 @@ with tab2:
     </p>
     """, unsafe_allow_html=True)
     st.write("")
-    st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
-    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
 
 # =========================
 # 升級會員按鈕
@@ -725,7 +723,10 @@ with col_btn:
     """, unsafe_allow_html=True)
 
     if st.button("👑 升級帳號", key="vip_upgrade_btn"):
-        st.switch_page("pages/vip.py")     
+        st.switch_page("pages/vip.py")
+    
+    st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
+    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
   
     # --- 1. 初始化檔案與欄位 ---
     req_file = "pending_requests.csv"
