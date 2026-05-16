@@ -1,0 +1,10 @@
+import streamlit as st
+
+robots_text = """
+User-agent: *
+Allow: /
+
+Sitemap: https://ccl-live.tw/sitemap.xml
+"""
+
+st.text(robots_text)
