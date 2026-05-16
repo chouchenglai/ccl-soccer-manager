@@ -275,24 +275,25 @@ color:white;
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
-# ================================
-# 價格方案
-# ================================
+# =========================================================
+# 會員方案
+# =========================================================
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 col1, col2, col3, col4 = st.columns(4)
 
-# ================================
+# =========================================================
 # 月費
-# ================================
+# =========================================================
 
 with col1:
 
     st.markdown("""
-    <div class="plan-card">
 
-    <div class="plan-title">
-    月費會員
-    </div>
+    <div class="price-card">
+
+    <h2>月費會員</h2>
 
     <div class="old-price">
     原價 NT$ 399 / 月
@@ -302,37 +303,35 @@ with col1:
     NT$ 299
     </div>
 
-    <div class="save-badge">
+    <div class="save-tag">
     現省 NT$100
     </div>
 
     <hr>
 
-    <div class="plan-features">
-    ✓ 雲端保存報表<br>
-    ✓ 模擬倉永久保存<br>
-    ✓ 會員統計功能
-    </div>
+    ✔ 雲端保存報表  
+    ✔ 模擬倉永久保存  
+    ✔ 會員統計功能  
 
-    <div class="upgrade-btn">
+    <button class="buy-btn">
     立即升級
-    </div>
+    </button>
 
     </div>
+
     """, unsafe_allow_html=True)
 
-# ================================
+# =========================================================
 # 季費
-# ================================
+# =========================================================
 
 with col2:
 
     st.markdown("""
-    <div class="plan-card">
 
-    <div class="plan-title">
-    季費會員
-    </div>
+    <div class="price-card">
+
+    <h2>季費會員</h2>
 
     <div class="old-price">
     原價 NT$ 897 / 3個月
@@ -342,37 +341,35 @@ with col2:
     NT$ 597
     </div>
 
-    <div class="save-badge">
+    <div class="save-tag">
     現省 NT$300
     </div>
 
     <hr>
 
-    <div class="plan-features">
-    ✓ 最熱門方案<br>
-    ✓ 長期分析功能<br>
-    ✓ 專屬會員工具
-    </div>
+    ✔ 最熱門方案  
+    ✔ 長期分析功能  
+    ✔ 專屬會員工具  
 
-    <div class="upgrade-btn">
+    <button class="buy-btn">
     立即升級
-    </div>
+    </button>
 
     </div>
+
     """, unsafe_allow_html=True)
 
-# ================================
+# =========================================================
 # 年費
-# ================================
+# =========================================================
 
 with col3:
 
     st.markdown("""
-    <div class="plan-card">
 
-    <div class="plan-title">
-    年費會員
-    </div>
+    <div class="price-card">
+
+    <h2>年費會員</h2>
 
     <div class="old-price">
     原價 NT$ 3588 / 年
@@ -382,37 +379,35 @@ with col3:
     NT$ 1188
     </div>
 
-    <div class="save-badge">
+    <div class="save-tag">
     超值優惠
     </div>
 
     <hr>
 
-    <div class="plan-features">
-    ✓ 高 CP 值方案<br>
-    ✓ 完整 VIP 功能<br>
-    ✓ 優先體驗更新
-    </div>
+    ✔ 高 CP 值方案  
+    ✔ 完整 VIP 功能  
+    ✔ 優先體驗更新  
 
-    <div class="upgrade-btn">
+    <button class="buy-btn">
     立即升級
-    </div>
+    </button>
 
     </div>
+
     """, unsafe_allow_html=True)
 
-# ================================
-# 終身
-# ================================
+# =========================================================
+# 終身會員
+# =========================================================
 
 with col4:
 
     st.markdown("""
-    <div class="plan-card">
 
-    <div class="plan-title">
-    終身會員
-    </div>
+    <div class="price-card">
+
+    <h2>終身會員</h2>
 
     <div class="old-price">
     原價 NT$ 6999
@@ -422,24 +417,46 @@ with col4:
     NT$ 2500
     </div>
 
-    <div class="save-badge">
+    <div class="save-tag">
     永久使用
     </div>
 
     <hr>
 
-    <div class="plan-features">
-    ✓ 永久免續費<br>
-    ✓ 所有 VIP 功能<br>
-    ✓ 未來更新永久支援
-    </div>
+    ✔ 永久免續費  
+    ✔ 所有 VIP 功能  
+    ✔ 未來更新永久支援  
 
-    <div class="upgrade-btn">
+    <button class="buy-btn">
     永久升級
-    </div>
+    </button>
 
     </div>
+
     """, unsafe_allow_html=True)
+
+# =========================================================
+# 底部資訊
+# =========================================================
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+
+st.info("💡 綠界金流付款功能，可於後續直接串接至本頁按鈕。")
+
+st.markdown("""
+
+<div style="
+text-align:center;
+color:#777;
+padding:30px;
+font-size:0.95rem;
+">
+
+Copyright © 2026 CCL-Live 體育賽事管理系統
+
+</div>
+
+""", unsafe_allow_html=True)
 
 # =========================================================
 # 底部資訊
