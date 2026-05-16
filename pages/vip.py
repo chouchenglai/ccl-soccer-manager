@@ -44,24 +44,27 @@ if remaining.days <= 10 and remaining.total_seconds() > 0:
     minutes = (total_seconds % 3600) // 60
     seconds = total_seconds % 60
 
+    if remaining.days <= 10:
+
     countdown_html = f"""
     <div style="
-        margin-top:30px;
-        background:linear-gradient(90deg,#ff9800,#ff5722);
-        padding:20px;
-        border-radius:20px;
-        text-align:center;
-        color:white;
-        font-weight:900;
-        box-shadow:0 8px 25px rgba(0,0,0,0.25);
+    background:linear-gradient(90deg,#00c853,#64dd17);
+    padding:12px 30px;
+    border-radius:999px;
+    font-size:1.05rem;
+    font-weight:900;
+    color:#ffffff;
+    text-shadow:0 2px 8px rgba(0,0,0,0.55);
+    display:inline-block;
+    margin-top:18px;
     ">
-
-    <div style="
-        font-size:1.5rem;
-        margin-bottom:10px;
-    ">
-    ⏰ 限時優惠倒數
+    ⏰ 限時優惠倒數：
+    {days}天 {hours}小時 {minutes}分鐘 {seconds}秒
     </div>
+    """
+
+else:
+    countdown_html = ""
 
     <div style="
         font-size:2rem;
