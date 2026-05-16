@@ -43,7 +43,7 @@ with col_pro:
     st.markdown(f"""
         <div style="text-align: right;">
             <a href="/vip" target="_self">
-                <img src="https://www.ccl-live.tw/pages/pro.png" width="90" style="cursor: pointer; transition: 0.3s;" title="升級帳號">
+                <img src="pro.jpg" width="90" style="cursor: pointer; transition: 0.3s;" title="升級帳號">
             </a>
         </div>
     """, unsafe_allow_html=True)
