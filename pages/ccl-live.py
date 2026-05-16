@@ -692,39 +692,6 @@ with tab2:
     </p>
     """, unsafe_allow_html=True)
     st.write("")
-
-# =========================
-# 升級會員按鈕
-# =========================
-
-col_title, col_btn = st.columns([7, 2])
-
-with col_btn:
-
-    st.markdown("""
-    <style>
-    div.stButton > button.upgrade_btn {
-        background: linear-gradient(180deg, #FFD54F, #FFB300);
-        color: #222;
-        font-weight: bold;
-        border-radius: 10px;
-        border: 2px solid #cc8a00;
-        padding: 10px 20px;
-        font-size: 18px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-        transition: 0.2s;
-    }
-
-    div.stButton > button.upgrade_btn:hover {
-        background: linear-gradient(180deg, #FFE082, #FFC107);
-        transform: scale(1.03);
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    if st.button("👑 升級帳號", key="vip_upgrade_btn"):
-        st.switch_page("pages/vip.py")
-    
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
   
