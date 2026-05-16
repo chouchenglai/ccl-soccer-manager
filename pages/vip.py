@@ -262,9 +262,8 @@ body{
 
 .new-price{
     color:#e53935;
-    font-size:3.5rem;
+    font-size:2.3rem;
     font-weight:900;
-    margin-top:12px;
 }
 
 .save-badge{
