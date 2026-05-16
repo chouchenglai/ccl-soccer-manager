@@ -439,6 +439,7 @@ else:
 
     # 【按鈕邏輯：中文攔截防線】
     if st.button("✅ 確認送出申請"):
+    st.link_button("💎 升級帳號 PRO", "/vip", use_container_width=True, type="primary")
         # 偵測是否包含中文字元
         has_chinese = any('\u4e00' <= char <= '\u9fff' for char in new_name)
         
@@ -468,9 +469,8 @@ else:
             
             st.success(f"✅ 申請已成功！編號：{new_id}")
             time.sleep(1)
-            st.rerun()
-        
-                   st.link_button("💎 升級帳號 PRO", "/vip", use_container_width=True, type="primary")
+            st.rerun()       
+                   
                        st.divider()
 
     # --- 4. 區塊 B：審核進度詳情 (管理員互動版) ---[cite: 1]       
