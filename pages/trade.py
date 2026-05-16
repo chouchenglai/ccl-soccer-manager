@@ -37,13 +37,11 @@ ensure_files()
 # === 這裡開始插入新增代碼 ===
 st.write("") # 留點空隙
 col_title, col_pro = st.columns([5, 1])
-with col_title:
-    st.title("🔐 登錄會員管理中心")
 with col_pro:
     # 這裡直接調用服務器上的 pro.png
     st.markdown(f"""
         <a href="/vip" target="_self">
-            <img src="pro.png" width="80" style="float: right; cursor: pointer; margin-top: 10px;" title="點擊升級 PRO 會員">
+            <img src="https://www.ccl-live.tw/pages/pro.png" width="80" style="float: right; cursor: pointer; margin-top: 10px;" title="點擊升級 PRO 會員">
         </a>
     """, unsafe_allow_html=True)
 st.divider()
