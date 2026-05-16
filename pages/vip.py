@@ -279,11 +279,6 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 # 方案區
 # =====================================================
 
-st.markdown(
-    '<div class="section-title">🚀 選擇您的會員方案</div>',
-    unsafe_allow_html=True
-)
-
 col1, col2, col3, col4 = st.columns(4)
 
 # =====================================================
