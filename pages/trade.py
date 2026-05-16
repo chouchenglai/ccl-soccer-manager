@@ -437,15 +437,19 @@ else:
         """)
         is_agree = st.checkbox("我已閱讀並同意上述全部條款")
 
-    # 【按鈕邏輯：中文攔截防線】
-    if st.button("確認送出申請"):
-        # 偵測是否包含中文字元
+   # --- 💡 專業並排版：保留原本邏輯，新增 PRO 按鈕 ---
+col_btn1, col_btn2 = st.columns(2)
+
+with col_btn1:
+    # 這裡保留您原本的按鈕，並加上 key 確保不衝突
+    if st.button("✅ 確認送出申請", use_container_width=True, key="submit_request_btn"):
+        # --- 以下是您原本設定好的內容，完全不動 ---
         has_chinese = any('\u4e00' <= char <= '\u9fff' for char in new_name)
         
         if not new_name:
             st.warning("請先輸入名稱再送出。")
         elif has_chinese:
-            st.error("❌ 建立失敗：報表名稱不可包含中文字，請修改為純英文或數字名稱。")[cite: 1]
+            st.error("❌ 建立失敗：報表名稱不可包含中文字，請修改為純英文或數字名稱。")
         elif not is_agree:
             st.error("❌ 請先勾選「同意服務協議」方可送出申請。")
         else:
@@ -457,7 +461,6 @@ else:
             empty_df = pd.DataFrame(columns=COLUMNS)
             empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')          
              
-                      
             # 更新總表 (預設權限為 User)
             new_data = {
                 "申請編號": new_id, "申請日期": today_str, "申請名稱": new_name,
@@ -470,7 +473,11 @@ else:
             time.sleep(1)
             st.rerun()
 
-    st.divider()
+with col_btn2:
+    # 新增的「升級 PRO」按鈕，使用 Primary 藍色，對應本站標誌
+    st.link_button("升 級 帳 號 PRO ", "/vip", use_container_width=True, type="primary")
+
+st.divider()
 
     # --- 4. 區塊 B：審核進度詳情 (管理員互動版) ---[cite: 1]       
     st.subheader("帳號審核進度詳情", anchor=False)
