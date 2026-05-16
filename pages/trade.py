@@ -32,108 +32,6 @@ def ensure_files():
     if not os.path.exists(CHAT_DB):
         pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 
-ensure_files()
-
-import base64  # 請確保檔案最上方有 import base64
-
-# --- 💡 讀取並轉換圖片為 Base64 (解決路徑無法顯示問題) ---
-def get_image_base64(path):
-    try:
-        with open(path, "rb") as f:
-            data = f.read()
-        return base64.b64encode(data).decode()
-    except:
-        return ""
-
-ensure_files()
-
-import base64 # 確保最上方有這行
-
-# 💡 定義一個萬用的圖片讀取器
-def get_img_as_base64(file):
-    try:
-        # 這裡會嘗試讀取跟 trade.py 同一個資料夾下的 pro.png
-        with open(file, "rb") as f:
-            data = f.read()
-        return base64.b64encode(data).decode()
-    except Exception as e:
-        return None
-
-ensure_files()
-
-ensure_files()
-
-# --- 💡 專業 CSS 樣式：打造本站專屬藍色按鈕 ---
-st.markdown("""
-<style>
-    .vip-btn {
-        background: linear-gradient(135deg, #2563eb, #0f172a); /* 本站標誌藍色漸層 */
-        color: white !important;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 12px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-        transition: 0.3s;
-        cursor: pointer;
-    }
-    .vip-btn:hover {
-        background: linear-gradient(135deg, #3b82f6, #1e40af);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-    }
-</style>
-""", unsafe_allow_html=True)
-
-ensure_files()
-
-# --- 💡 專業 CSS 樣式：本站專屬藍色按鈕 (無下劃線版) ---
-st.markdown("""
-<style>
-    .vip-btn {
-        background: linear-gradient(135deg, #1e40af, #0f172a); /* 深邃標誌藍漸層 */
-        color: white !important;
-        padding: 10px 22px;
-        text-align: center;
-        text-decoration: none !important; /* 💡 徹底移除下劃線 */
-        display: inline-block;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 50px; /* 圓角改為膠囊型，更有現代感 */
-        border: none;
-        box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
-        transition: 0.3s all ease;
-        cursor: pointer;
-    }
-    .vip-btn:hover {
-        background: linear-gradient(135deg, #2563eb, #1e40af); /* 懸停時變亮 */
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-        color: white !important;
-        text-decoration: none !important; /* 確保懸停也沒有下劃線 */
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# --- 1. 標題與專業按鈕並排區塊 ---
-col_title, col_pro = st.columns([4, 1.2])
-
-with col_pro:
-    # 這裡的 class="vip-btn" 會套用上面的樣式
-    st.markdown(f"""
-        <div style="text-align: right; padding-top: 15px;">
-            <a href="/vip" target="_self" class="vip-btn">
-                升 級 帳 號  P R O
-            </a>
-        </div>
-    """, unsafe_allow_html=True)
-
-st.divider()
-
 def load_data():
     if os.path.exists(st.session_state.current_db):
         try:
@@ -365,11 +263,11 @@ else:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
-    💡 提示：未升級帳號前，使用模擬倉操作，數據將不會被保留，升級完成過後，才能建立報表保存數據！
+    💡 提示：未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！
     </p>
     """, unsafe_allow_html=True)
     st.write("")
-    st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄帳號管理中心</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)     
   
     # --- 1. 初始化檔案與欄位 ---
@@ -438,7 +336,7 @@ else:
         is_agree = st.checkbox("我已閱讀並同意上述全部條款")
 
     # 【按鈕邏輯：中文攔截防線】
-    if st.button("✅ 確認送出申請"):
+    if st.button("確認送出申請"):
         # 偵測是否包含中文字元
         has_chinese = any('\u4e00' <= char <= '\u9fff' for char in new_name)
         
@@ -468,8 +366,9 @@ else:
             
             st.success(f"✅ 申請已成功！編號：{new_id}")
             time.sleep(1)
-            st.rerun()                          
-                       st.divider()
+            st.rerun()
+
+    st.divider()
 
     # --- 4. 區塊 B：審核進度詳情 (管理員互動版) ---[cite: 1]       
     st.subheader("帳號審核進度詳情", anchor=False)
