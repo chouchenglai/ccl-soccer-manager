@@ -257,20 +257,9 @@ else:
     </style>
     """, unsafe_allow_html=True)  
 
-col1, col2 = st.columns(2)
-
-with col1:
-    if st.button("🏠 返回首頁"):
-        st.switch_page("soccer_app.py")
-
-with col2:
-    if st.button("🎯 返回主平台"):
-        st.switch_page("pages/ccl-live.py")
-
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
-with tab2:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
