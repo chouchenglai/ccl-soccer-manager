@@ -1,69 +1,151 @@
-# ================================
-# CCL-Live VIP 升級中心
-# pages/vip.py
-# ================================
-
 import streamlit as st
 from datetime import datetime
-import pytz
+from zoneinfo import ZoneInfo
 
-# ================================
+# =========================================================
+# 基本設定
+# =========================================================
+
+st.set_page_config(
+    page_title="CCL-Live 會員升級中心",
+    layout="wide"
+)
+
+# =========================================================
 # 台北時區
-# ================================
+# =========================================================
 
-taipei_tz = pytz.timezone("Asia/Taipei")
+taipei_tz = ZoneInfo("Asia/Taipei")
 now = datetime.now(taipei_tz)
 
-# ================================
-# 優惠日期設定
-# ================================
+# =========================================================
+# 優惠截止時間
+# =========================================================
 
-discount_start = taipei_tz.localize(
-    datetime(2026, 6, 1, 0, 0, 0)
+discount_end = datetime(
+    2026, 7, 31, 23, 59, 59,
+    tzinfo=taipei_tz
 )
 
-discount_end = taipei_tz.localize(
-    datetime(2026, 7, 31, 23, 59, 59)
-)
+# =========================================================
+# 倒數功能（最後10天才顯示）
+# =========================================================
 
-discount_active = discount_start <= now <= discount_end
-
-# ================================
-# 倒數計時
-# ================================
+remaining = discount_end - now
 
 countdown_html = ""
 
-if discount_active:
+if remaining.days <= 10 and remaining.total_seconds() > 0:
 
-    remaining = discount_end - now
+    total_seconds = int(remaining.total_seconds())
 
-    if remaining.days <= 10:
+    days = total_seconds // 86400
+    hours = (total_seconds % 86400) // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
 
-        total_seconds = int(remaining.total_seconds())
+    countdown_html = f"""
+    <div style="
+        margin-top:30px;
+        background:linear-gradient(90deg,#ff9800,#ff5722);
+        padding:20px;
+        border-radius:20px;
+        text-align:center;
+        color:white;
+        font-weight:900;
+        box-shadow:0 8px 25px rgba(0,0,0,0.25);
+    ">
 
-        days = total_seconds // 86400
-        hours = (total_seconds % 86400) // 3600
-        minutes = (total_seconds % 3600) // 60
-        seconds = total_seconds % 60
+    <div style="
+        font-size:1.5rem;
+        margin-bottom:10px;
+    ">
+    ⏰ 限時優惠倒數
+    </div>
 
-        countdown_html = f"""
-        <div style="
-            background:linear-gradient(90deg,#00c853,#64dd17);
-            padding:14px 32px;
-            border-radius:999px;
-            font-size:1.05rem;
-            font-weight:900;
-            color:#ffffff;
-            text-shadow:0 2px 8px rgba(0,0,0,0.55);
-            display:inline-block;
-            margin-top:20px;
-            box-shadow:0 6px 18px rgba(0,0,0,0.35);
-        ">
-        ⏰ 限時優惠倒數：
-        {days}天 {hours}小時 {minutes}分鐘 {seconds}秒
-        </div>
-        """
+    <div style="
+        font-size:2rem;
+        letter-spacing:2px;
+    ">
+    {days} 天 {hours} 小時 {minutes} 分 {seconds} 秒
+    </div>
+
+    </div>
+    """
+
+# =========================================================
+# CSS 樣式
+# =========================================================
+
+st.markdown("""
+
+<style>
+
+html, body, [class*="css"]  {
+    font-family: "Microsoft JhengHei", sans-serif;
+}
+
+.block-container{
+    padding-top:2rem;
+    padding-bottom:3rem;
+}
+
+.price-card{
+    background:white;
+    border-radius:25px;
+    padding:35px;
+    box-shadow:0 10px 35px rgba(0,0,0,0.12);
+    transition:0.3s;
+    border:2px solid transparent;
+    height:100%;
+}
+
+.price-card:hover{
+    transform:translateY(-8px);
+    border:2px solid #1f6bff;
+}
+
+.old-price{
+    color:#888;
+    text-decoration:line-through;
+    font-size:1rem;
+}
+
+.new-price{
+    color:#e53935;
+    font-size:2.3rem;
+    font-weight:900;
+}
+
+.save-tag{
+    background:#ffeb3b;
+    color:#000;
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:0.9rem;
+    font-weight:900;
+}
+
+.buy-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(90deg,#1565c0,#1e88e5);
+    color:white;
+    font-size:1.05rem;
+    font-weight:900;
+    margin-top:18px;
+    cursor:pointer;
+}
+
+.buy-btn:hover{
+    opacity:0.92;
+}
+
+</style>
+
+""", unsafe_allow_html=True)
 
 # ================================
 # 頁面設定
@@ -434,29 +516,6 @@ with col4:
     </div>
 
     """, unsafe_allow_html=True)
-
-# =========================================================
-# 底部資訊
-# =========================================================
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-
-st.info("💡 綠界金流付款功能，可於後續直接串接至本頁按鈕。")
-
-st.markdown("""
-
-<div style="
-text-align:center;
-color:#777;
-padding:30px;
-font-size:0.95rem;
-">
-
-Copyright © 2026 CCL-Live 體育賽事管理系統
-
-</div>
-
-""", unsafe_allow_html=True)
 
 # =========================================================
 # 底部資訊
