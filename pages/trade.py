@@ -34,19 +34,21 @@ def ensure_files():
 
 ensure_files()
 
-# === 這裡開始插入新增代碼 ===
-st.write("") # 留點空隙
+# --- 💡 頂部標題與 PRO 圖片 (全圖片點擊，無文字) ---
+st.write("") 
 col_title, col_pro = st.columns([5, 1])
-with col_pro:
-    # 這裡直接調用服務器上的 pro.png
-    st.markdown(f"""
-        <a href="/vip" target="_self">
-            <img src="https://www.ccl-live.tw/pages/pro.png" width="80" style="float: right; cursor: pointer; margin-top: 10px;" title="點擊升級 PRO 會員">
-        </a>
-    """, unsafe_allow_html=True)
-st.divider()
-# === 新增結束 ===
 
+with col_pro:
+    # 這裡直接使用圖片超連結，target="_self" 確保本頁打開
+    st.markdown(f"""
+        <div style="text-align: right;">
+            <a href="/vip" target="_self">
+                <img src="https://www.ccl-live.tw/pages/pro.png" width="90" style="cursor: pointer; transition: 0.3s;" title="升級帳號">
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.divider()
 
 def load_data():
     if os.path.exists(st.session_state.current_db):
