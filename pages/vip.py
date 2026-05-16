@@ -113,8 +113,11 @@ html, body, [class*="css"]  {
 
 .new-price{
     color:#e53935;
-    font-size:2.3rem;
-    font-weight:900;
+    font-size:2.6rem;
+    font-weight:800;
+    margin-top:10px;
+    letter-spacing:1px;
+    line-height:1.2;
 }
 
 .save-tag{
@@ -230,17 +233,24 @@ body{
 
 .plan-card{
     background:white;
-    border-radius:30px;
-    padding:40px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.12);
-    min-height:700px;
+    border-radius:28px;
+    padding:34px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.10);
+    min-height:640px;
+    transition:0.25s;
+}
+
+.plan-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 40px rgba(0,0,0,0.18);
 }
 
 .plan-title{
-    font-size:2.8rem;
-    font-weight:900;
+    font-size:2.2rem;
+    font-weight:800;
     color:#1a2a4d;
-    line-height:1.25;
+    line-height:1.35;
+    letter-spacing:1px;
 }
 
 .old-price{
