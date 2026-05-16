@@ -384,10 +384,10 @@ with col1:
 
     <div class="price-card">
 
-    <h2>月費會員</h2>
+    <h2>月費制</h2>
 
     <div class="old-price">
-    原價 NT$ 399 / 月
+    原價 NT$ 399/月
     </div>
 
     <div class="new-price">
@@ -422,7 +422,7 @@ with col2:
 
     <div class="price-card">
 
-    <h2>季費會員</h2>
+    <h2>季費制</h2>
 
     <div class="old-price">
     原價 NT$ 897 / 3個月
@@ -460,10 +460,10 @@ with col3:
 
     <div class="price-card">
 
-    <h2>年費會員</h2>
+    <h2>年費制</h2>
 
     <div class="old-price">
-    原價 NT$ 3588 / 年
+    原價 NT$ 3588/年
     </div>
 
     <div class="new-price">
@@ -498,7 +498,7 @@ with col4:
 
     <div class="price-card">
 
-    <h2>終身會員</h2>
+    <h2>終身制</h2>
 
     <div class="old-price">
     原價 NT$ 6999
