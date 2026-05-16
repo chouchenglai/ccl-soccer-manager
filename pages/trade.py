@@ -61,29 +61,46 @@ def get_img_as_base64(file):
 
 ensure_files()
 
-# --- 1. 標題與 PRO 圖片 (使用 Base64 內嵌法) ---
-# 讀取圖片數據
-pro_img_data = get_img_as_base64("pro.jpg")
+ensure_files()
 
-# 這裡把比例拉開一點，[4.5, 1.5] 能確保圖片有足夠的寬度顯示
-col_title, col_pro = st.columns([4.5, 1.5])
+# --- 💡 專業 CSS 樣式：打造本站專屬藍色按鈕 ---
+st.markdown("""
+<style>
+    .vip-btn {
+        background: linear-gradient(135deg, #2563eb, #0f172a); /* 本站標誌藍色漸層 */
+        color: white !important;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    .vip-btn:hover {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 1. 標題與專業按鈕並排區塊 ---
+col_title, col_pro = st.columns([4, 1.2])
 
 with col_pro:
-    if pro_img_data:
-        # 💡 重點：直接鑲嵌 Base64 數據，保證任何瀏覽器都能看到圖片
-        st.markdown(f"""
-            <div style="text-align: right; padding-top: 10px;">
-                <a href="/vip" target="_self">
-                    <img src="data:image/png;base64,{pro_img_data}" 
-                         style="width: 110px; cursor: pointer; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));" 
-                         title="點擊直接升級 PRO">
-                </a>
-            </div>
-        """, unsafe_allow_html=True)
-    else:
-        # 如果圖片真的讀不到，就在右邊放一個醒目的連結按鈕當備案
-        st.write("")
-        st.link_button("🚀 升級 PRO", "/vip", use_container_width=True, type="primary")
+    # 使用我們剛剛定義的 .vip-btn 樣式
+    st.markdown(f"""
+        <div style="text-align: right; padding-top: 15px;">
+            <a href="/vip" target="_self" class="vip-btn">
+                💎 升 級 帳 號
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
