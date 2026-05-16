@@ -267,36 +267,7 @@ else:
     </p>
     """, unsafe_allow_html=True)
     st.write("")
-    col_title, col_pro = st.columns([8, 2])
-
-with col_title:
-    st.markdown(
-        "<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>",
-        unsafe_allow_html=True
-    )
-
-with col_pro:
-
-    import base64
-
-    def get_base64_image(image_path):
-        with open(image_path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
-
-    pro_b64 = get_base64_image("pro.png")
-
-    st.markdown(f"""
-    <a href="/vip" target="_self">
-        <img src="data:image/png;base64,{pro_b64}"
-        width="120"
-        style="
-            margin-top:10px;
-            border-radius:12px;
-            cursor:pointer;
-        ">
-    </a>
-    """, unsafe_allow_html=True)
-
+    st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄帳號管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)     
   
     # --- 1. 初始化檔案與欄位 ---
