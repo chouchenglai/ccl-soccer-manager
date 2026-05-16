@@ -516,7 +516,7 @@ with col4:
 
     ✔ 永久免續費  
     ✔ 所有 VIP 功能  
-    ✔ 未來更新永久支援  
+    ✔ 更新永久支援  
 
     <button class="buy-btn">
     永久升級
