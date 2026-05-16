@@ -275,148 +275,168 @@ color:white;
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
-# =====================================================
+# =========================================================
+# 會員方案
+# =========================================================
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns(4)
+
+# =========================================================
 # 月費
-# =====================================================
+# =========================================================
 
 with col1:
 
-    st.markdown(f"""
+    st.markdown("""
 
-    <div class="plan-card">
+    <div class="price-card">
 
-    <div class="plan-title">
-    🗓 月費方案
-    </div>
-
-    <div class="plan-price">
-    {month_price}
-    </div>
+    <h2>月費會員</h2>
 
     <div class="old-price">
-    {month_old}
+    原價 NT$ 399 / 月
     </div>
 
-    <div class="plan-desc">
-
-    ✔ 每月自動續用<br>
-    ✔ 保存個人報表數據<br>
-    ✔ 雲端同步管理<br>
-    ✔ 完整統計分析功能
-
+    <div class="new-price">
+    NT$ 299
     </div>
 
+    <div class="save-tag">
+    現省 NT$100
     </div>
 
-    """, unsafe_allow_html=True)
+    <hr>
 
-# =====================================================
-# 季費
-# =====================================================
+    ✔ 雲端保存報表  
+    ✔ 模擬倉永久保存  
+    ✔ 會員統計功能  
 
-with col2:
-
-    st.markdown(f"""
-
-    <div class="plan-card">
-
-    <div class="plan-title">
-    🏆 季費方案
-    </div>
-
-    <div class="plan-price">
-    {season_price}
-    </div>
-
-    <div class="old-price">
-    {season_old}
-    </div>
-
-    <div class="plan-desc">
-
-    ✔ 一次享有三個月<br>
-    ✔ 平均每月更便宜<br>
-    ✔ 推薦熱門方案<br>
-    ✔ 適合長期使用者
-
-    </div>
-
-    </div>
-
-    """, unsafe_allow_html=True)
-
-# =====================================================
-# 年費
-# =====================================================
-
-with col3:
-
-    st.markdown(f"""
-
-    <div class="plan-card">
-
-    <div class="plan-title">
-    💎 年費 VIP
-    </div>
-
-    <div class="plan-price">
-    {year_price}
-    </div>
-
-    <div class="old-price">
-    {year_old}
-    </div>
-
-    <div class="plan-desc">
-
-    ✔ 超高 CP 值方案<br>
-    ✔ 專屬會員功能<br>
-    ✔ 優先開放新功能<br>
-    ✔ 長期專業使用推薦
-
-    </div>
-
-    </div>
-
-    """, unsafe_allow_html=True)
-
-# =====================================================
-# 終身
-# =====================================================
-
-with col4:
-
-    st.markdown(f"""
-
-    <div class="plan-card">
-
-    <div class="plan-title">
-    👑 終身至尊版
-    </div>
-
-    <div class="plan-price">
-    {life_price}
-    </div>
-
-    <div class="old-price">
-    {life_old}
-    </div>
-
-    <div class="plan-desc">
-
-    ✔ 一次付費永久使用<br>
-    ✔ 永久更新權限<br>
-    ✔ 未來功能免費升級<br>
-    ✔ 最高級 VIP 身分
-
-    </div>
+    <button class="buy-btn">
+    立即升級
+    </button>
 
     </div>
 
     """, unsafe_allow_html=True)
 
 # =========================================================
-# 底部說明
+# 季費
+# =========================================================
+
+with col2:
+
+    st.markdown("""
+
+    <div class="price-card">
+
+    <h2>季費會員</h2>
+
+    <div class="old-price">
+    原價 NT$ 897 / 3個月
+    </div>
+
+    <div class="new-price">
+    NT$ 597
+    </div>
+
+    <div class="save-tag">
+    現省 NT$300
+    </div>
+
+    <hr>
+
+    ✔ 最熱門方案  
+    ✔ 長期分析功能  
+    ✔ 專屬會員工具  
+
+    <button class="buy-btn">
+    立即升級
+    </button>
+
+    </div>
+
+    """, unsafe_allow_html=True)
+
+# =========================================================
+# 年費
+# =========================================================
+
+with col3:
+
+    st.markdown("""
+
+    <div class="price-card">
+
+    <h2>年費會員</h2>
+
+    <div class="old-price">
+    原價 NT$ 3588 / 年
+    </div>
+
+    <div class="new-price">
+    NT$ 1188
+    </div>
+
+    <div class="save-tag">
+    超值優惠
+    </div>
+
+    <hr>
+
+    ✔ 高 CP 值方案  
+    ✔ 完整 VIP 功能  
+    ✔ 優先體驗更新  
+
+    <button class="buy-btn">
+    立即升級
+    </button>
+
+    </div>
+
+    """, unsafe_allow_html=True)
+
+# =========================================================
+# 終身會員
+# =========================================================
+
+with col4:
+
+    st.markdown("""
+
+    <div class="price-card">
+
+    <h2>終身會員</h2>
+
+    <div class="old-price">
+    原價 NT$ 6999
+    </div>
+
+    <div class="new-price">
+    NT$ 2500
+    </div>
+
+    <div class="save-tag">
+    永久使用
+    </div>
+
+    <hr>
+
+    ✔ 永久免續費  
+    ✔ 所有 VIP 功能  
+    ✔ 未來更新永久支援  
+
+    <button class="buy-btn">
+    永久升級
+    </button>
+
+    </div>
+
+    """, unsafe_allow_html=True)
+
+# =========================================================
+# 底部資訊
 # =========================================================
 
 st.markdown("<br><br>", unsafe_allow_html=True)
