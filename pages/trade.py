@@ -263,7 +263,7 @@ else:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
-    💡 提示：未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！
+    💡 提示：未升級帳號前，使用模擬倉操作，數據將不會被保留，升級完成過後，才能建立報表保存數據！
     </p>
     """, unsafe_allow_html=True)
     st.write("")
