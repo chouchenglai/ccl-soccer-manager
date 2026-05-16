@@ -387,7 +387,7 @@ with col1:
     <h2>月費制</h2>
 
     <div class="old-price">
-    原NT$399/月
+    原價NT$399/月
     </div>
 
     <div class="new-price">
