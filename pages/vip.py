@@ -1,5 +1,5 @@
 # ================================
-# CCL-Live 帳號升級中心
+# CCL-Live VIP 升級中心
 # pages/vip.py
 # ================================
 
@@ -70,7 +70,7 @@ if discount_active:
 # ================================
 
 st.set_page_config(
-    page_title="⚽ CCL-Live 帳號升級",
+    page_title="CCL-Live VIP",
     layout="wide"
 )
 
@@ -210,8 +210,73 @@ hr{
 </style>
 """, unsafe_allow_html=True)
 
+# ================================
+# 頂部
+# ================================
+
+st.markdown(f"""
+<div class="vip-header">
+
+<div class="vip-title">
+⚽ CCL-Live 帳號升級中心
+</div>
+
+<div class="vip-subtitle">
+🎊 為慶祝本網站成立，特別推出限時優惠方案
+</div>
+
+{countdown_html}
+
+<div style="
+margin-top:28px;
+font-size:1.2rem;
+font-weight:700;
+color:white;
+">
+優惠期間｜115年6月1日 ～ 115年7月31日
+</div>
+
+<div class="vip-feature-box">
+
+<div class="vip-feature-title">
+升級會員後，即可享有
+</div>
+
+<div class="feature-grid">
+
+<div class="feature-item">
+✔ 雲端保存報表數據
+</div>
+
+<div class="feature-item">
+✔ 長期歷史分析功能
+</div>
+
+<div class="feature-item">
+✔ 多帳本管理系統
+</div>
+
+<div class="feature-item">
+✔ 會員專屬統計工具
+</div>
+
+<div class="feature-item">
+✔ VIP 專區功能優先使用權
+</div>
+
+<div class="feature-item">
+✔ 未來功能永久更新支援
+</div>
+
+</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+
 # =========================================================
-# 會員方案
+# 方案區塊
 # =========================================================
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -371,7 +436,7 @@ with col4:
     """, unsafe_allow_html=True)
 
 # =========================================================
-# 底部資訊
+# 底部說明
 # =========================================================
 
 st.markdown("<br><br>", unsafe_allow_html=True)
