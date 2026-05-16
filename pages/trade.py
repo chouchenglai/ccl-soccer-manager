@@ -63,7 +63,7 @@ ensure_files()
 
 # --- 1. 標題與 PRO 圖片 (使用 Base64 內嵌法) ---
 # 讀取圖片數據
-pro_img_data = get_img_as_base64("pro.png")
+pro_img_data = get_img_as_base64("pro.jpg")
 
 # 這裡把比例拉開一點，[4.5, 1.5] 能確保圖片有足夠的寬度顯示
 col_title, col_pro = st.columns([4.5, 1.5])
@@ -74,7 +74,7 @@ with col_pro:
         st.markdown(f"""
             <div style="text-align: right; padding-top: 10px;">
                 <a href="/vip" target="_self">
-                    <img src="data:pro.jpg;base64,{pro_img_data}" 
+                    <img src="data:image/png;base64,{pro_img_data}" 
                          style="width: 110px; cursor: pointer; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));" 
                          title="點擊直接升級 PRO">
                 </a>
