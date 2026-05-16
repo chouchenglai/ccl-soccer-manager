@@ -32,6 +32,49 @@ def ensure_files():
     if not os.path.exists(CHAT_DB):
         pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 
+# --- 💡 專業 CSS 樣式：本站專屬藍色按鈕 (無下劃線版) ---
+st.markdown("""
+<style>
+    .vip-btn {
+        background: linear-gradient(135deg, #1e40af, #0f172a); /* 深邃標誌藍漸層 */
+        color: white !important;
+        padding: 10px 22px;
+        text-align: center;
+        text-decoration: none !important; /* 💡 徹底移除下劃線 */
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 50px; /* 圓角改為膠囊型，更有現代感 */
+        border: none;
+        box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+        transition: 0.3s all ease;
+        cursor: pointer;
+    }
+    .vip-btn:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af); /* 懸停時變亮 */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        color: white !important;
+        text-decoration: none !important; /* 確保懸停也沒有下劃線 */
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 1. 標題與專業按鈕並排區塊 ---
+col_title, col_pro = st.columns([4, 1.2])
+
+with col_pro:
+    # 這裡的 class="vip-btn" 會套用上面的樣式
+    st.markdown(f"""
+        <div style="text-align: right; padding-top: 15px;">
+            <a href="/vip" target="_self" class="vip-btn">
+                升 級 帳 號  P R O
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.divider()
+
 def load_data():
     if os.path.exists(st.session_state.current_db):
         try:
@@ -693,7 +736,39 @@ with tab2:
     """, unsafe_allow_html=True)
     st.write("")
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
-    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)     
+    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
+
+# =========================
+# 升級會員按鈕
+# =========================
+
+col_title, col_btn = st.columns([7, 2])
+
+with col_btn:
+
+    st.markdown("""
+    <style>
+    div.stButton > button.upgrade_btn {
+        background: linear-gradient(180deg, #FFD54F, #FFB300);
+        color: #222;
+        font-weight: bold;
+        border-radius: 10px;
+        border: 2px solid #cc8a00;
+        padding: 10px 20px;
+        font-size: 18px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        transition: 0.2s;
+    }
+
+    div.stButton > button.upgrade_btn:hover {
+        background: linear-gradient(180deg, #FFE082, #FFC107);
+        transform: scale(1.03);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("👑 升級帳號", key="vip_upgrade_btn"):
+        st.switch_page("pages/vip.py")     
   
     # --- 1. 初始化檔案與欄位 ---
     req_file = "pending_requests.csv"

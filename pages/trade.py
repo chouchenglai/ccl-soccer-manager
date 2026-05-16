@@ -49,20 +49,6 @@ ensure_files()
 
 import base64 # 確保最上方有這行
 
-# 💡 定義一個萬用的圖片讀取器
-def get_img_as_base64(file):
-    try:
-        # 這裡會嘗試讀取跟 trade.py 同一個資料夾下的 pro.png
-        with open(file, "rb") as f:
-            data = f.read()
-        return base64.b64encode(data).decode()
-    except Exception as e:
-        return None
-
-ensure_files()
-
-ensure_files()
-
 # --- 💡 專業 CSS 樣式：打造本站專屬藍色按鈕 ---
 st.markdown("""
 <style>
