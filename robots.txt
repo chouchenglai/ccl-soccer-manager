@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ccl-live.tw/sitemap.xml
+Sitemap: https://www.ccl-live.tw/
+         https://www.ccl-live.tw/ccl-live
+         https://www.ccl-live.tw/live
+         https://www.ccl-live.tw/vip
