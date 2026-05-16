@@ -240,8 +240,8 @@ padding:12px 30px;
 border-radius:999px;
 font-size:1.05rem;
 font-weight:900;
-color:white;
-box-shadow:0 6px 18px rgba(0,0,0,0.25);
+color:#ffffff;
+text-shadow:0 2px 8px rgba(0,0,0,0.55);
 ">
 
 優惠期間｜115年6月1日 ～ 115年7月31日
