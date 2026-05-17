@@ -722,8 +722,6 @@ if st.session_state.get(
             st.session_state.show_add_funds = False
 
             st.rerun()    
- 
- st.divider()
 
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
