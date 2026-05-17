@@ -303,10 +303,6 @@ else:
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
 with tab1:  # 下單投注
-
-# 1. 先放按鈕與標題的排版 (放在 tab1 的最上面)
-    col_t1_title, col_t1_pro = st.columns([4, 1.2])
-
     st.markdown(
     '<div id="top_page"></div>',
     unsafe_allow_html=True
@@ -397,18 +393,6 @@ with tab1:  # 下單投注
 # =========================
 
 st.markdown("## 🏆 賽事資訊")
-
-with col_t1_pro:
-        # 直接把這段心動按鈕貼進來
-        st.markdown(f"""
-            <div style="text-align: right; padding-top: 5px;">
-                <a href="/vip" target="_self" class="vip-btn">
-                    升 級 帳 號  P R O
-                </a>
-            </div>
-        """, unsafe_allow_html=True)
-    
-    st.divider()
 
 # =========================
 # 快速索引
