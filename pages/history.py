@@ -78,7 +78,7 @@ with col2:
         st.switch_page("pages/ccl-live.py")
 
 # --- 2. 數據源指定 (指定的路徑) ---
-# 💡 這裡鎖定讀取您的 admin.csv，作為官方展示樣板
+# 💡 這裡鎖定讀取您的 admin.csv，作為本站展示樣板
 ADMIN_DB = "pages/admin.csv" 
 
 def get_admin_data():
