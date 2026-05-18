@@ -887,9 +887,9 @@ with tab_live:
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
 with tab3: # 📋 歷史記錄
-        st.subheader("📜 完整賽事歷史紀錄")
+        st.subheader("📜 完整賽事歷史紀錄")       
         
-        # 💡 修正一：定義顏色判斷 (適用於 類型 與 盈虧金額)
+          # 💡 修正一：定義顏色判斷 (適用於 類型 與 盈虧金額)
         def color_rule(row):
             # 盈虧金額判斷：正綠負紅
             val = row['盈虧金額']
@@ -946,22 +946,6 @@ if os.path.exists(target_path):
         st.error(f"讀取 admin.csv 出錯：{e}")
 else:
     st.warning(f"找不到路徑：{target_path}。請確保檔案已上傳至 pages 資料夾中。")
-
-if os.path.exists(target_path):
-    try:
-        df = pd.read_csv(target_path)
-        if not df.empty:
-            # 確保有「盈虧金額」來計算準度
-            if "盈虧金額" in df.columns:
-                wins = len(df[df["盈虧金額"] > 0])
-                total = len(df)
-                win_rate = (wins / total) * 100 if total > 0 else 0
-                
-                # 顯示準度大報表
-                c1, c2, c3 = st.columns(3)
-                c1.metric("總推薦場次", f"{total} 場")
-                c2.metric("勝出場次", f"{wins} 場")
-                c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
 
 st.divider()
 
