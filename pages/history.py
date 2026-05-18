@@ -354,10 +354,6 @@ st.subheader("📜 完整賽事歷史紀錄")
 
         else:
             st.info("目前尚無歷史紀錄。")
-   
-        st.subheader("📈 統計表曲線圖")
-        st.write("")
-        st.line_chart(main_df["結算總分"], height=320)
 
 # --- 底部 ---
 st.markdown("""
