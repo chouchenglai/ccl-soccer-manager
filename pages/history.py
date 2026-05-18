@@ -33,7 +33,7 @@ def get_admin_data():
         return "admin.csv"
     return ADMIN_DB
 
-   col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
 with col1:
     if st.button("🏠 返回首頁"):
