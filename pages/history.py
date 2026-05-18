@@ -23,8 +23,8 @@ if os.path.exists(img_path):
 # --- 1. 頁面基本設定 ---
 st.set_page_config(page_title=" CCL-Live 本站歷史戰績紀錄報表", page_icon="📜", layout="wide")
 
-# --- 2. 數據源指定 (阿來站長指定的路徑) ---
-# 💡 這裡鎖定讀取您的 admin.csv，作為官方展示樣板
+# --- 2. 數據源指定 (指定的路徑) ---
+# 💡 這裡鎖定讀取您的 admin.csv，作為本站展示樣板
 ADMIN_DB = "pages/admin.csv" 
 
 def get_admin_data():
@@ -32,31 +32,6 @@ def get_admin_data():
     if os.path.exists("admin.csv"):
         return "admin.csv"
     return ADMIN_DB
-
-# --- 3. 標誌藍 CSS 樣式 ---
-st.markdown("""
-<style>
-    .vip-btn {
-        background: linear-gradient(135deg, #1e40af, #0f172a);
-        color: white !important;
-        padding: 8px 20px;
-        text-align: center;
-        text-decoration: none !important;
-        display: inline-block;
-        font-size: 14px;
-        font-weight: bold;
-        border-radius: 50px;
-        transition: 0.3s;
-    }
-    .promotion-box {
-        background: rgba(30, 64, 175, 0.1);
-        border-left: 5px solid #1e40af;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 with col_b:
    col1, col2 = st.columns(2)
