@@ -3,8 +3,25 @@ import pandas as pd
 import os
 import pytz
 
+# --- 標誌顯示區 (Base64) ---
+import base64
+def get_base64_img(file_path):
+    with open(file_path, "rb") as f: data = f.read()
+    return base64.b64encode(data).decode()
+
+img_path = "ccl_logo_header.jpg"
+if os.path.exists(img_path):
+    img_b64 = get_base64_img(img_path)
+    st.markdown(f"""
+        <style>
+            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
+            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
+        </style>
+        <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
+    """, unsafe_allow_html=True)
+
 # --- 1. 頁面基本設定 ---
-st.set_page_config(page_title="CCL-Live 官方報牌紀錄", page_icon="📈", layout="wide")
+st.set_page_config(page_title="⚽ CCL-Live 本站歷史戰績紀錄報表", page_icon="📈", layout="wide")
 
 # --- 2. 數據源指定 (阿來站長指定的路徑) ---
 # 💡 這裡鎖定讀取您的 admin.csv，作為官方展示樣板
