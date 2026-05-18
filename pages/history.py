@@ -4,9 +4,36 @@ import os
 import pytz
 
 # --- 1. 頁面基本設定 ---
-st.set_page_config(page_title="CCL-Live 官方報牌紀錄", page_icon="📈", layout="wide")
+st.set_page_config(page_title="CCL-Live 官方歷史戰績", page_icon="📜", layout="wide")
 
-# --- 2. 數據源指定 (阿來站長指定的路徑) ---
+# --- 標誌顯示區 (Base64) ---
+import base64
+def get_base64_img(file_path):
+    with open(file_path, "rb") as f: data = f.read()
+    return base64.b64encode(data).decode()
+
+img_path = "ccl_logo_header.jpg"
+if os.path.exists(img_path):
+    img_b64 = get_base64_img(img_path)
+    st.markdown(f"""
+        <style>
+            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
+            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
+        </style>
+        <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
+    """, unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🏠 返回首頁"):
+        st.switch_page("pages/soccer_app.py")
+
+with col2:
+    if st.button("🎯 返回主平台"):
+        st.switch_page("pages/ccl-live.py")
+
+# --- 2. 數據源指定 (指定的路徑) ---
 # 💡 這裡鎖定讀取您的 admin.csv，作為官方展示樣板
 ADMIN_DB = "pages/admin.csv" 
 
@@ -44,12 +71,34 @@ st.markdown("""
 # --- 4. 頂部宣傳標題 ---
 col_t, col_b = st.columns([4, 1.2])
 with col_t:
-    st.title("🏆 官方歷史報牌準度紀錄")
-    st.markdown('<div class="promotion-box">🔥 <b>站長公告：</b>本頁面紀錄為實測數據，準度透明公開，歡迎參考與訂閱 PRO 獲取即時推送！</div>', unsafe_allow_html=True)
+    st.title("📜 本站歷史戰績紀錄報表")
+    st.markdown('<div class="promotion-box">💎 <b>站長公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
 with col_b:
     st.markdown(f'<div style="text-align:right; padding-top:10px;"><a href="/" target="_self" class="vip-btn">🏠 回到主頁面</a></div>', unsafe_allow_html=True)
 
 # --- 5. 數據顯示邏輯 ---
+ADMIN_DB = "pages/admin.csv"
+target_path = "admin.csv" if os.path.exists("admin.csv") else ADMIN_DB
+
+if os.path.exists(target_path):
+    df = pd.read_csv(target_path)
+    if not df.empty:
+        display_df = df.iloc[::-1].copy()
+        
+        # 💡 修正二：顏色與千分位共存的寫法
+        def style_profit(val):
+            if isinstance(val, (int, float)):
+                if val > 0: return 'color: #28a745; font-weight: bold;'
+                if val < 0: return 'color: #dc3545; font-weight: bold;'
+            return ''
+
+        # 在 .format 裡加入 "{:,}" 確保顯示千分位
+        styled_df = display_df.style.map(style_profit, subset=['盈虧金額']).format({
+            "金額": "{:,}",
+            "盈虧金額": "{:+,}",
+            "結算總分": "{:,}"
+        })
+
 target_path = get_admin_data()
 
 if os.path.exists(target_path):
@@ -68,7 +117,7 @@ if os.path.exists(target_path):
                 c2.metric("勝出場次", f"{wins} 場")
                 c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
 
-            st.write("### 📝 詳細歷史清單")
+            st.write("### 📝 完整賽事歷史記錄")
             # 倒序顯示，最新在上面
             st.dataframe(df.iloc[::-1], use_container_width=True, height=450)
         else:
