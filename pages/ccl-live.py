@@ -32,49 +32,6 @@ def ensure_files():
     if not os.path.exists(CHAT_DB):
         pd.DataFrame(columns=CHAT_COLUMNS).to_csv(CHAT_DB, index=False, encoding='utf-8-sig')
 
-# --- 💡 專業 CSS 樣式：本站專屬藍色按鈕 (無下劃線版) ---
-st.markdown("""
-<style>
-    .vip-btn {
-        background: linear-gradient(135deg, #1e40af, #0f172a); /* 深邃標誌藍漸層 */
-        color: white !important;
-        padding: 10px 22px;
-        text-align: center;
-        text-decoration: none !important; /* 💡 徹底移除下劃線 */
-        display: inline-block;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 50px; /* 圓角改為膠囊型，更有現代感 */
-        border: none;
-        box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
-        transition: 0.3s all ease;
-        cursor: pointer;
-    }
-    .vip-btn:hover {
-        background: linear-gradient(135deg, #2563eb, #1e40af); /* 懸停時變亮 */
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-        color: white !important;
-        text-decoration: none !important; /* 確保懸停也沒有下劃線 */
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# --- 1. 標題與專業按鈕並排區塊 ---
-col_title, col_pro = st.columns([4, 1.2])
-
-with col_pro:
-    # 這裡的 class="vip-btn" 會套用上面的樣式
-    st.markdown(f"""
-        <div style="text-align: right; padding-top: 15px;">
-            <a href="/vip" target="_self" class="vip-btn">
-                升 級 帳 號  P R O
-            </a>
-        </div>
-    """, unsafe_allow_html=True)
-
-st.divider()
-
 def load_data():
     if os.path.exists(st.session_state.current_db):
         try:
@@ -303,6 +260,7 @@ else:
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
 with tab1:  # 下單投注
+
     st.markdown(
     '<div id="top_page"></div>',
     unsafe_allow_html=True
@@ -723,6 +681,8 @@ if st.session_state.get(
 
             st.rerun()    
 
+col1= st.columns(1)
+
 # ==========================================
 # Tab 2: 帳號管理 (一鍵審核 + 強效防錯版)
 # ==========================================
@@ -730,13 +690,13 @@ with tab2:
     st.write("")
     st.markdown("""
     <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
-    💡 提示：未升級帳號前，使用模擬倉操作，數據將不會被保留，升級完成過後，才能建立報表保存數據！
+    💡 提示：未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！
     </p>
     """, unsafe_allow_html=True)
     st.write("")
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
-    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)
-
+    st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)     
+  
     # --- 1. 初始化檔案與欄位 ---
     req_file = "pending_requests.csv"
     req_cols = ["申請編號", "申請日期", "申請名稱", "備註事項", "審核結果", "權限"]
@@ -927,49 +887,31 @@ with tab_live:
             st.components.v1.iframe("https://live.titan007.com/indexall_big.aspx", height=800, scrolling=True)
 
 with tab3: # 📋 歷史記錄
-        st.subheader("📜 完整賽事歷史記錄")
+        st.subheader("📜 完整賽事歷史紀錄")
         
-        # 1. 定義染色邏輯 (確保縮排正確)
-        def color_row(row):
-            style = ['color: black'] * len(row)
-            # 判斷盈虧顏色
-            if row['盈虧金額'] > 0: 
-                target_color = 'color: green'
-            elif row['盈虧金額'] < 0: 
-                target_color = 'color: red'
-            else: 
-                target_color = 'color: black'
+        # 💡 修正一：定義顏色判斷 (適用於 類型 與 盈虧金額)
+        def color_rule(row):
+            # 盈虧金額判斷：正綠負紅
+            val = row['盈虧金額']
+            color = '#28a745' if val > 0 else '#dc3545' if val < 0 else '#31333F'
+            style = f'color: {color}; font-weight: bold;'
             
-            # 將顏色套用到「類型」與「盈虧金額」這兩欄
-            style[row.index.get_loc('類型')] = target_color
-            style[row.index.get_loc('盈虧金額')] = target_color
-            return style
+            # 同時回傳給 類型 與 盈虧金額 這兩欄
+            return [style if col in ['類型', '盈虧金額'] else '' for col in display_df.columns]
 
-                # 2. 顯示表格 (包含倒序處理與千分位格式化)
-        if not main_df.empty:
-
-            # 建立顯示專用 DataFrame
-            display_df = main_df.iloc[::-1].copy()
+        # 💡 修正二：解決千分位與顏色衝突 (使用 .format 強制鎖定格式)
+        styled_df = display_df.style.apply(color_rule, axis=1).format({
+            "金額": "{:,.0f}",
+            "盈虧金額": "{:+,.0f}", # 自動帶出 + 號與千分位
+            "結算總分": "{:,.0f}"
+        })                
 
             # 日期只顯示年月日
             display_df["日期"] = pd.to_datetime(
                 display_df["日期"],
                 errors="coerce"
             ).dt.strftime("%Y-%m-%d")
-
-            # 套用表格樣式
-            styled_df = display_df.style.apply(
-                color_row,
-                axis=1
-            ).format({
-
-                "金額": "{:,}",
-
-                "盈虧金額": "{:+,.0f}",
-
-                "結算總分": "{:,}"
-
-            })
+           
             st.dataframe(
     styled_df,
     width=1400,
@@ -1015,14 +957,30 @@ with tab3: # 📋 歷史記錄
         else:
             st.info("目前尚無歷史紀錄。")
 
+if os.path.exists(target_path):
+    try:
+        df = pd.read_csv(target_path)
+        if not df.empty:
+            # 確保有「盈虧金額」來計算準度
+            if "盈虧金額" in df.columns:
+                wins = len(df[df["盈虧金額"] > 0])
+                total = len(df)
+                win_rate = (wins / total) * 100 if total > 0 else 0
+                
+                # 顯示準度大報表
+                c1, c2, c3 = st.columns(3)
+                c1.metric("總推薦場次", f"{total} 場")
+                c2.metric("勝出場次", f"{wins} 場")
+                c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
+
 with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
         st.write("")
         st.line_chart(main_df["結算總分"], height=320)      
 
 # ---------------------------------------------------------
-# 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
-# ---------------------------------------------------------
+    # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
+    # ---------------------------------------------------------
 with tab5:
         st.markdown("### 💬 足球現場實況滾球推薦")
         
