@@ -4,7 +4,7 @@ import os
 import pytz
 
 # --- 1. 頁面基本設定 ---
-st.set_page_config(page_title="CCL-Live 官方歷史戰績", page_icon="📜", layout="wide")
+st.set_page_config(page_title="CCL-Live 本站歷史戰績記錄", page_icon="📜", layout="wide")
 
 # --- 標誌顯示區 (Base64) ---
 import base64
@@ -119,6 +119,21 @@ if os.path.exists(target_path):
                 c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
 
             st.write("### 📝 完整賽事歷史記錄")
+
+            st.dataframe(
+            styled_df, 
+            use_container_width=True, 
+            height=500,
+            column_config={
+                "日期": st.column_config.TextColumn("📅 日期"),
+                "賽事項目": st.column_config.TextColumn("⚽ 賽事項目"),
+                "類型": st.column_config.TextColumn("🏷️ 類型"),
+                "金額": st.column_config.TextColumn("💰 金額"),
+                "盈虧金額": st.column_config.TextColumn("📈 盈虧"),
+                "結算總分": st.column_config.TextColumn("🏆 總分")
+            }
+        )
+
             # 倒序顯示，最新在上面
             st.dataframe(df.iloc[::-1], use_container_width=True, height=450)
         else:
