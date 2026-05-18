@@ -61,10 +61,19 @@ st.markdown("""
 # --- 4. 頂部宣傳標題 ---
 col_t, col_b = st.columns([4, 1.2])
 with col_t:
-    st.title("📜 本站歷史戰績紀錄報表")
+    st.title("📋 本站歷史戰績紀錄報表")
     st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
 with col_b:
-    st.markdown(f'<div style="text-align:right; padding-top:10px;"><a href="/" target="_self" class="vip-btn">🏠 回到主頁面</a></div>', unsafe_allow_html=True)
+   col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🏠 返回首頁"):
+        st.switch_page("soccer_app.py")
+
+with col2:
+    if st.button("🎯 返回主平台"):
+        st.switch_page("pages/ccl-live.py")
+
 
 # --- 5. 數據顯示邏輯 ---
 target_path = get_admin_data()
@@ -85,11 +94,11 @@ if os.path.exists(target_path):
                 c2.metric("勝出場次", f"{wins} 場")
                 c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
 
-            st.write("### 📝 詳細歷史清單")
+            st.write("### 📜 完整賽事歷史記錄")
             # 倒序顯示，最新在上面
             st.dataframe(df.iloc[::-1], use_container_width=True, height=450)
         else:
-            st.info("目前 admin.csv 內尚無數據。")
+            st.info("目前 admin.csv 內尚無數據！")
     except Exception as e:
         st.error(f"讀取 admin.csv 出錯：{e}")
 else:
