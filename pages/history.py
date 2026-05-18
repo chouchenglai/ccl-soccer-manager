@@ -133,9 +133,7 @@ if os.path.exists(target_path):
                 "結算總分": st.column_config.TextColumn("🏆 總分")
             }
         )
-
-            # 倒序顯示，最新在上面
-            st.dataframe(df.iloc[::-1], use_container_width=True, height=450)
+            
         else:
             st.info("目前 admin.csv 內尚無數據。")
     except Exception as e:
