@@ -267,7 +267,7 @@ with col2:
     if st.button("🎯 返回主平台"):
         st.switch_page("pages/ccl-live.py")
 
-        st.subheader("📜 完整賽事歷史紀錄")
+st.subheader("📜 完整賽事歷史紀錄")
         
         # 1. 定義染色邏輯 (確保縮排正確)
         def color_row(row):
