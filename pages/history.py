@@ -59,7 +59,16 @@ with col_t:
 
 with col_b:
     # 💡 頂部放置勝率
-    st.metric("📊 目前實測勝率", win_rate_str, delta=delta_str)
+    win_rate_str = "0%"
+delta_str = "0 勝 / 0 場"
+
+if os.path.exists(target_path):
+    raw_df = pd.read_csv(target_path)
+    if not raw_df.empty and "盈虧金額" in raw_df.columns:
+        wins = len(raw_df[raw_df["盈虧金額"] > 0])
+        total = len(raw_df)
+        win_rate_str = f"{(wins/total*100):.1f}%"
+        delta_str = f"{wins} 勝 / {total} 場"
     
     # 💡 關鍵修正：在這裡精確空出一行 (25像素高度)，讓按鈕往下移動
     st.markdown('<div style="height: 25px;"></div>', unsafe_allow_html=True)
