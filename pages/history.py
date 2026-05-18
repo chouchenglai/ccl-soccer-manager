@@ -33,7 +33,6 @@ def get_admin_data():
         return "admin.csv"
     return ADMIN_DB
 
-with col_b:
    col1, col2 = st.columns(2)
 
 with col1:
