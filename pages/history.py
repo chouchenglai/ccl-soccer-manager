@@ -75,23 +75,26 @@ with col_t:
     st.markdown('<div class="promotion-box">💎 <b>站長公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
 
 # --- 5. 數據顯示邏輯 ---
+ADMIN_DB = "pages/admin.csv"
+target_path = "admin.csv" if os.path.exists("admin.csv") else ADMIN_DB
+
 if os.path.exists(target_path):
     df = pd.read_csv(target_path)
     if not df.empty:
         display_df = df.iloc[::-1].copy()
         
-        # 💡 修正顏色判斷：正數綠(win)、負數紅(loss)
+        # 💡 修正二：顏色與千分位共存的寫法
         def style_profit(val):
             if isinstance(val, (int, float)):
-                if val > 0: return 'color: #28a745; font-weight: bold;' # 綠
-                if val < 0: return 'color: #dc3545; font-weight: bold;' # 紅
+                if val > 0: return 'color: #28a745; font-weight: bold;'
+                if val < 0: return 'color: #dc3545; font-weight: bold;'
             return ''
 
-        # 💡 同時處理顏色與「千分位+正負號」
+        # 在 .format 裡加入 "{:,}" 確保顯示千分位
         styled_df = display_df.style.map(style_profit, subset=['盈虧金額']).format({
-            "金額": "{:,.0f}",
-            "盈虧金額": "{:+,.0f}", # 這裡會自動帶出 + 號與千分位
-            "結算總分": "{:,.0f}"
+            "金額": "{:,}",
+            "盈虧金額": "{:+,}",
+            "結算總分": "{:,}"
         })
 
 target_path = get_admin_data()
