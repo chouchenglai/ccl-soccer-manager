@@ -83,18 +83,21 @@ if os.path.exists(target_path):
     if not df.empty:
         display_df = df.iloc[::-1].copy()
         
-        # 💡 修正二：顏色與千分位共存的寫法
-        def style_profit(val):
-            if isinstance(val, (int, float)):
-                if val > 0: return 'color: #28a745; font-weight: bold;'
-                if val < 0: return 'color: #dc3545; font-weight: bold;'
-            return ''
+        # 💡 修正一：定義顏色判斷 (適用於 類型 與 盈虧金額)
+        def color_rule(row):
+            # 盈虧金額判斷：正綠負紅
+            val = row['盈虧金額']
+            color = '#28a745' if val > 0 else '#dc3545' if val < 0 else '#31333F'
+            style = f'color: {color}; font-weight: bold;'
+            
+            # 同時回傳給 類型 與 盈虧金額 這兩欄
+            return [style if col in ['類型', '盈虧金額'] else '' for col in display_df.columns]
 
-        # 在 .format 裡加入 "{:,}" 確保顯示千分位
-        styled_df = display_df.style.map(style_profit, subset=['盈虧金額']).format({
-            "金額": "{:,}",
-            "盈虧金額": "{:+,}",
-            "結算總分": "{:,}"
+        # 💡 修正二：解決千分位與顏色衝突 (使用 .format 強制鎖定格式)
+        styled_df = display_df.style.apply(color_rule, axis=1).format({
+            "金額": "{:,.0f}",
+            "盈虧金額": "{:+,.0f}", # 自動帶出 + 號與千分位
+            "結算總分": "{:,.0f}"
         })
 
 target_path = get_admin_data()
