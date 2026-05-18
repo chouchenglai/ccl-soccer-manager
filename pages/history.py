@@ -33,6 +33,9 @@ def get_admin_data():
         return "admin.csv"
     return ADMIN_DB
 
+    st.write("")
+    st.write("")
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -73,6 +76,9 @@ col_t, col_b = st.columns([4, 1.2])
 with col_t:
     st.title("📜 本站歷史戰績紀錄報表")
     st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
+
+    st.write("")
+    st.write("")
 
 # --- 5. 數據顯示邏輯 ---
 target_path = get_admin_data()
