@@ -27,7 +27,7 @@ st.set_page_config(page_title="CCL-Live 本站歷史戰績紀錄報表", page_ic
 ADMIN_DB = "pages/admin.csv" 
 
 def get_admin_data():
-    if os.path.exists("admin.csv"): return "admin.csv"
+    if os.path.exists("pages/admin.csv"): return "pages/admin.csv"
     return ADMIN_DB
 
 # --- 4. 頂部宣傳與返回按鈕 (解決換行問題) ---
@@ -44,7 +44,7 @@ with col_t:
 with col_b:
     # 💡 關鍵修正：使用 HTML padding 確保按鈕往下移動兩行，與 Logo 保持完美間距
     st.markdown('<div style="padding-top: 45px;"></div>', unsafe_allow_html=True)
-    st.link_button("🏠 回到主頁面", "/", use_container_width=True)
+    st.link_button("🏠 回到主頁面", "/page/ccl-live.py", use_container_width=True)
 
 st.write("") # 額外增加一行空行
 
@@ -68,7 +68,7 @@ if os.path.exists(target_path):
             # 套用樣式
             styled_df = display_df.style.applymap(style_profit, subset=['盈虧金額'])
 
-            st.write("### 📝 詳細歷史清單")
+            st.write("### 📝 完整賽事歷史記錄")
             # 💡 修正二：加入 column_config 實現千分位小分位
             st.dataframe(
                 styled_df,
