@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import os
 import pytz
-import base64
 
-# --- 1. 權威商標顯示 (確保 Logo 在最上方) ---
+# --- 標誌顯示區 (Base64) ---
+import base64
 def get_base64_img(file_path):
     with open(file_path, "rb") as f: data = f.read()
     return base64.b64encode(data).decode()
@@ -14,39 +14,71 @@ if os.path.exists(img_path):
     img_b64 = get_base64_img(img_path)
     st.markdown(f"""
         <style>
-            .banner-box {{ width: 100%; text-align: center; margin-bottom: 20px; }}
-            .banner-img {{ width: 90%; height: auto; display: block; margin: 0 auto; }}
+            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
+            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
         </style>
         <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
     """, unsafe_allow_html=True)
 
-# --- 2. 頁面基本設定 ---
-st.set_page_config(page_title="CCL-Live 本站歷史戰績紀錄報表", page_icon="📜", layout="wide")
-
-# --- 3. 數據源指定 ---
+# --- 1. 頁面基本設定 ---
+st.set_page_config(page_title=" CCL-Live 本站歷史戰績紀錄報表", page_icon="📜", layout="wide")
+  
+# --- 2. 數據源指定 (指定的路徑) ---
+# 💡 這裡鎖定讀取您的 admin.csv，作為本站展示樣板
 ADMIN_DB = "pages/admin.csv" 
 
 def get_admin_data():
-    if os.path.exists("pages/admin.csv"): return "pages/admin.csv"
+    # 邏輯：如果在 pages 資料夾內執行，直接找 admin.csv；如果在根目錄執行，找 pages/admin.csv
+    if os.path.exists("admin.csv"):
+        return "admin.csv"
     return ADMIN_DB
 
-# --- 4. 頂部宣傳與返回按鈕 (解決換行問題) ---
-col_t, col_b = st.columns([4, 1.2])
+    st.write("")
+    st.write("")
 
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🏠 返回首頁"):
+        st.switch_page("pages/soccer_app.py")
+
+with col2:
+    if st.button("🎯 返回主平台"):
+        st.switch_page("pages/ccl-live.py")
+
+# --- 3. 標誌藍 CSS 樣式 ---
+st.markdown("""
+<style>
+    .vip-btn {
+        background: linear-gradient(135deg, #1e40af, #0f172a);
+        color: white !important;
+        padding: 8px 20px;
+        text-align: center;
+        text-decoration: none !important;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 50px;
+        transition: 0.3s;
+    }
+    .promotion-box {
+        background: rgba(30, 64, 175, 0.1);
+        border-left: 5px solid #1e40af;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 4. 頂部宣傳標題 ---
+col_t, col_b = st.columns([4, 1.2])
 with col_t:
     st.title("📜 本站歷史戰績紀錄報表")
-    st.markdown("""
-        <div style="background: rgba(30, 64, 175, 0.1); border-left: 5px solid #1e40af; padding: 15px; border-radius: 5px;">
-            💎 <b>本站公告：</b>本頁面記錄為實測數據！
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
 
-with col_b:
-    # 💡 關鍵修正：使用 HTML padding 確保按鈕往下移動兩行，與 Logo 保持完美間距
-    st.markdown('<div style="padding-top: 45px;"></div>', unsafe_allow_html=True)
-    st.link_button("🏠 回到主頁面", "/page/ccl-live.py", use_container_width=True)
-
-st.write("") # 額外增加一行空行
+    st.write("")
+    st.write("")
 
 # --- 5. 數據顯示邏輯 (含千分位與顏色設定) ---
 target_path = get_admin_data()
