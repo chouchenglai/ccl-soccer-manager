@@ -69,6 +69,18 @@ with col_b:
 
 st.write("")
 
+# 先初始化變數
+win_rate_str = "0%"
+delta_str = "0 勝 / 0 場"
+
+if os.path.exists(target_path):
+    raw_df = pd.read_csv(target_path)
+    if not raw_df.empty and "盈虧金額" in raw_df.columns:
+        wins = len(raw_df[raw_df["盈虧金額"] > 0])
+        total = len(raw_df)
+        win_rate_str = f"{(wins/total*100):.1f}%"
+        delta_str = f"{wins} 勝 / {total} 場"
+
 # --- 6. 數據詳細清單顯示 ---
 if os.path.exists(target_path):
     df = pd.read_csv(target_path)
