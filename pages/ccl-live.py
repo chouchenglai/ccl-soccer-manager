@@ -906,25 +906,6 @@ with tab3: # 📋 歷史記錄
             "結算總分": "{:,.0f}"
         })                
 
-            # 日期只顯示年月日
-            display_df["日期"] = pd.to_datetime(
-                display_df["日期"],
-                errors="coerce"
-            ).dt.strftime("%Y-%m-%d")
-
-            # 套用表格樣式
-            styled_df = display_df.style.apply(
-                color_row,
-                axis=1
-            ).format({
-
-                "金額": "{:,.0f}",
-
-                "盈虧金額": "{:+,.0f}",
-
-                "結算總分": "{:,.0f}"
-
-            })
             st.dataframe(
     styled_df,
     width=1400,
