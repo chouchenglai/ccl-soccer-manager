@@ -947,8 +947,6 @@ if os.path.exists(target_path):
 else:
     st.warning(f"找不到路徑：{target_path}。請確保檔案已上傳至 pages 資料夾中。")
 
-st.divider()
-
 if os.path.exists(target_path):
     try:
         df = pd.read_csv(target_path)
@@ -964,6 +962,8 @@ if os.path.exists(target_path):
                 c1.metric("總推薦場次", f"{total} 場")
                 c2.metric("勝出場次", f"{wins} 場")
                 c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
+
+st.divider()
 
 with tab4: # 統計圖表[cite: 2]        
         st.subheader("📈 統計表曲線圖")
