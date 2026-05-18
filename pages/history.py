@@ -27,7 +27,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button("🏠 返回首頁"):
-        st.switch_page("pages/soccer_app.py")
+        st.switch_page("/soccer_app.py")
 
 with col2:
     if st.button("🎯 返回主平台"):
