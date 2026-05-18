@@ -100,8 +100,6 @@ if os.path.exists(target_path):
             "結算總分": "{:,.0f}"
         })
 
-            st.write("### 📝 完整賽事歷史記錄")
-
             st.dataframe(
             styled_df, 
             use_container_width=True, 
