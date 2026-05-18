@@ -44,7 +44,7 @@ with col1:
 
 with col2:
     if st.button("🎯 返回主平台"):
-        st.switch_page("ccl-live.py")
+        st.switch_page("pages/ccl-live.py")
 
 # --- 3. 標誌藍 CSS 樣式 ---
 st.markdown("""
