@@ -44,8 +44,8 @@ st.markdown("""
 # --- 4. 頂部宣傳標題 ---
 col_t, col_b = st.columns([4, 1.2])
 with col_t:
-    st.title("🏆 官方歷史報牌準度紀錄")
-    st.markdown('<div class="promotion-box">🔥 <b>站長公告：</b>本頁面紀錄為實測數據，準度透明公開，歡迎參考與訂閱 PRO 獲取即時推送！</div>', unsafe_allow_html=True)
+    st.title("📜 本站歷史戰績紀錄報表")
+    st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據，</div>', unsafe_allow_html=True)
 with col_b:
     st.markdown(f'<div style="text-align:right; padding-top:10px;"><a href="/" target="_self" class="vip-btn">🏠 回到主頁面</a></div>', unsafe_allow_html=True)
 
