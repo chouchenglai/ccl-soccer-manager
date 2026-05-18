@@ -2,85 +2,59 @@ import streamlit as st
 import pandas as pd
 import os
 import pytz
-
-# --- 標誌顯示區 (Base64) ---
 import base64
+
+# --- 1. 頁面基本設定 (必須放在最頂端，絕對不能動) ---
+st.set_page_config(page_title="CCL-Live 本站歷史戰績紀錄報表", page_icon="📜", layout="wide")
+
+# --- 2. 標誌顯示區 (Base64) ---
 def get_base64_img(file_path):
-    with open(file_path, "rb") as f: data = f.read()
-    return base64.b64encode(data).decode()
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f: data = f.read()
+        return base64.b64encode(data).decode()
+    return None
 
 img_path = "ccl_logo_header.jpg"
-if os.path.exists(img_path):
-    img_b64 = get_base64_img(img_path)
+img_b64 = get_base64_img(img_path)
+
+if img_b64:
     st.markdown(f"""
         <style>
-            .banner-box {{ width: 90%; text-align: center; background-color: #ffffff; padding: 0px 0; margin-bottom: 20px; overflow: hidden; }}
-            .banner-img {{ width: 90%; transform: scale(1.1); transform-origin: center; height: auto; display: block; margin: 0 auto; }}
+            .banner-box {{ width: 100%; text-align: center; margin-bottom: 10px; }}
+            .banner-img {{ width: 90%; height: auto; display: block; margin: 0 auto; border-radius: 10px; }}
         </style>
         <div class="banner-box"><img src="data:image/jpeg;base64,{img_b64}" class="banner-img"></div>
     """, unsafe_allow_html=True)
 
-# --- 1. 頁面基本設定 ---
-st.set_page_config(page_title=" CCL-Live 本站歷史戰績紀錄報表", page_icon="📜", layout="wide")
-  
-# --- 2. 數據源指定 (指定的路徑) ---
-# 💡 這裡鎖定讀取您的 admin.csv，作為本站展示樣板
+# --- 3. 數據源與工具函數 ---
 ADMIN_DB = "pages/admin.csv" 
 
 def get_admin_data():
-    # 邏輯：如果在 pages 資料夾內執行，直接找 admin.csv；如果在根目錄執行，找 pages/admin.csv
-    if os.path.exists("admin.csv"):
-        return "admin.csv"
+    if os.path.exists("admin.csv"): return "admin.csv"
     return ADMIN_DB
 
-    st.write("")
-    st.write("")
+# --- 4. 頂部宣傳與返回按鈕 ---
+# 使用 HTML 強制空行，解決按鈕太靠上的問題
+st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
-
-with col1:
-    if st.button("🏠 返回首頁"):
-        st.switch_page("pages/soccer_app.py")
-
-with col2:
-    if st.button("🎯 返回主平台"):
-        st.switch_page("pages/ccl-live.py")
-
-# --- 3. 標誌藍 CSS 樣式 ---
-st.markdown("""
-<style>
-    .vip-btn {
-        background: linear-gradient(135deg, #1e40af, #0f172a);
-        color: white !important;
-        padding: 8px 20px;
-        text-align: center;
-        text-decoration: none !important;
-        display: inline-block;
-        font-size: 14px;
-        font-weight: bold;
-        border-radius: 50px;
-        transition: 0.3s;
-    }
-    .promotion-box {
-        background: rgba(30, 64, 175, 0.1);
-        border-left: 5px solid #1e40af;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# --- 4. 頂部宣傳標題 ---
 col_t, col_b = st.columns([4, 1.2])
+
 with col_t:
     st.title("📜 本站歷史戰績紀錄報表")
-    st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div style="background: rgba(30, 64, 175, 0.1); border-left: 5px solid #1e40af; padding: 15px; border-radius: 5px;">
+            💎 <b>本站公告：</b>本頁面記錄為實測數據！
+        </div>
+    """, unsafe_allow_html=True)
 
-    st.write("")
-    st.write("")
+with col_b:
+    # 這裡調整 padding-top 讓按鈕對齊標題下方
+    st.markdown('<div style="padding-top: 50px;"></div>', unsafe_allow_html=True)
+    st.link_button("🏠 回到主頁面", "ccl-live.py", use_container_width=True)
 
-# --- 5. 數據顯示邏輯 (含千分位與顏色設定) ---
+st.write("") 
+
+# --- 5. 數據顯示邏輯 ---
 target_path = get_admin_data()
 
 if os.path.exists(target_path):
@@ -90,22 +64,24 @@ if os.path.exists(target_path):
             # 數據處理：反轉順序
             display_df = df.iloc[::-1].copy()
             
-            # 💡 修正三：顏色顯示邏輯 (正數綠色、負數紅色)
+            # 💡 修正：顏色顯示邏輯 (贏綠輸紅)
+            # 新版 Streamlit 建議使用 map 而非 applymap
             def style_profit(val):
                 if isinstance(val, (int, float)):
-                    color = 'green' if val > 0 else 'red' if val < 0 else 'black'
-                    return f'color: {color}; font-weight: bold;'
-                return ''
+                    if val > 0: return 'color: #28a745; font-weight: bold;' # 綠色
+                    if val < 0: return 'color: #dc3545; font-weight: bold;' # 紅色
+                return 'color: #31333F;'
 
-            # 套用樣式
-            styled_df = display_df.style.applymap(style_profit, subset=['盈虧金額'])
+            # 套用表格樣式
+            styled_df = display_df.style.map(style_profit, subset=['盈虧金額'])
 
             st.write("### 📝 完整賽事歷史記錄")
-            # 💡 修正二：加入 column_config 實現千分位小分位
+            
+            # 💡 修正：加入千分位與小分位控制
             st.dataframe(
                 styled_df,
                 use_container_width=True,
-                height=450,
+                height=500,
                 column_config={
                     "日期": st.column_config.TextColumn("📅 日期"),
                     "金額": st.column_config.NumberColumn("💰 金額", format="%d"),
