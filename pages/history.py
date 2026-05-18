@@ -50,7 +50,7 @@ with col_t:
 with col_b:
     # 這裡調整 padding-top 讓按鈕對齊標題下方
     st.markdown('<div style="padding-top: 50px;"></div>', unsafe_allow_html=True)
-    st.link_button("🏠 回到主頁面", "ccl-live.py", use_container_width=True)
+    st.link_button("🏠 回到主頁面", "ccl-live", use_container_width=True)
 
 st.write("") 
 
