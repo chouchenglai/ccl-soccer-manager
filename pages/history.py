@@ -100,24 +100,6 @@ if os.path.exists(target_path):
             "結算總分": "{:,.0f}"
         })
 
-target_path = get_admin_data()
-
-if os.path.exists(target_path):
-    try:
-        df = pd.read_csv(target_path)
-        if not df.empty:
-            # 確保有「盈虧金額」來計算準度
-            if "盈虧金額" in df.columns:
-                wins = len(df[df["盈虧金額"] > 0])
-                total = len(df)
-                win_rate = (wins / total) * 100 if total > 0 else 0
-                
-                # 顯示準度大報表
-                c1, c2, c3 = st.columns(3)
-                c1.metric("總推薦場次", f"{total} 場")
-                c2.metric("勝出場次", f"{wins} 場")
-                c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
-
             st.write("### 📝 完整賽事歷史記錄")
 
             st.dataframe(
