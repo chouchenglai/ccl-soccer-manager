@@ -43,6 +43,31 @@ with col2:
     if st.button("🎯 返回主平台"):
         st.switch_page("pages/ccl-live.py")
 
+# --- 3. 標誌藍 CSS 樣式 ---
+st.markdown("""
+<style>
+    .vip-btn {
+        background: linear-gradient(135deg, #1e40af, #0f172a);
+        color: white !important;
+        padding: 8px 20px;
+        text-align: center;
+        text-decoration: none !important;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 50px;
+        transition: 0.3s;
+    }
+    .promotion-box {
+        background: rgba(30, 64, 175, 0.1);
+        border-left: 5px solid #1e40af;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # --- 4. 頂部宣傳標題 ---
 col_t, col_b = st.columns([4, 1.2])
 with col_t:
