@@ -22,9 +22,7 @@ if os.path.exists(img_path):
 
 # --- 1. 頁面基本設定 ---
 st.set_page_config(page_title=" CCL-Live 本站歷史戰績紀錄報表", page_icon="📜", layout="wide")
-    st.write("")
-    st.write("")
-
+  
 # --- 2. 數據源指定 (指定的路徑) ---
 # 💡 這裡鎖定讀取您的 admin.csv，作為本站展示樣板
 ADMIN_DB = "pages/admin.csv" 
@@ -46,7 +44,7 @@ with col1:
 
 with col2:
     if st.button("🎯 返回主平台"):
-        st.switch_page("pages/ccl-live.py")
+        st.switch_page("ccl-live.py")
 
 # --- 3. 標誌藍 CSS 樣式 ---
 st.markdown("""
