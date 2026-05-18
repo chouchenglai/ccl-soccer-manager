@@ -45,7 +45,7 @@ st.markdown("""
 col_t, col_b = st.columns([4, 1.2])
 with col_t:
     st.title("📜 本站歷史戰績紀錄報表")
-    st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據，</div>', unsafe_allow_html=True)
+    st.markdown('<div class="promotion-box">💎 <b>本站公告：</b>本頁面記錄為實測數據！</div>', unsafe_allow_html=True)
 with col_b:
     st.markdown(f'<div style="text-align:right; padding-top:10px;"><a href="/" target="_self" class="vip-btn">🏠 回到主頁面</a></div>', unsafe_allow_html=True)
 
