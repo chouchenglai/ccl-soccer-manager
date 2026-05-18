@@ -906,8 +906,6 @@ with tab3: # 📋 歷史記錄
             "結算總分": "{:,.0f}"
         })
 
-target_path = get_admin_data()
-
 if os.path.exists(target_path):
     try:
         df = pd.read_csv(target_path)
