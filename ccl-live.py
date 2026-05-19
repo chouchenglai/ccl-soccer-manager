@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 st.set_page_config(page_title="CCL-Live 體育賽事管理系統", page_icon="⚽", layout="wide")
 
 # --- 基本設定 ---
-DEFAULT_DB = "ccl-soccer.csv"
+DEFAULT_DB = "ccl-live.csv"
 CHAT_DB = "ccl_chat_log.csv"
 COLUMNS = ["日期", "賽事項目", "類型", "金額", "盈虧金額", "結算總分"]
 CHAT_COLUMNS = ["時間", "暱稱", "內容", "標籤"]
@@ -350,6 +350,8 @@ with tab1:  # 下單投注
 # 賽事資訊
 # =========================
 
+st.info("💡 提示：升級帳號前，使用模擬倉操作，數據將不會被保留，升級帳號完成，伺服器建檔後，才能建立報表保存數據！")
+
 st.markdown("## 🏆 賽事資訊")
 
 # =========================
@@ -688,11 +690,7 @@ col1= st.columns(1)
 # ==========================================
 with tab2:
     st.write("")
-    st.markdown("""
-    <p style='color: black; font-weight: bold; font-size: 0.9em; margin-bottom: 5px;'>
-    💡 提示：未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！
-    </p>
-    """, unsafe_allow_html=True)
+    st.info("💡 提示：升級帳號前，使用模擬倉操作，數據將不會被保留，升級帳號完成，伺服器建檔後，才能建立報表保存數據！")
     st.write("")
     st.markdown("<h2 style='color:#1E90FF; font-weight:bold;'>📂 登錄會員管理中心</h2>", unsafe_allow_html=True)
     st.markdown("<hr style='border: 1px solid #1E90FF; margin-top: -10px;'>", unsafe_allow_html=True)     
@@ -715,7 +713,7 @@ with tab2:
     # --- 關鍵：管理員身分識別 (不分大小寫) ---
     is_admin = False
     if "current_db" in st.session_state:
-        current_active_name = st.session_state.current_db.replace('.csv', '')
+        current_active_name = st.session_state.current_db.replace('/pages/.csv', '')
         # 只要 CSV 裡的權限是 ADMIN/Admin/admin 都算通過
         admin_check = req_df[(req_df['申請名稱'] == current_active_name) & (req_df['權限'].str.upper() == 'ADMIN')]
         if not admin_check.empty:
@@ -726,7 +724,7 @@ with tab2:
     is_authenticated = False 
     
     if "current_db" in st.session_state:
-        current_active_name = st.session_state.current_db.replace('.csv', '')
+        current_active_name = st.session_state.current_db.replace('/pages/.csv', '')
         # 檢查是否為 Admin 帳號 (不分大小寫)
         admin_row = req_df[(req_df['申請名稱'] == current_active_name) & (req_df['權限'].str.upper() == 'ADMIN')]
         
@@ -777,7 +775,7 @@ with tab2:
             # 通過校驗，執行建立
             new_id = f"{len(req_df) + 1:04d}"
             today_str = datetime.now(TW_TZ).strftime("%Y年%m月%d日")
-            target_csv = f"{new_name}.csv" if not new_name.endswith(".csv") else new_name
+            target_csv = f"{new_name}.csv" if not new_name.endswith("/pages/.csv") else new_name
 
             empty_df = pd.DataFrame(columns=COLUMNS)
             empty_df.to_csv(target_csv, index=False, encoding='utf-8-sig')          
@@ -960,7 +958,7 @@ with tab3: # 📋 歷史記錄
         "盈虧金額": st.column_config.NumberColumn(
             "盈虧金額",
             width="small",
-            format="%+d"
+            format="%+,.0f"
         ),
 
         "結算總分": st.column_config.NumberColumn(
