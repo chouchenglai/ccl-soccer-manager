@@ -261,7 +261,7 @@ else:
        
 with tab1:  # 下單投注
 
-    # --- 💡 專業 CSS 樣式：本站專屬藍色按鈕 (無下劃線版) ---
+# --- 💡 專業 CSS 樣式：本站專屬藍色按鈕 (無下劃線版) ---
 st.markdown("""
 <style>
     .vip-btn {
@@ -288,6 +288,21 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# --- 1. 標題與專業按鈕並排區塊 ---
+col_title, col_pro = st.columns([4, 1.2])
+
+with col_pro:
+    # 這裡的 class="vip-btn" 會套用上面的樣式
+    st.markdown(f"""
+        <div style="text-align: right; padding-top: 15px;">
+            <a href="/vip" target="_self" class="vip-btn">
+                升 級 帳 號  P R O
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.divider()
 
     st.markdown(
     '<div id="top_page"></div>',
