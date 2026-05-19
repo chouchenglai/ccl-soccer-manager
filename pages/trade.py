@@ -257,7 +257,7 @@ else:
     </style>
     """, unsafe_allow_html=True)  
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns([2,2,6])
 
 with col1:
     if st.button("🏠 返回首頁"):
@@ -266,6 +266,76 @@ with col1:
 with col2:
     if st.button("🎯 返回主平台"):
         st.switch_page("pages/ccl-live.py")
+
+with col3:
+
+    st.components.v1.html("""
+        <style>
+            #clock-container {
+                display: flex;
+                align-items: center;
+                background-color: #f8f9fb;
+                padding: 8px 15px;
+                border-radius: 6px;
+                border-left: 5px solid #ff4b4b;
+                font-family: sans-serif;
+                margin-bottom: 5px;
+            }
+
+            #clock {
+                font-size: 15px;
+                font-weight: 600;
+                color: #31333f;
+                letter-spacing: 0.8px;
+            }
+
+            .prefix {
+                font-size: 14px;
+                color: #666;
+                margin-right: 12px;
+            }
+        </style>
+
+        <div id="clock-container">
+            <span class="prefix">
+                台北標準時間 (GMT+8) :
+            </span>
+
+            <span id="clock">
+                載入中...
+            </span>
+        </div>
+
+        <script>
+            function updateClock() {
+
+                const now = new Date();
+
+                const hh = String(
+                    now.getHours()
+                ).padStart(2, '0');
+
+                const mm = String(
+                    now.getMinutes()
+                ).padStart(2, '0');
+
+                const ss = String(
+                    now.getSeconds()
+                ).padStart(2, '0');
+
+                document.getElementById('clock')
+                    .textContent =
+                    now.toLocaleDateString()
+                    + " "
+                    + hh + ":" + mm + ":" + ss;
+            }
+
+            setInterval(updateClock, 1000);
+
+            updateClock();
+        </script>
+
+    """, height=52)
 
 # 下單投注
 
