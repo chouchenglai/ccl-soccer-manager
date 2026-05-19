@@ -257,6 +257,17 @@ else:
     </style>
     """, unsafe_allow_html=True)  
 
+    # 核心：標籤頁定義
+    st.markdown("""
+    <style>
+        /* 針對 Streamlit 預設標籤列的第二個按鈕 (nth-child(2)) 裡面的文字 (p) 進行樣式修改 */
+        div[data-baseweb="tab-list"] button[data-baseweb="tab"]:nth-child(2) p {
+            color: #1E90FF !important;      /* 替換為閃耀的藍寶石色 */
+            font-weight: bold !important;   /* 強制字體加粗 */
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -266,6 +277,9 @@ with col1:
 with col2:
     if st.button("🎯 返回主平台"):
         st.switch_page("pages/ccl-live.py")
+
+st.write("")
+
 
 # 下單投注
 
