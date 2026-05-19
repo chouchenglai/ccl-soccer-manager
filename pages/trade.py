@@ -339,7 +339,6 @@ with col3:
 
 # 下單投注
 
-    st.write("")
     st.markdown(
     '<div id="top_page"></div>',
     unsafe_allow_html=True
