@@ -267,7 +267,7 @@ with col2:
     if st.button("🎯 返回主平台"):
         st.switch_page("pages/ccl-live.py")
 
-with tab1:  # 下單投注
+# 下單投注
 
     st.markdown(
     '<div id="top_page"></div>',
