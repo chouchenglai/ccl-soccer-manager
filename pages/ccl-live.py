@@ -889,53 +889,88 @@ with tab_live:
 with tab3: # 📋 歷史記錄
         st.subheader("📜 完整賽事歷史紀錄")
         
-         if not df.empty:
-            # --- 💡 這裡開始是您要的完整「統計 + 變色 + 千分位」代碼 ---
+        # 1. 定義染色邏輯 (確保縮排正確)
+        def color_row(row):
+            style = ['color: black'] * len(row)
+            # 判斷盈虧顏色
+            if row['盈虧金額'] > 0: 
+                target_color = 'color: green'
+            elif row['盈虧金額'] < 0: 
+                target_color = 'color: red'
+            else: 
+                target_color = 'color: black'
+            
+            # 將顏色套用到「類型」與「盈虧金額」這兩欄
+            style[row.index.get_loc('類型')] = target_color
+            style[row.index.get_loc('盈虧金額')] = target_color
+            return style
 
-            # 1. 準度大報表統計 (自動讀取當前檔案數據)
-            if "盈虧金額" in df.columns:
-                wins = len(df[df["盈虧金額"] > 0])
-                total = len(df)
-                win_rate = (wins / total) * 100 if total > 0 else 0
-                
-                st.markdown("#### 📈 當前檔案實測準度")
-                c1, c2, c3 = st.columns(3)
-                c1.metric("總推薦場次", f"{total} 場")
-                c2.metric("勝出場次", f"{wins} 場")
-                c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
-                st.write("") 
+                # 2. 顯示表格 (包含倒序處理與千分位格式化)
+        if not main_df.empty:
 
-            # 2. 定義染色邏輯 (正數綠色、負數紅色，適用於類型與盈虧金額)
-            def color_rule(row):
-                val = row['盈虧金額']
-                # 贏家綠 (#28a745)，輸家紅 (#dc3545)
-                color = '#28a745' if val > 0 else '#dc3545' if val < 0 else '#31333F'
-                style = f'color: {color}; font-weight: bold;'
-                return [style if col in ['類型', '盈虧金額'] else '' for col in df.columns]
+            # 建立顯示專用 DataFrame
+            display_df = main_df.iloc[::-1].copy()
 
-            # 3. 套用格式 (強制執行千分位與正負號顯示)
-            # iloc[::-1] 確保最新的紀錄出現在最上面
-            styled_df = df.iloc[::-1].style.apply(color_rule, axis=1).format({
-                "金額": "{:,.0f}",
-                "盈虧金額": "{:+,.0f}", # 這裡會強制顯示正負號與千分位
-                "結算總分": "{:,.0f}"
+            # 日期只顯示年月日
+            display_df["日期"] = pd.to_datetime(
+                display_df["日期"],
+                errors="coerce"
+            ).dt.strftime("%Y-%m-%d")
+
+            # 套用表格樣式
+            styled_df = display_df.style.apply(
+                color_row,
+                axis=1
+            ).format({
+
+                "金額": "{:,}",
+
+                "盈虧金額": "{:+,.0f}",
+
+                "結算總分": "{:,}"
+
             })
-
-            # 4. 最後顯示表格 (配置中文標題與圖標)
             st.dataframe(
-                styled_df,
-                use_container_width=True,
-                height=500,
-                column_config={
-                    "日期": st.column_config.TextColumn("📅 日期"),
-                    "賽事項目": st.column_config.TextColumn("⚽ 賽事項目"),
-                    "類型": st.column_config.TextColumn("🏷️ 類型"),
-                    "金額": st.column_config.TextColumn("💰 金額"),
-                    "盈虧金額": st.column_config.TextColumn("📈 盈虧"),
-                    "結算總分": st.column_config.TextColumn("🏆 總分")
-                }
-            )
-            # --- 💡 代碼結束 ---
+    styled_df,
+    width=1400,
+    height=420,
+    column_config={
+
+        "日期": st.column_config.TextColumn(
+            "日期",
+            width="small"
+        ),
+
+        "賽事項目": st.column_config.TextColumn(
+            "賽事項目",
+            width="large"
+        ),
+
+        "類型": st.column_config.TextColumn(
+            "類型",
+            width="small"
+        ),
+
+        "金額": st.column_config.NumberColumn(
+            "金額",
+            width="small",
+            format="%,d"
+        ),
+
+        "盈虧金額": st.column_config.NumberColumn(
+            "盈虧金額",
+            width="small",
+            format="%+d"
+        ),
+
+        "結算總分": st.column_config.NumberColumn(
+            "結算總分",
+            width="small",
+            format="%,d"
+        )
+
+    }
+)
 
         else:
             st.info("目前尚無歷史紀錄。")
