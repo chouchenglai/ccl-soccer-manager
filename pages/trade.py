@@ -400,10 +400,7 @@ updateClock();
 </script>
 """, height=65)
 
-col_t, col_b = st.columns([4, 1.2])
-with col_t:
-    st.title("📜 本站歷史戰績紀錄報表")
-    st.markdown('<div class="promotion-box">💡 <b>本站叮嚀：</b>未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！</div>', unsafe_allow_html=True)
+st.info("💡 提示：未通過審核前，使用模擬倉操作，數據將不會被保留，顯示通過後，才能建立報表保存數據！")
        
 # =========================
 # 賽事資訊
