@@ -960,7 +960,7 @@ with tab3: # 📋 歷史記錄
         "盈虧金額": st.column_config.NumberColumn(
             "盈虧金額",
             width="small",
-            format="%+d"
+            format="%+,.0f"
         ),
 
         "結算總分": st.column_config.NumberColumn(
