@@ -929,96 +929,65 @@ with tab_live:
 with tab3: # 📋 歷史記錄
         st.subheader("📜 完整賽事歷史記錄")
         
-        # 1. 定義染色邏輯 (確保縮排正確)
-        def color_row(row):
-            style = ['color: black'] * len(row)
-            # 判斷盈虧顏色
-            if row['盈虧金額'] > 0: 
-                target_color = 'color: green'
-            elif row['盈虧金額'] < 0: 
-                target_color = 'color: red'
-            else: 
-                target_color = 'color: black'
+        # 💡 修正一：定義顏色判斷 (適用於 類型 與 盈虧金額)
+        def color_rule(row):
+            # 盈虧金額判斷：正綠負紅
+            val = row['盈虧金額']
+            color = '#28a745' if val > 0 else '#dc3545' if val < 0 else '#31333F'
+            style = f'color: {color}; font-weight: bold;'
             
-            # 將顏色套用到「類型」與「盈虧金額」這兩欄
-            style[row.index.get_loc('類型')] = target_color
-            style[row.index.get_loc('盈虧金額')] = target_color
-            return style
+            # 同時回傳給 類型 與 盈虧金額 這兩欄
+            return [style if col in ['類型', '盈虧金額'] else '' for col in display_df.columns]
 
-                # 2. 顯示表格 (包含倒序處理與千分位格式化)
-        if not main_df.empty:
+        # 💡 修正二：解決千分位與顏色衝突 (使用 .format 強制鎖定格式)
+        styled_df = display_df.style.apply(color_rule, axis=1).format({
+            "金額": "{:,.0f}",
+            "盈虧金額": "{:+,.0f}", # 自動帶出 + 號與千分位
+            "結算總分": "{:,.0f}"
+        })
 
-            # 建立顯示專用 DataFrame
-            display_df = main_df.iloc[::-1].copy()
+target_path = get_admin_data()
 
-            # 日期只顯示年月日
-            display_df["日期"] = pd.to_datetime(
-                display_df["日期"],
-                errors="coerce"
-            ).dt.strftime("%Y-%m-%d")
+if os.path.exists(target_path):
+    try:
+        df = pd.read_csv(target_path)
+        if not df.empty:
+            # 確保有「盈虧金額」來計算準度
+            if "盈虧金額" in df.columns:
+                wins = len(df[df["盈虧金額"] > 0])
+                total = len(df)
+                win_rate = (wins / total) * 100 if total > 0 else 0
+                
+                # 顯示準度大報表
+                c1, c2, c3 = st.columns(3)
+                c1.metric("總推薦場次", f"{total} 場")
+                c2.metric("勝出場次", f"{wins} 場")
+                c3.metric("目前勝率", f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% 相較基準")
 
-            # 套用表格樣式
-            styled_df = display_df.style.apply(
-                color_row,
-                axis=1
-            ).format({
+            st.write("### 📝 完整賽事歷史記錄")
 
-                "金額": "{:,}",
-
-                "盈虧金額": "{:+,.0f}",
-
-                "結算總分": "{:,}"
-
-            })
             st.dataframe(
-    styled_df,
-    width=1400,
-    height=420,
-    column_config={
-
-        "日期": st.column_config.TextColumn(
-            "日期",
-            width="small"
-        ),
-
-        "賽事項目": st.column_config.TextColumn(
-            "賽事項目",
-            width="large"
-        ),
-
-        "類型": st.column_config.TextColumn(
-            "類型",
-            width="small"
-        ),
-
-        "金額": st.column_config.NumberColumn(
-            "金額",
-            width="small",
-            format="%,d"
-        ),
-
-        "盈虧金額": st.column_config.NumberColumn(
-            "盈虧金額",
-            width="small",
-            format="%+d"
-        ),
-
-        "結算總分": st.column_config.NumberColumn(
-            "結算總分",
-            width="small",
-            format="%,d"
+            styled_df, 
+            use_container_width=True, 
+            height=500,
+            column_config={
+                "日期": st.column_config.TextColumn("📅 日期"),
+                "賽事項目": st.column_config.TextColumn("⚽ 賽事項目"),
+                "類型": st.column_config.TextColumn("🏷️ 類型"),
+                "金額": st.column_config.TextColumn("💰 金額"),
+                "盈虧金額": st.column_config.TextColumn("📈 盈虧"),
+                "結算總分": st.column_config.TextColumn("🏆 總分")
+            }
         )
-
-    }
-)
-
+            
         else:
-            st.info("目前尚無歷史紀錄。")
+            st.info("目前 admin.csv 內尚無數據。")
+    except Exception as e:
+        st.error(f"讀取 admin.csv 出錯：{e}")
+else:
+    st.warning(f"找不到路徑：{target_path}。請確保檔案已上傳至 pages 資料夾中。")
 
-with tab4: # 統計圖表[cite: 2]        
-        st.subheader("📈 統計表曲線圖")
-        st.write("")
-        st.line_chart(main_df["結算總分"], height=320)      
+st.divider()   
 
 # ---------------------------------------------------------
 # 5. 討論區模組 (修正版：區分身分顏色 + 引用回覆功能)
