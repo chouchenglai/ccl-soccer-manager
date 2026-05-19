@@ -260,6 +260,9 @@ else:
     tab1, tab2, tab_live, tab3, tab4, tab5 = st.tabs(["💰 下單投注", "**📝 註冊帳號**", "⚽ 即時比分", "📋 歷史記錄", "📊 統計圖表",  "💬 討 論 區"])
        
 with tab1:  # 下單投注
+
+st.info("💡 提示：升級帳號前，使用模擬倉操作，數據將不會被保留，升級帳號完成，伺服器建檔後，才能建立報表保存數據！")
+
     st.markdown(
     '<div id="top_page"></div>',
     unsafe_allow_html=True
