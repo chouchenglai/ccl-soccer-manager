@@ -713,7 +713,7 @@ with tab2:
     # --- 關鍵：管理員身分識別 (不分大小寫) ---
     is_admin = False
     if "current_db" in st.session_state:
-        current_active_name = st.session_state.current_db.replace('/pages/.csv', '')
+        current_active_name = st.session_state.current_db.replace('.csv', '')
         # 只要 CSV 裡的權限是 ADMIN/Admin/admin 都算通過
         admin_check = req_df[(req_df['申請名稱'] == current_active_name) & (req_df['權限'].str.upper() == 'ADMIN')]
         if not admin_check.empty:
@@ -724,7 +724,7 @@ with tab2:
     is_authenticated = False 
     
     if "current_db" in st.session_state:
-        current_active_name = st.session_state.current_db.replace('/pages/.csv', '')
+        current_active_name = st.session_state.current_db.replace('.csv', '')
         # 檢查是否為 Admin 帳號 (不分大小寫)
         admin_row = req_df[(req_df['申請名稱'] == current_active_name) & (req_df['權限'].str.upper() == 'ADMIN')]
         
