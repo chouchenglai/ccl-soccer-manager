@@ -272,15 +272,17 @@ st.write("")
 st.components.v1.html("""
 <style>
     #clock-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
-        background: linear-gradient(
-            90deg,
-            #f8f9fb,
-            #eef3ff
-        );
+    padding-left: 22px;
+
+    background: linear-gradient(
+        90deg,
+        #f8f9fb,
+        #eef3ff
+    );
 
         padding: 10px 18px;
 
